@@ -1,0 +1,129 @@
+%
+% This template has been created by Theo J. Mertzimekis, PhD
+% It can be modified freely to meet your needs.
+% Help in using this thesis can be found here:
+% http://users.uoa.gr/~tmertzi/LaTeX
+%
+% As a minimal credit to the creator, please do not remove the lines above
+%
+
+\documentclass[11pt]{report}
+
+\usepackage[english]{babel}
+
+\usepackage{varioref,multicol}
+\usepackage{comment}
+\usepackage{graphicx} % package to handle graphics
+\usepackage{longtable} % package for long tables, exceeding one single page
+\usepackage{caption,subcaption} % packages to handle multiple figures in a minipage
+\usepackage{amsmath,amssymb,isotope}% package to extend math capabilities
+\usepackage[version=4]{mhchem}
+\usepackage{listings} % package to include code listings
+\usepackage{fontspec} %package to activate XeTeX font manager
+
+% DOCUMENT LAYOUT
+\usepackage{geometry} 
+\geometry{a4paper,textwidth=150mm,textheight=220mm,marginparsep=4pt}
+\setlength\parindent{8mm}
+\setlength\parskip{3mm}
+
+% FONTS
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{xcolor}
+\usepackage{noto} % --> Use Google Noto font to fix some characters when standard fonts (Times etc) are used
+\defaultfontfeatures{Mapping=tex-text} % converts LaTeX specials (``quotes'' --- dashes etc.) to unicode
+
+% ---- CUSTOM AMPERSAND
+\newcommand{\amper}{{\fontspec[Scale=.95]{Gentium Italic}\selectfont\itshape\&}}
+
+% package to handle line spacing
+\usepackage{setspace}
+\renewcommand{\arraystretch}{1.25}
+
+% HEADINGS
+\usepackage{sectsty} 
+\usepackage[normalem]{ulem} 
+\sectionfont{\rmfamily\mdseries\upshape\Large}
+\subsectionfont{\rmfamily\bfseries\upshape\normalsize} 
+\subsubsectionfont{\rmfamily\mdseries\upshape\normalsize} 
+
+% PDF SETUP
+% ---- FILL IN HERE THE DOC TITLE AND AUTHOR
+\usepackage[
+        unicode,
+        driverfallback=dvipdfmx, 
+        bookmarks, 
+        colorlinks, 
+        breaklinks, 
+        pdftitle={Ángel Iglesias Préstamo - Analysis and implementation of an algorithm to validate Knowledge Graphs using Big data techniques},
+        pdfauthor={angelip2303}
+    ]{hyperref}  
+\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue} 
+
+% package for fancy style headers and footers
+\usepackage{fancybox}
+
+% redefine bullet symbols and section style
+\renewcommand\thesection{\arabic{section}.}
+\setcounter{tocdepth}{2}
+\renewcommand{\labelitemi}{$\blacktriangleright$}
+\renewcommand{\labelitemii}{$\bullet$}
+
+%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%
+
+\begin{document}
+
+\pagenumbering{roman}
+
+% make title out of \author, \title, \date  specified in the preamble
+\input{thesis_01_titlepage}
+% include the abstract, written in a separate file called thesis_abstract.tex
+
+\setcounter{page}{0}
+\include{thesis_02_abstract}
+\include{thesis_03_dedication}
+
+% Create table of contents - not mandatory
+\tableofcontents
+\newpage\phantom{~}\newpage
+
+% Create a list of figures
+\listoffigures
+\newpage\phantom{~}\newpage
+
+% Create a list of tables
+\listoftables
+\newpage\phantom{~}\newpage
+
+\setcounter{page}{0}    %reset numbering to 1,2,3...
+\pagenumbering{arabic}
+
+% include files with content. Changes the names according to your taste.
+\chapter{Introduction}
+\input{thesis_04_intro}
+
+\chapter{Description}
+\input{thesis_05_description}
+
+\chapter{Theoretical Process}
+\input{thesis_06_theory}
+
+\chapter{Experimental procedure}
+\input{thesis_07_experiment}
+
+\chapter{Results and Analysis}
+\input{thesis_08_results}
+
+\chapter{Conclusions}
+\input{thesis_09_conclusions}
+
+
+\bibliographystyle{unsrt} % bibliography style is unsorted numerically, other styles: alpha [Mer02] etc. Check LaTeX reference manual for more styles
+\bibliography{thesis_biblio} % this is the .bib file that holds the bibliography records 
+
+\appendix
+\chapter{Software}
+\input{thesis_appx01_software}
+
+\end{document}
