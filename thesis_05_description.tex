@@ -1,1 +1,30 @@
+\epigraph{\textit{The only way to learn a new programming language is by writing programs in it.}}{-- \textup{Dennis Ritchie}}
 
+\section{Related Work}
+
+Some work has already been done in the field of Knowledge graph validation. In this section we are exploring what other projects have achieved and their limitations.
+
+\section{Evaluation of alternatives}
+
+During the first meeting, that took place the 29th September 2022, we discussed about the possible paths we could follow in order to develop this project. What we had clear it was the idea of using the functional paradigm. This way, two options arose:
+
+\subsection{Haskell}
+
+While Haskell is a purely functional programming language~\cite{wiki:Haskell} with a much cleaner theoretical foundation, there are not as much libraries for consuming RDF-formatted data. It's abstractions are more elegant and we have the possibility of being more academic when developing the project.
+
+\begin{lstlisting}[language=Haskell, caption=\textit{Hello World!} program written in Haskell]
+main :: IO ()
+main = putStrLn "Hello, World!"
+\end{lstlisting}
+
+\subsection{Scala}
+
+However, Scala supports both object-oriented programming and functional programming~\cite{wiki:Scala_(programming_language)}. More in more, Scala source code can be compiled to be ran in the \textit{Java Virtual Machine}. This means, any library written to be used in Java programs, can also be imported into any Scala project. Not only that, but the initial code of this project was already written in Scala. Even more, we also have the possibility of using \textit{Apache Spark} as the engine for executing our system. As a drawback, it is not as pure as Haskell is.
+
+\begin{lstlisting}[language=Scala, caption=\textit{Hello World!} program written in Scala 2]
+object Hello {
+    def main(args: Array[String]) = {
+        println("Hello, world")
+    }
+}
+\end{lstlisting}
