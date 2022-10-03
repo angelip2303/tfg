@@ -1,139 +1,139 @@
 % Encoding: UTF-8
 
-@Misc{https://doi.org/10.48550/arxiv.2110.11709,
-  Doi                      = {10.z8550/ARXIV.2110.11709},
-  Url                      = {https://arxiv.org/abs/2110.11709},
-  Author                   = {Gayo, Jose Emilio Labra},
-  Keywords                 = {Databases (cs.DB), Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  Title                    = {Creating Knowledge Graphs Subsets using Shape Expressions},
-  Publisher                = {arXiv},
-  Year                     = {2021},
-  Copyright                = {Creative Commons Attribution 4.0 International}
-}
-
-@Misc{https://doi.org/10.48550/arxiv.2208.02697,
-  Doi                      = {10.48550/ARXIV.2208.02697},
-  Url                      = {https://arxiv.org/abs/2208.02697},
-  Author                   = {Gayo, Jose Emilio Labra},
-  Keywords                 = {Databases (cs.DB), Digital Libraries (cs.DL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  Title                    = {WShEx: A language to describe and validate Wikibase entities},
-  Publisher                = {arXiv},
-  Year                     = {2022},
-  Copyright                = {arXiv.org perpetual, non-exclusive license}
-}
-
-@Misc{web:wikidata,
-  Author                   = {Wikimedia},
-  Title                    = {Wikidata},
-  Year                     = {2019},
-  Note                     = {Last accessed 30 September 2022. {\small \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}}},
-}
-
-@Misc{web:knowledge_graphs:google,
-  Author                   = {Google},
-  Title                    = {Introducing the Knowledge Graph: things, not strings},
-  Year                     = {2012},
-  Note                     = {Last accessed 1 October 2022. {\small  \url{https://www.blog.google/products/search/introducing-knowledge-graph-things-not/}}},
-}
-
-@Misc{web:knowledge_graphs:use,
-  Author                   = {Jennifer L. Schenker},
-  Title                    = {New Report Details Industry’s Use Of Knowledge Graphs},
-  Year                     = {2021},
-  Note                     = {Last accessed 1 October 2022. {\small  \url{https://innovator.news/new-report-details-industrys-use-of-knowledge-graphs-6d093718eebf}}},
-}
-
-@article{wikidata:dumps,
-  title= {wikidata-20220103-all.json.gz},
-  journal= {},
-  author= {wikidata.org},
-  year= {},
-  url= {https://dumps.wikimedia.org/},
-  abstract= {Dump of Wikidata of January 3rd 2022.},
-  keywords= {Wikidata, JSON},
-  terms= {},
-  license= {https://creativecommons.org/publicdomain/zero/1.0/},
-  superseded= {}
-}
-
-@Misc{web:wikidata:dumps,
-  Title                    = {Archive where all previous dumps from Wikidata are stored},
-  Year                     = {2021},
-  Note                     = {Last accessed 1 October 2022. {\small  \url{https://archive.org/details/wikimediadownloads?and%5B%5D=%22Wikidata%20entity%20dumps%22}}},
-}
-
-@Misc{wiki:Haskell,
-  Author                   = {Wikipedia},
-  Title                    = {Haskell},
-  Year                     = {2022},
-  Note                     = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Haskell&oldid=1110793134}}},
-}
-
-@Misc{wiki:Scala_(programming_language),
-  Author                   = {Wikipedia},
-  Title                    = {Scala (programming language)},
-  Year                     = {2022},
-  Note                     = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Scala\%20(programming\%20language)&oldid=1110155532}}},
-}
-
-@inproceedings {180251,
-author = {Joseph E. Gonzalez and Yucheng Low and Haijie Gu and Danny Bickson and Carlos Guestrin},
-title = {{PowerGraph}: Distributed {Graph-Parallel} Computation on Natural Graphs},
-booktitle = {10th USENIX Symposium on Operating Systems Design and Implementation (OSDI 12)},
-year = {2012},
-isbn = {978-1-931971-96-6},
-address = {Hollywood, CA},
-pages = {17--30},
-url = {https://www.usenix.org/conference/osdi12/technical-sessions/presentation/gonzalez},
-publisher = {USENIX Association},
-month = oct,
+@inproceedings{10.1145/1807167.1807184,
+  author    = {Malewicz, Grzegorz and Austern, Matthew H. and Bik, Aart J.C and Dehnert, James C. and Horn, Ilan and Leiser, Naty and Czajkowski, Grzegorz},
+  title     = {Pregel: A System for Large-Scale Graph Processing},
+  year      = {2010},
+  isbn      = {9781450300322},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1807167.1807184},
+  doi       = {10.1145/1807167.1807184},
+  abstract  = {Many practical computing problems concern large graphs. Standard examples include the Web graph and various social networks. The scale of these graphs - in some cases billions of vertices, trillions of edges - poses challenges to their efficient processing. In this paper we present a computational model suitable for this task. Programs are expressed as a sequence of iterations, in each of which a vertex can receive messages sent in the previous iteration, send messages to other vertices, and modify its own state and that of its outgoing edges or mutate graph topology. This vertex-centric approach is flexible enough to express a broad set of algorithms. The model has been designed for efficient, scalable and fault-tolerant implementation on clusters of thousands of commodity computers, and its implied synchronicity makes reasoning about programs easier. Distribution-related details are hidden behind an abstract API. The result is a framework for processing large graphs that is expressive and easy to program.},
+  booktitle = {Proceedings of the 2010 ACM SIGMOD International Conference on Management of Data},
+  pages     = {135–146},
+  numpages  = {12},
+  keywords  = {distributed computing, graph algorigthms},
+  location  = {Indianapolis, Indiana, USA},
+  series    = {SIGMOD '10}
 }
 
 @article{10.14778/2212351.2212354,
-author = {Low, Yucheng and Bickson, Danny and Gonzalez, Joseph and Guestrin, Carlos and Kyrola, Aapo and Hellerstein, Joseph M.},
-title = {Distributed GraphLab: A Framework for Machine Learning and Data Mining in the Cloud},
-year = {2012},
-issue_date = {April 2012},
-publisher = {VLDB Endowment},
-volume = {5},
-number = {8},
-issn = {2150-8097},
-url = {https://doi.org/10.14778/2212351.2212354},
-doi = {10.14778/2212351.2212354},
-abstract = {While high-level data parallel frameworks, like MapReduce, simplify the design and implementation of large-scale data processing systems, they do not naturally or efficiently support many important data mining and machine learning algorithms and can lead to inefficient learning systems. To help fill this critical void, we introduced the GraphLab abstraction which naturally expresses asynchronous, dynamic, graph-parallel computation while ensuring data consistency and achieving a high degree of parallel performance in the shared-memory setting. In this paper, we extend the GraphLab framework to the substantially more challenging distributed setting while preserving strong data consistency guarantees.We develop graph based extensions to pipelined locking and data versioning to reduce network congestion and mitigate the effect of network latency. We also introduce fault tolerance to the GraphLab abstraction using the classic Chandy-Lamport snapshot algorithm and demonstrate how it can be easily implemented by exploiting the GraphLab abstraction itself. Finally, we evaluate our distributed implementation of the GraphLab abstraction on a large Amazon EC2 deployment and show 1-2 orders of magnitude performance gains over Hadoop-based implementations.},
-journal = {Proc. VLDB Endow.},
-month = {apr},
-pages = {716–727},
-numpages = {12}
+  author     = {Low, Yucheng and Bickson, Danny and Gonzalez, Joseph and Guestrin, Carlos and Kyrola, Aapo and Hellerstein, Joseph M.},
+  title      = {Distributed GraphLab: A Framework for Machine Learning and Data Mining in the Cloud},
+  year       = {2012},
+  issue_date = {April 2012},
+  publisher  = {VLDB Endowment},
+  volume     = {5},
+  number     = {8},
+  issn       = {2150-8097},
+  url        = {https://doi.org/10.14778/2212351.2212354},
+  doi        = {10.14778/2212351.2212354},
+  abstract   = {While high-level data parallel frameworks, like MapReduce, simplify the design and implementation of large-scale data processing systems, they do not naturally or efficiently support many important data mining and machine learning algorithms and can lead to inefficient learning systems. To help fill this critical void, we introduced the GraphLab abstraction which naturally expresses asynchronous, dynamic, graph-parallel computation while ensuring data consistency and achieving a high degree of parallel performance in the shared-memory setting. In this paper, we extend the GraphLab framework to the substantially more challenging distributed setting while preserving strong data consistency guarantees.We develop graph based extensions to pipelined locking and data versioning to reduce network congestion and mitigate the effect of network latency. We also introduce fault tolerance to the GraphLab abstraction using the classic Chandy-Lamport snapshot algorithm and demonstrate how it can be easily implemented by exploiting the GraphLab abstraction itself. Finally, we evaluate our distributed implementation of the GraphLab abstraction on a large Amazon EC2 deployment and show 1-2 orders of magnitude performance gains over Hadoop-based implementations.},
+  journal    = {Proc. VLDB Endow.},
+  month      = {apr},
+  pages      = {716–727},
+  numpages   = {12}
 }
 
-@inproceedings {186216,
-author = {Joseph E. Gonzalez and Reynold S. Xin and Ankur Dave and Daniel Crankshaw and Michael J. Franklin and Ion Stoica},
-title = {{GraphX}: Graph Processing in a Distributed Dataflow Framework},
-booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)},
-year = {2014},
-isbn = { 978-1-931971-16-4},
-address = {Broomfield, CO},
-pages = {599--613},
-url = {https://www.usenix.org/conference/osdi14/technical-sessions/presentation/gonzalez},
-publisher = {USENIX Association},
-month = oct,
+@inproceedings{180251,
+  author    = {Joseph E. Gonzalez and Yucheng Low and Haijie Gu and Danny Bickson and Carlos Guestrin},
+  title     = {{PowerGraph}: Distributed {Graph-Parallel} Computation on Natural Graphs},
+  booktitle = {10th USENIX Symposium on Operating Systems Design and Implementation (OSDI 12)},
+  year      = {2012},
+  isbn      = {978-1-931971-96-6},
+  address   = {Hollywood, CA},
+  pages     = {17--30},
+  url       = {https://www.usenix.org/conference/osdi12/technical-sessions/presentation/gonzalez},
+  publisher = {USENIX Association},
+  month     = oct
 }
 
-@inproceedings{10.1145/1807167.1807184,
-author = {Malewicz, Grzegorz and Austern, Matthew H. and Bik, Aart J.C and Dehnert, James C. and Horn, Ilan and Leiser, Naty and Czajkowski, Grzegorz},
-title = {Pregel: A System for Large-Scale Graph Processing},
-year = {2010},
-isbn = {9781450300322},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/1807167.1807184},
-doi = {10.1145/1807167.1807184},
-abstract = {Many practical computing problems concern large graphs. Standard examples include the Web graph and various social networks. The scale of these graphs - in some cases billions of vertices, trillions of edges - poses challenges to their efficient processing. In this paper we present a computational model suitable for this task. Programs are expressed as a sequence of iterations, in each of which a vertex can receive messages sent in the previous iteration, send messages to other vertices, and modify its own state and that of its outgoing edges or mutate graph topology. This vertex-centric approach is flexible enough to express a broad set of algorithms. The model has been designed for efficient, scalable and fault-tolerant implementation on clusters of thousands of commodity computers, and its implied synchronicity makes reasoning about programs easier. Distribution-related details are hidden behind an abstract API. The result is a framework for processing large graphs that is expressive and easy to program.},
-booktitle = {Proceedings of the 2010 ACM SIGMOD International Conference on Management of Data},
-pages = {135–146},
-numpages = {12},
-keywords = {distributed computing, graph algorigthms},
-location = {Indianapolis, Indiana, USA},
-series = {SIGMOD '10}
+@inproceedings{186216,
+  author    = {Joseph E. Gonzalez and Reynold S. Xin and Ankur Dave and Daniel Crankshaw and Michael J. Franklin and Ion Stoica},
+  title     = {{GraphX}: Graph Processing in a Distributed Dataflow Framework},
+  booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)},
+  year      = {2014},
+  isbn      = { 978-1-931971-16-4},
+  address   = {Broomfield, CO},
+  pages     = {599--613},
+  url       = {https://www.usenix.org/conference/osdi14/technical-sessions/presentation/gonzalez},
+  publisher = {USENIX Association},
+  month     = oct
+}
+
+@misc{https://doi.org/10.48550/arxiv.2110.11709,
+  doi       = {10.z8550/ARXIV.2110.11709},
+  url       = {https://arxiv.org/abs/2110.11709},
+  author    = {Gayo, Jose Emilio Labra},
+  keywords  = {Databases (cs.DB), Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {Creating Knowledge Graphs Subsets using Shape Expressions},
+  publisher = {arXiv},
+  year      = {2021},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
+
+@misc{https://doi.org/10.48550/arxiv.2208.02697,
+  doi       = {10.48550/ARXIV.2208.02697},
+  url       = {https://arxiv.org/abs/2208.02697},
+  author    = {Gayo, Jose Emilio Labra},
+  keywords  = {Databases (cs.DB), Digital Libraries (cs.DL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {WShEx: A language to describe and validate Wikibase entities},
+  publisher = {arXiv},
+  year      = {2022},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@misc{web:knowledge_graphs:google,
+  author = {Google},
+  title  = {Introducing the Knowledge Graph: things, not strings},
+  year   = {2012},
+  note   = {Last accessed 1 October 2022. {\small  \url{https://www.blog.google/products/search/introducing-knowledge-graph-things-not/}}}
+}
+
+@misc{web:knowledge_graphs:use,
+  author = {Jennifer L. Schenker},
+  title  = {New Report Details Industry’s Use Of Knowledge Graphs},
+  year   = {2021},
+  note   = {Last accessed 1 October 2022. {\small  \url{https://innovator.news/new-report-details-industrys-use-of-knowledge-graphs-6d093718eebf}}}
+}
+
+@misc{web:wikidata,
+  author = {Wikimedia},
+  title  = {Wikidata},
+  year   = {2019},
+  note   = {Last accessed 30 September 2022. {\small \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}}}
+}
+
+@misc{web:wikidata:dumps,
+  title = {Archive where all previous dumps from Wikidata are stored},
+  year  = {2021},
+  note  = {Last accessed 1 October 2022. {\small  \url{https://archive.org/details/wikimediadownloads?and%5B%5D=%22Wikidata%20entity%20dumps%22}}}
+}
+
+@misc{wiki:Haskell,
+  author = {Wikipedia},
+  title  = {Haskell},
+  year   = {2022},
+  note   = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Haskell&oldid=1110793134}}}
+}
+
+@misc{wiki:Scala_(programming_language),
+  author = {Wikipedia},
+  title  = {Scala (programming language)},
+  year   = {2022},
+  note   = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Scala\%20(programming\%20language)&oldid=1110155532}}}
+}
+
+@article{wikidata:dumps,
+  title      = {wikidata-20220103-all.json.gz},
+  journal    = {},
+  author     = {wikidata.org},
+  year       = {},
+  url        = {https://dumps.wikimedia.org/},
+  abstract   = {Dump of Wikidata of January 3rd 2022.},
+  keywords   = {Wikidata, JSON},
+  terms      = {},
+  license    = {https://creativecommons.org/publicdomain/zero/1.0/},
+  superseded = {}
 }

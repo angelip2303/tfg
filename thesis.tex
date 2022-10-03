@@ -15,7 +15,7 @@
 \usepackage{comment}
 \usepackage{graphicx} % package to handle graphics
 \usepackage{longtable} % package for long tables, exceeding one single page
-\usepackage{caption,subcaption} % packages to handle multiple figures in a minipage
+\usepackage{caption,subcaption} % packages to handle multiple figures
 \usepackage{amsmath,amssymb}% package to extend math capabilities
 \usepackage[version=4]{mhchem}
 \usepackage{listings} % package to include code listings
@@ -33,7 +33,7 @@
 \usepackage{xunicode}
 \usepackage{xltxtra}
 \usepackage{xcolor}
-\usepackage{noto} % --> Use Google Noto font to fix some characters when standard fonts (Times etc) are used
+\usepackage{noto} % --> Use Google Noto font
 \defaultfontfeatures{Mapping=tex-text} % converts LaTeX specials (``quotes'' --- dashes etc.) to unicode
 
 % ---- CUSTOM AMPERSAND
@@ -63,15 +63,13 @@
     ]{hyperref}  
 \hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue} 
 
-% package to properly describe the terms used, we put it after hyperref for the links to be clickable
-\usepackage[nonumberlist]{glossaries} 
-
 % package for fancy style headers and footers
 \usepackage{fancybox}
 
 % redefine bullet symbols and section style
-\renewcommand\thesection{\arabic{section}.}
-\setcounter{tocdepth}{2}
+\renewcommand\thesection{\arabic{section}}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3} % adding the depth to the subsubsection numbering
 \renewcommand{\labelitemi}{$\blacktriangleright$}
 \renewcommand{\labelitemii}{$\bullet$}
 
@@ -104,22 +102,15 @@
 
 \lstset{style=mystyle}
 
-% write the entries of the glossary
-
-\newglossaryentry{dumps}
-{
-    name=dump,
-    description={is a copy of the whole Wikibase raw data that can be downloaded from their system. This could also be understood as a snapshot of what was stored in the system at a certain moment},
-}
-
-\makenoidxglossaries
-
 % beautiful quotes at the beginning of each chapter
 
 \usepackage{epigraph}
 \setlength\epigraphwidth{8cm}
 \setlength\epigraphrule{0pt}
 \renewcommand{\textflush}{flushepinormal}
+
+% including the bibliography as one of the occurrences of the table of contents
+\usepackage[nottoc,numbib]{tocbibind}
 
 %%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%
 
@@ -147,7 +138,7 @@
 \listoftables
 \newpage\phantom{~}\newpage
 
-\setcounter{page}{0}    %reset numbering to 1,2,3...
+\setcounter{page}{0} % reset numbering to 1, 2, 3...
 \pagenumbering{arabic}
 
 % include files with content. Changes the names according to your taste.
@@ -184,8 +175,5 @@
 \appendix
 \chapter{Software}
 \input{thesis_appx01_software}
-
-\setglossarystyle{altlist}
-\printnoidxglossaries
 
 \end{document}
