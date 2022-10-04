@@ -7,3 +7,100 @@ A knowledge graph uses a graph-structured data model to represent knowledge of s
 \subsection{Wikibase graphs}
 
 Wikibase graphs are the main example of attributed ones, where we can represent property-value pairs
+
+\section{Data-flow algorithms}
+
+The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system.
+
+\subsection{MapReduce}
+
+Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence. Followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations; where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce: results in passing the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184} .
+
+\subsection{Pregel model}
+
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring ones.
+
+In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received ones (in the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this, is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph:
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+            activenode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=5mm},
+            inactivenode/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=5mm},
+        ]
+        %Nodes: Superstep 0
+        \node[activenode]   (super0_left)                                    {3};
+        \node[activenode]   (super0_centerleft) [right=of super0_left]       {6};
+        \node[activenode]   (super0_centeright) [right=of super0_centerleft] {2};
+        \node[activenode]   (super0_right)      [right=of super0_centeright] {1};
+
+        \node (super0) [right=of super0_right] {Superstep 0};
+
+        %Nodes: Superstep 1
+        \node[activenode]     (super1_left)       [below=of super0_left]       {6};
+        \node[inactivenode]   (super1_centerleft) [below=of super0_centerleft] {6};
+        \node[inactivenode]   (super1_centeright) [below=of super0_centeright] {2};
+        \node[activenode]     (super1_right)      [below=of super0_right]      {6};
+
+        \node [right=of super1_right] {Superstep 1};
+
+        %Nodes: Superstep 2
+        \node[inactivenode]   (super2_left)       [below=of super1_left]       {6};
+        \node[inactivenode]   (super2_centerleft) [below=of super1_centerleft] {6};
+        \node[activenode]     (super2_centeright) [below=of super1_centeright] {6};
+        \node[inactivenode]   (super2_right)      [below=of super1_right]      {6};
+
+        \node [right=of super2_right] {Superstep 2};
+
+        %Nodes: Superstep 3
+        \node[inactivenode]   (super3_left)       [below=of super2_left]       {6};
+        \node[inactivenode]   (super3_centerleft) [below=of super2_centerleft] {6};
+        \node[inactivenode]   (super3_centeright) [below=of super2_centeright] {6};
+        \node[inactivenode]   (super3_right)      [below=of super2_right]      {6};
+
+        \node [right=of super3_right] {Superstep 3};
+
+        %Dashed lines: connections between nodes
+        \path[dashed,-to] (super0_left) edge node {} (super1_centerleft);
+        \path[dashed,-to] (super0_centerleft) edge node {} (super1_left);
+        \path[dashed,-to] (super0_centerleft) edge node {} (super1_right);
+        \path[dashed,-to] (super0_centeright) edge node {} (super1_centerleft);
+        \path[dashed,-to] (super0_centeright) edge node {} (super1_right);
+        \path[dashed,-to] (super0_right) edge node {} (super1_centeright);
+
+        \path[dashed,-to] (super1_left) edge node {} (super2_centerleft);
+        \path[dashed,-to] (super1_right) edge node {} (super2_centeright);
+
+        \path[dashed,-to] (super2_centeright) edge node {} (super3_centerleft);
+        \path[dashed,-to] (super2_centeright) edge node {} (super3_right);
+
+        %Lines: connections between nodes
+        \path[to-to] (super0_left)       edge             node {} (super0_centerleft);
+        \path[-to]   (super0_centerleft) edge[bend left]  node {} (super0_right);
+        \path[to-]   (super0_centerleft) edge[bend right] node {} (super0_centeright);
+        \path[to-to] (super0_centeright) edge             node {} (super0_right);
+
+        \path[to-to] (super1_left)       edge             node {} (super1_centerleft);
+        \path[-to]   (super1_centerleft) edge[bend left]  node {} (super1_right);
+        \path[to-]   (super1_centerleft) edge[bend right] node {} (super1_centeright);
+        \path[to-to] (super1_centeright) edge             node {} (super1_right);
+
+        \path[to-to] (super2_left)       edge             node {} (super2_centerleft);
+        \path[-to]   (super2_centerleft) edge[bend left]  node {} (super2_right);
+        \path[to-]   (super2_centerleft) edge[bend right] node {} (super2_centeright);
+        \path[to-to] (super2_centeright) edge             node {} (super2_right);
+
+        \path[to-to] (super3_left)       edge             node {} (super3_centerleft);
+        \path[-to]   (super3_centerleft) edge[bend left]  node {} (super3_right);
+        \path[to-]   (super3_centerleft) edge[bend right] node {} (super3_centeright);
+        \path[to-to] (super3_centeright) edge             node {} (super3_right);
+
+        %Legend: active and inactive nodes
+        \matrix [draw,below left] [right=of super0] {
+            \node [activenode,label=right:Active node] {};     \\
+            \node [inactivenode,label=right:Inactive node] {}; \\
+        };
+    \end{tikzpicture}
+    \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
+    \label{fig:dumps}
+\end{figure}
