@@ -6,7 +6,6 @@
 %
 % As a minimal credit to the creator, please do not remove the lines above
 %
-
 \documentclass[11pt]{report}
 
 \usepackage[english]{babel}
@@ -24,6 +23,7 @@
 \usepackage{epigraph} % package to display quotes at each chapter
 \usepackage{tikz} % package for representing diagrams
 \usetikzlibrary{positioning}
+\usepackage{standalone} % package for allowing the use of external tikz figures
 
 % DOCUMENT LAYOUT
 \usepackage{geometry} 
@@ -119,6 +119,7 @@
 
 \pagenumbering{roman}
 
+
 % make title out of \author, \title, \date  specified in the preamble
 \input{thesis_01_titlepage}
 
@@ -136,12 +137,11 @@
 % Create a list of tables
 \listoftables
 
-\setcounter{page}{0} % reset numbering to 1, 2, 3...
-\pagenumbering{arabic}
-
-% include files with content. Changes the names according to your taste.
 
 \chapter{Introduction}
+% and we establish the numeration back to the normal one 
+\setcounter{page}{0} % reset numbering to 1, 2, 3...
+\pagenumbering{arabic}
 \label{chapter:intro}
 \input{thesis_04_intro}
 
@@ -166,8 +166,8 @@
 \input{thesis_09_conclusions}
 
 
-\bibliographystyle{unsrt} % bibliography style is unsorted numerically, other styles: alpha [Mer02] etc. Check LaTeX reference manual for more styles
-\bibliography{thesis_biblio} % this is the .bib file that holds the bibliography records 
+\bibliographystyle{unsrt}
+\bibliography{thesis_biblio}
 
 
 \appendix
