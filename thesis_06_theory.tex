@@ -28,3 +28,12 @@ In comparison to the MapReduce framework, where for each iteration the state of 
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
+
+Notice that at the beginning of the execution, the state of all the nodes will be active. This initial stage is called Superstep 0.
+
+\begin{figure}[h]
+    \centering
+    \includestandalone{figures/state_diagram}
+    \caption[State diagram of a vertex]{State diagram of a vertex~\cite{10.1145/1807167.1807184}}
+    \label{fig:state}
+\end{figure}
