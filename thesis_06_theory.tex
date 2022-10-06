@@ -18,9 +18,9 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 
 \subsection{Pregel model}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring ones.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge.} ones. \textit{Thinking like a vertex} could be understood as the \textit{late-motive} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve smaller graphs: a vertex and its neighboring ones.
 
-In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received ones (in the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this, is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}):
+In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received ones (in the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}):
 
 \begin{figure}[h]
     \centering
@@ -29,11 +29,22 @@ In comparison to the MapReduce framework, where for each iteration the state of 
     \label{fig:pregel}
 \end{figure}
 
-Notice that at the beginning of the execution, the state of all the nodes will be active. This initial stage is called Superstep 0.
+Notice that at the beginning of the execution, the state of all the nodes will be set to active. This initial stage is called \textit{superstep 0}. When a vertex is active, it sends a message to its neighbors, that will receive it in the next \textit{superstep}. In this case, the message we are propagating is the largest value that we have learned so far. As an example to that, the second to the left node starts with a value of 6 -- which is the maximum value of the graph -- and sends that number to its neighbors: 3 and 1. In the next \textit{superstep}, the vertices that have received a message have to compare both: the value they store and the received one. This comparison is what it's called the \textit{vprog} function, which will vary from one problem to another. Then, both nodes will update its state to 6. As they have updated their state, they will have to send the new value to its neighbors: beginning another iteration (\textit{superstep}). Notice that at the \textit{superstep 1}, the second to the left node is halted as it doesn't send any other message to its neighbors as it's value has not changed. When every node is halted -- inactive -- the execution of the algorithm finishes. In the figure \ref{fig:state} a simplified state machine is illustrated:
 
 \begin{figure}[h]
     \centering
     \includestandalone{figures/state_diagram}
-    \caption[State diagram of a vertex]{State diagram of a vertex~\cite{10.1145/1807167.1807184}}
+    \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
+\end{figure}
+
+\subsubsection{Architecture of a Pregel system}
+
+It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
+
+\begin{figure}[h]
+    \centering
+    \includestandalone{figures/architecture}
+    \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
+    \label{fig:architecture}
 \end{figure}
