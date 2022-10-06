@@ -42,7 +42,7 @@
     %Dashed lines: connections between nodes
     \path[dashed,-to] (super0_left) edge node {} (super1_centerleft);
     \path[dashed,-to] (super0_centerleft) edge node {} (super1_left);
-    \path[dashed,-to] (super0_centerleft) edge node {} (super1_right);
+    \path[dashed,-] (super0_centerleft.east) edge node {} (super1_right);
     \path[dashed,-to] (super0_centeright) edge node {} (super1_centerleft);
     \path[dashed,-to] (super0_centeright) edge node {} (super1_right);
     \path[dashed,-to] (super0_right) edge node {} (super1_centeright);
