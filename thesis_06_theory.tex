@@ -2,11 +2,18 @@
 
 \section{Knowledge graph}
 
-A knowledge graph uses a graph-structured data model to represent knowledge of some real world domain. Where each node represents an entity and the edges are the relationships between them. These graphs can be represented using different technologies; however, we will focus on attributed graphs.
+A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graphs are often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure for the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be represented using different technologies; however, we will focus on attributed graphs.
 
 \subsection{Wikibase graphs}
 
 Wikibase graphs are the main example of attributed ones, where we can represent property-value pairs
+
+\begin{figure}[h]
+    \centering
+    \includestandalone{figures/architecture_wikibase}
+    \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
+    \label{fig:architecture:wikibase}
+\end{figure}
 
 \section{Data-flow algorithms}
 
@@ -18,7 +25,7 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 
 \subsection{Pregel model}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relavance for better understanding the architecture of this system ~\ref{section:architecture}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
@@ -39,12 +46,13 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 \end{figure}
 
 \subsubsection{Architecture of a Pregel system}
+\label{section:architecture:pregel}
 
 It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/architecture}
+    \includestandalone{figures/architecture_pregel}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
-    \label{fig:architecture}
+    \label{fig:architecture:pregel}
 \end{figure}
