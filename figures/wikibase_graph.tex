@@ -1,0 +1,34 @@
+% Tikz File 'architecture_wikibase.tex'
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{../mystyle}
+\input{../commands}
+\usetikzlibrary{positioning}
+\begin{document}
+\begin{tikzpicture}[
+        vertex/.style={rectangle, rounded corners, draw=black!60, minimum width=20mm, minimum height=7.5mm, text centered, font=\footnotesize},
+        predicate/.style = {fill=white, font=\tiny}
+    ]
+    \node[vertex,align=center,draw=blue] (alanTuring) at (-2, 0) {\alanTuring\\{\tiny \dateOfBirth  \hspace{1mm} \textit{23 June 1912}}\\{\tiny \dateOfDeath  \hspace{1mm} \textit{7 June 1954}}};
+    \node[vertex] (human) at (-2, -2) {\Human};
+    \node[vertex] (birth) at (2.5, 2) {\warringtonLodge};
+    \node[vertex] (death) at (1, 4) {\wilmslow};
+    \node[vertex] (employer) at (4, 0) {\government};
+    \node[vertex] (country) at (7, 2) {\unitedKingdom};
+    \node[vertex] (bombe) at (4, -2) {\bombe};
+    \node[vertex] (machine) at (0, -3.5) {\computer};
+    \node[vertex] (town) at (6, 4) {\town};
+
+    \path[-to] (alanTuring.north) edge[bend left] node[predicate] {\placeOfDeath} (death.west);
+    \path[-to] (alanTuring.north) edge[bend left] node[predicate] {\placeOfBirth} (birth.west);
+    \path[-to] (alanTuring.south) edge node[predicate] {\instanceOf} (human.north);
+    \path[-to] (alanTuring.east) edge node[label={[align=left,font=\tiny]above:\employer\\- \timeStart \hspace{1mm} \textit{1938}\\- \timeEnd \hspace{1mm} \textit{1945}}] {} (employer.west);
+    \path[-to] (birth.east) edge node[predicate] {\country} (country.west);
+    \path[-to] (bombe.south) edge[bend left] node[predicate] {\instanceOf} (machine.east);
+    \path[-to] (bombe.north) edge node[predicate] {\manufacturer} (employer.south);
+    \path[-to] (bombe) edge[bend left] node[predicate] {\discoverer} (alanTuring);
+    \path[-to] (bombe.east) edge[bend right] node[predicate] {\country} (country);
+    \path[-to] (death.east) edge node[predicate] {\instanceOf} (town.west);
+    \path[-to] (death) edge node[predicate] {\country} (country);
+\end{tikzpicture}
+\end{document}

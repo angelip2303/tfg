@@ -6,13 +6,52 @@ A knowledge graph uses a graph-structured data model to represent knowledge of s
 
 \subsection{Wikibase graphs}
 
-Wikibase graphs are the main example of attributed ones, where we can represent property-value pairs
+Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to Wikidata; one example to that is Google which migrated its previous knowledge graph Freebase to Wikipedia in 2014~\cite{10.1145/2872427.2874809}. As of October 9 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}.
+
+Internally, Wikidata content is stored in a SQL database (MariaDB)
 
 \begin{figure}[h]
     \centering
     \includestandalone{figures/architecture_wikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:architecture:wikibase}
+\end{figure}
+
+\begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
+    Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ çis the set of possible values of a property.
+\end{definition}
+
+For better understanding this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
+
+\begin{table}
+    \begin{tabular}{ccl}
+        \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,       \\
+                      &      & \bombe, \town, \computer \}                                                  \\
+        \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,         \\
+                      &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \}                \\
+        \DataValueSet & = \{ & 23 June 1912, 7 June 1954, 1938, 1945\}                                      \\
+        $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                    \\
+                      &      & (\alanTuring, \dateOfBirth, 23 June 1912, \{\}),                             \\
+                      &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                        \\
+                      &      & (\alanTuring, \dateOfDeath, 7 June 1954, \{\}),                              \\
+                      &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                               \\
+                      &      & (\alanTuring, \employer, \government, \{ \timeStart:1938, \timeEnd:1945 \}), \\
+                      &      & (\bombe, \discoverer, \alanTuring, \{\}),                                    \\
+                      &      & (\bombe, \manufacturer, \government, \{\}),                                  \\
+                      &      & (\bombe, \instanceOf, \computer, \{\}),                                      \\
+                      &      & (\bombe, \country, \unitedKingdom, \{\})                                     \\
+                      &      & (\wilmslow, \country, \unitedKingdom, \{\})                                  \\
+                      &      & (\wilmslow, \instanceOf, \town, \{\}) \}                                     \\
+                      &      & (\warringtonLodge, \country, \unitedKingdom, \{\}) \}                        \\
+    \end{tabular}
+    \caption{\label{tab:wikibase:graph}Example of a Wikibase graph according to its definition}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includestandalone{figures/wikibase_graph}
+    \caption[Visualization of an example of a Wikibase knowledge graph]{Visualization of the previous example of a Wikibase knowledge graph\footnote{\url{https://www.wikidata.org/wiki/Q7251}}}
+    \label{fig:wikibase:graph}
 \end{figure}
 
 \section{Data-flow algorithms}
@@ -25,7 +64,7 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 
 \subsection{Pregel model}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relavance for better understanding the architecture of this system ~\ref{section:architecture}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relavance for better understanding the architecture of this system ~\ref{section:architecture:pregel}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
