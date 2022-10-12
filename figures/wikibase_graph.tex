@@ -9,14 +9,14 @@
         vertex/.style={rectangle, rounded corners, draw=black!60, minimum width=15mm, minimum height=7.5mm, text centered, font=\footnotesize},
         predicate/.style = {fill=white, font=\footnotesize}
     ]
-    \node[vertex,align=center,draw=blue] (alanTuring) at (-2, 0) {\alanTuring\\{\tiny \dateOfBirth  \hspace{1mm} \textit{23 June 1912}}\\{\tiny \dateOfDeath  \hspace{1mm} \textit{7 June 1954}}};
+    \node[vertex,align=center] (alanTuring) at (-2, 0) {\alanTuring\\{\tiny \dateOfBirth  \hspace{1mm} \textit{23 June 1912}}\\{\tiny \dateOfDeath  \hspace{1mm} \textit{7 June 1954}}};
     \node[vertex] (human) at (-2, -2) {\Human};
-    \node[vertex] (birth) at (2.5, 2.25) {\warringtonLodge};
+    \node[vertex] (birth) at (2.75, 2.25) {\warringtonLodge};
     \node[vertex] (death) at (1, 4) {\wilmslow};
     \node[vertex] (employer) at (4, 0) {\government};
-    \node[vertex] (country) at (7, 2.25) {\unitedKingdom};
+    \node[vertex] (country) at (7.25, 2.25) {\unitedKingdom};
     \node[vertex] (bombe) at (4, -2) {\bombe};
-    \node[vertex] (machine) at (1, -3.5) {\computer};
+    \node[vertex] (machine) at (1, -3.25) {\computer};
     \node[vertex] (town) at (6, 4) {\town};
 
     \path[-to] (alanTuring.north) edge[bend left] node[predicate] {\placeOfDeath} (death.west);

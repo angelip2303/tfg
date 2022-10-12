@@ -35,7 +35,7 @@ Lastly, an statement is a piece of data about an item\footnote{\url{https://www.
     \caption[Including information about the genre of \textit{The Hunger Games}]{\label{tab:wikibase:graph}Including information about the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
 \end{table}
 
-This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. We are linking concepts. In case we want to provide a translation to some of those entities, you may -- for example -- add information about the items or provide the appropriate name in a certain language. What will remain unchanged is the relation previously described.
+This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. Instead of storing attributes that are language-dependent; following this example, The \textit{statement} $s = \{ (\href{https://www.wikidata.org/wiki/Q11678}{Q11678}, \href{https://www.wikidata.org/wiki/Property:P136}{P136}, \href{https://www.wikidata.org/wiki/Q15062348}{Q15062348}, \{\}) \}$ is equivalent to: \textit{the genre of The Hunger games is dystopian fiction}. What we are doing is linking concepts.
 
 \begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
@@ -43,29 +43,28 @@ This way, what we are achieving is a database where we link concepts in a langua
 
 For better understanding this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
 
-\begin{table}[h]
-    \begin{tabular}{ccl}
-        \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
-                      &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
-        \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
-                      &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \hspace{1mm} \}                       \\
-        \DataValueSet & = \{ & {\small 23 June 1912}, {\small 7 June 1954}, {\small 1938}, {\small 1945}\hspace{1mm} \}         \\
-        $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                                        \\
-                      &      & (\alanTuring, \dateOfBirth, {\small 23 June 1912}, \{\}),                                        \\
-                      &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                                            \\
-                      &      & (\alanTuring, \dateOfDeath, {\small 7 June 1954}4, \{\}),                                        \\
-                      &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                                                   \\
-                      &      & (\alanTuring, \employer, \government, \{ \timeStart: {\small 1938}, \timeEnd: {\small 1945} \}), \\
-                      &      & (\bombe, \discoverer, \alanTuring, \{\}),                                                        \\
-                      &      & (\bombe, \manufacturer, \government, \{\}),                                                      \\
-                      &      & (\bombe, \instanceOf, \computer, \{\}),                                                          \\
-                      &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
-                      &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
-                      &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
-                      &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
-    \end{tabular}
+\begin{longtable}{ccl}
+    \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
+                  &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
+    \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
+                  &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \hspace{1mm} \}                       \\
+    \DataValueSet & = \{ & {\small 23 June 1912}, {\small 7 June 1954}, {\small 1938}, {\small 1945}\hspace{1mm} \}         \\
+    $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                                        \\
+                  &      & (\alanTuring, \dateOfBirth, {\small 23 June 1912}, \{\}),                                        \\
+                  &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                                            \\
+                  &      & (\alanTuring, \dateOfDeath, {\small 7 June 1954}, \{\}),                                         \\
+                  &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                                                   \\
+                  &      & (\alanTuring, \employer, \government, \{ \timeStart: {\small 1938}, \timeEnd: {\small 1945} \}), \\
+                  &      & (\bombe, \discoverer, \alanTuring, \{\}),                                                        \\
+                  &      & (\bombe, \manufacturer, \government, \{\}),                                                      \\
+                  &      & (\bombe, \instanceOf, \computer, \{\}),                                                          \\
+                  &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
+                  &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
+                  &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
+                  &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
     \caption{\label{tab:wikibase:graph}Example of a Wikibase graph according to its definition}
-\end{table}
+\end{longtable}
+
 
 The figure \ref{fig:wikibase:graph} shows a representation of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
