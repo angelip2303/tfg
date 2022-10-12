@@ -2,13 +2,11 @@
 
 \section{Knowledge graph}
 
-A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graphs are often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure for the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be represented using different technologies; however, we will focus on attributed graphs.
+A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graphs are often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be represented using different technologies; however, we will focus on attributed graphs.
 
 \subsection{Wikibase graphs}
 
-Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to Wikidata; one example to that is Google which migrated its previous knowledge graph Freebase to Wikipedia in 2014~\cite{10.1145/2872427.2874809}. As of October 9 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}.
-
-Internally, Wikidata content is stored in a SQL database (MariaDB)
+Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikipedia in 2014~\cite{10.1145/2872427.2874809}. As of October 9 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki and an RDF-based one that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
 \begin{figure}[h]
     \centering
@@ -17,35 +15,59 @@ Internally, Wikidata content is stored in a SQL database (MariaDB)
     \label{fig:architecture:wikibase}
 \end{figure}
 
+Informally speaking, the Wikibase data model is composed by \textit{entities} and \textit{statements} (about those entities). This way, an entity can be either an \textit{item} or a \textit{property}. Items are used to represent all the \textit{things} from the human knowledge. Usually denoted by a \texttt{Q} followed by an identifier; for example, \href{https://www.wikidata.org/wiki/Q7251}{Q7251} represents Alan Turing in Wikidata. On the other hand, properties model a relationship between an item and a value, and are represented by a \texttt{P} followed by its identifier; as an example, \href{https://www.wikidata.org/wiki/Property:P31}{P31} is the property \textit{instance of} in Wikidata.
+
+For values to be associated to properties, they must belong to some specific data types\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include: URLs, time, quantities, mathematical expressions; to name a few.
+
+Lastly, an statement is a piece of data about an item\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}} that is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value. An example to that is:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|l|l|l|}
+        \hline
+        \rowcolor[HTML]{EFEFEF}
+        \textbf{Language}     & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Item}}                              & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Property}}                            & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Value}}                             \\ \hline
+        \textit{English}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q11678}{The Hunger Games}}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{genre}}            & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction}}  \\ \hline
+        \textit{Spanish}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q11678}{Los juegos del hambre}} & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{género}}           & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{ficción distópica}}  \\ \hline
+        \textit{French}       & \multicolumn{1}{l|}{ \href{https://www.wikidata.org/wiki/Q11678}{Hunger Games}}         & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{genre artistique}} & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{fiction dystopique}} \\ \hline
+        \multicolumn{1}{l|}{} & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Q11678}{Q11678}}                & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Property:P136}{P136}}             & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Q15062348}{Q15062348} }         \\ \cline{2-4}
+    \end{tabular}
+    \caption[Including information about the genre of \textit{The Hunger Games}]{\label{tab:wikibase:graph}Including information about the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
+\end{table}
+
+This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. We are linking concepts. In case we want to provide a translation to some of those entities, you may -- for example -- add information about the items or provide the appropriate name in a certain language. What will remain unchanged is the relation previously described.
+
 \begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
-    Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ çis the set of possible values of a property.
+    Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
 For better understanding this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
 
-\begin{table}
+\begin{table}[h]
     \begin{tabular}{ccl}
-        \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,       \\
-                      &      & \bombe, \town, \computer \}                                                  \\
-        \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,         \\
-                      &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \}                \\
-        \DataValueSet & = \{ & 23 June 1912, 7 June 1954, 1938, 1945\}                                      \\
-        $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                    \\
-                      &      & (\alanTuring, \dateOfBirth, 23 June 1912, \{\}),                             \\
-                      &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                        \\
-                      &      & (\alanTuring, \dateOfDeath, 7 June 1954, \{\}),                              \\
-                      &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                               \\
-                      &      & (\alanTuring, \employer, \government, \{ \timeStart:1938, \timeEnd:1945 \}), \\
-                      &      & (\bombe, \discoverer, \alanTuring, \{\}),                                    \\
-                      &      & (\bombe, \manufacturer, \government, \{\}),                                  \\
-                      &      & (\bombe, \instanceOf, \computer, \{\}),                                      \\
-                      &      & (\bombe, \country, \unitedKingdom, \{\})                                     \\
-                      &      & (\wilmslow, \country, \unitedKingdom, \{\})                                  \\
-                      &      & (\wilmslow, \instanceOf, \town, \{\}) \}                                     \\
-                      &      & (\warringtonLodge, \country, \unitedKingdom, \{\}) \}                        \\
+        \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
+                      &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
+        \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
+                      &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \hspace{1mm} \}                       \\
+        \DataValueSet & = \{ & {\small 23 June 1912}, {\small 7 June 1954}, {\small 1938}, {\small 1945}\hspace{1mm} \}         \\
+        $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                                        \\
+                      &      & (\alanTuring, \dateOfBirth, {\small 23 June 1912}, \{\}),                                        \\
+                      &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                                            \\
+                      &      & (\alanTuring, \dateOfDeath, {\small 7 June 1954}4, \{\}),                                        \\
+                      &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                                                   \\
+                      &      & (\alanTuring, \employer, \government, \{ \timeStart: {\small 1938}, \timeEnd: {\small 1945} \}), \\
+                      &      & (\bombe, \discoverer, \alanTuring, \{\}),                                                        \\
+                      &      & (\bombe, \manufacturer, \government, \{\}),                                                      \\
+                      &      & (\bombe, \instanceOf, \computer, \{\}),                                                          \\
+                      &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
+                      &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
+                      &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
+                      &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
     \end{tabular}
     \caption{\label{tab:wikibase:graph}Example of a Wikibase graph according to its definition}
 \end{table}
+
+The figure \ref{fig:wikibase:graph} shows a representation of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
 \begin{figure}[h]
     \centering
@@ -53,6 +75,8 @@ For better understanding this formal definition, let me explain it step-by-step.
     \caption[Visualization of an example of a Wikibase knowledge graph]{Visualization of the previous example of a Wikibase knowledge graph\footnote{\url{https://www.wikidata.org/wiki/Q7251}}}
     \label{fig:wikibase:graph}
 \end{figure}
+
+\subsubsection{Export formats of the Wikibase data model}
 
 \section{Data-flow algorithms}
 

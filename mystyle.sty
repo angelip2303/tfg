@@ -6,6 +6,11 @@
 \usepackage{caption,subcaption} % packages to handle multiple figures
 \usepackage{amsmath,amssymb} % package to extend math capabilities
 \usepackage{fontspec} % package to activate XeTeX font manager
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning,fit,shapes.geometric}
+\usepackage{listings} % package to include code listings
 \usepackage{standalone} % package for allowing the use of external tikz figures
 
 
@@ -55,9 +60,9 @@
 \renewcommand{\labelitemi}{$\blacktriangleright$}
 \renewcommand{\labelitemii}{$\bullet$}
 
+
+
 % setting up lstlisting's style and coloring
-\usepackage{xcolor}
-\usepackage{listings} % package to include code listings
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -94,12 +99,6 @@
 
 % including the bibliography as one of the occurrences of the table of contents
 \usepackage[nottoc,numbib]{tocbibind}
-
-
-% package for representing some nice diagrams
-\usepackage{tikz}
-\usepackage{pgfplots} % package allowing visualization of plots
-\usetikzlibrary{positioning,fit,shapes.geometric}
 
 
 % package allowing to break URLs also by hyphens
