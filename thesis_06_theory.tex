@@ -1,12 +1,12 @@
 \epigraph{\textit{It doesn't matter how beautiful your theory is, it doesn't matter how smart you are. If it doesn't agree with experiment, it's wrong.}}{-- \textup{Richard P. Feynman }}
 
-\section{Knowledge graph}
+\section{Knowledge graphs}
 
-A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graphs are often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be represented using different technologies; however, we will focus on attributed graphs.
+A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
 
 \subsection{Wikibase graphs}
 
-Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikipedia in 2014~\cite{10.1145/2872427.2874809}. As of October 9 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki and an RDF-based one that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
+Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one, that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
 \begin{figure}[h]
     \centering
@@ -17,11 +17,11 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 Informally speaking, the Wikibase data model is composed by \textit{entities} and \textit{statements} (about those entities). This way, an entity can be either an \textit{item} or a \textit{property}. Items are used to represent all the \textit{things} from the human knowledge. Usually denoted by a \texttt{Q} followed by an identifier; for example, \href{https://www.wikidata.org/wiki/Q7251}{Q7251} represents Alan Turing in Wikidata. On the other hand, properties model a relationship between an item and a value, and are represented by a \texttt{P} followed by its identifier; as an example, \href{https://www.wikidata.org/wiki/Property:P31}{P31} is the property \textit{instance of} in Wikidata.
 
-For values to be associated to properties, they must belong to some specific data types\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include: URLs, time, quantities, mathematical expressions; to name a few.
+For values to be associated to properties, they must belong to some specific data type\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include: URLs, time, quantities, mathematical expressions; to name a few.
 
-Lastly, an statement is a piece of data about an item\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}} that is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value. An example to that is:
+Lastly, an statement is a piece of data about an item\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}, and is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value. An example to that is:
 
-\begin{table}[ht]
+\begin{table}[h]
     \centering
     \begin{tabular}{|c|l|l|l|}
         \hline
@@ -42,6 +42,10 @@ This way, what we are achieving is a database where we link concepts in a langua
 \end{definition}
 
 For better understanding this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
+
+\begin{example}
+    We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
+\end{example}
 
 \begin{longtable}{ccl}
     \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
@@ -66,7 +70,7 @@ For better understanding this formal definition, let me explain it step-by-step.
 \end{longtable}
 
 
-The figure \ref{fig:wikibase:graph} shows a representation of the previously described \ref{tab:wikibase:graph} Wikibase graph.
+The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
 \begin{figure}[h]
     \centering
@@ -75,7 +79,40 @@ The figure \ref{fig:wikibase:graph} shows a representation of the previously des
     \label{fig:wikibase:graph}
 \end{figure}
 
-\subsubsection{Export formats of the Wikibase data model}
+\subsubsection{Wikibase data serialization}
+
+The Wikibase data model supports two export formats: JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles.
+
+\paragraph{Wikibase JSON serialization}
+
+is represented as:
+
+\begin{lstlisting}[style=JSON]
+[
+    { "type": "item", "id": "Q42", "claims": { "P31": [...
+    { "type": "item", "id": "Q80", "claims": { "P108": [...
+    { "type": "property", "id": "P108", "claims": { ... 
+    ... 
+] 
+\end{lstlisting}
+
+\paragraph{Wikibase RDF serialization}
+
+is represented as\footnote{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}:
+
+\begin{lstlisting}[style=Turtle]
+wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
+
+s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 a wikibase:Statement,
+wikibase:BestRank ;
+wikibase:rank wikibase:NormalRank ;
+ps:P108 wd:Q220798 ;
+pq:P580 "1938-01-01T00:00:00Z"^^xsd:dateTime ;
+pqv:P580 v:560845b053d80d9ba30cc757808172fd ;
+pq:P582 "1945-01-01T00:00:00Z"^^xsd:dateTime ;
+pqv:P582 v:db243e11a2e2c6bb034f59e082f66d29 ;
+prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .
+\end{lstlisting}
 
 \section{Data-flow algorithms}
 

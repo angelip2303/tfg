@@ -27,6 +27,7 @@
 \include{thesis_03_dedication}
 
 % Create table of contents - not mandatory
+\pdfbookmark{\contentsname}{toc}
 \tableofcontents
 
 % Create a list of figures
@@ -51,18 +52,27 @@
 \label{chapter:theory}
 \input{thesis_06_theory}
 
+\part{Design and Implementation of the Pregel solution}
+
 \chapter{Experimental Procedure}
 \label{chapter:experiment}
 \input{thesis_07_experiment}
+
+\part{Project Synthesis}
 
 \chapter{Results and Analysis}
 \label{chapter:results}
 \input{thesis_08_results}
 
+\chapter{Planning and Budget}
+\label{chapter:planning}
+\input{thesis_09_planning}
+
 \chapter{Conclusions}
 \label{chapter:conclusions}
-\input{thesis_09_conclusions}
+\input{thesis_10_conclusions}
 
+\part{Annexes and References}
 
 \bibliographystyle{unsrt}
 \bibliography{thesis_biblio}

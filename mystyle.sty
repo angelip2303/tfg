@@ -13,6 +13,7 @@
 \usepackage{listings} % package to include code listings
 \usepackage{standalone} % package for allowing the use of external tikz figures
 \usepackage{longtable} % package to allow tables to take more than one page 
+\usepackage{pgfgantt}
 
 
 % OVERALL TWEAKS
@@ -50,7 +51,16 @@
         pdftitle={Ángel Iglesias Préstamo - Analysis and implementation of an algorithm to validate Knowledge Graphs using Big data techniques},
         pdfauthor={UO270534}
     ]{hyperref}  
-\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue} 
+\hypersetup{
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=black,
+    urlcolor=blue,
+    bookmarksnumbered=true,
+    bookmarksopen=true,         
+    bookmarksopenlevel=1,
+    pdfpagemode=UseOutlines
+} 
 
 
 % redefine bullet symbols and section style
@@ -108,3 +118,4 @@
 
 % giving definitions an appropiate styling
 \newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]

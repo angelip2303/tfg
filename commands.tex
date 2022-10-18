@@ -38,3 +38,47 @@
 
 \setlength{\tabcolsep}{1mm}
 \renewcommand{\arraystretch}{1.5}
+
+
+\lstdefinestyle{Turtle}{
+    numberblanklines=false,
+    morekeywords={prefix, @prefix,
+            % Common prefixes...
+            cex:,cdt:,dc:,dct:,dbo:,dbr:,doap:,ex:,foaf:,lemon:,org:,owl:,qb:,qp:,rdf:,rdfs:,sh:,sx:,schema:,skos:,skosxl:,void:,wr:,wt:,wf:,xsd:},
+    alsoletter={:,@},
+    comment=[l]{\#},
+    morestring=[b]',
+    morestring=[b]"
+}
+
+
+\newcommand\JSONnumbervaluestyle{\color{blue}}
+\newcommand\JSONstringvaluestyle{\color{red}}
+
+% switch used as state variable
+\newif\ifcolonfoundonthisline
+
+\makeatletter
+
+
+\lstdefinestyle{JSON}
+{
+    showstringspaces    = false,
+    keywords            = {false,true},
+    alsoletter          = 0123456789.,
+    morestring          = [s]{"}{"},
+    stringstyle         = \ifcolonfoundonthisline\JSONstringvaluestyle\fi,
+    MoreSelectCharTable =%
+    \lst@DefSaveDef{`:}\colon@json{\processColon@json},
+    basicstyle          = \ttfamily,
+    keywordstyle        = \ttfamily\bfseries,
+}
+
+
+%% flip the switch if a colon is found in Pmode
+\newcommand\processColon@json{%
+    \colon@json%
+    \ifnum\lst@mode=\lst@Pmode%
+        \global\colonfoundonthislinetrue%
+    \fi
+}
