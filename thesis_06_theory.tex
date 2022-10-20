@@ -23,16 +23,9 @@ Lastly, an statement is a piece of data about an item\footnote{\url{https://www.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{|c|l|l|l|}
-        \hline
-        \rowcolor[HTML]{EFEFEF}
-        \textbf{Language}     & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Item}}                              & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Property}}                            & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Value}}                             \\ \hline
-        \textit{English}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q11678}{The Hunger Games}}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{genre}}            & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction}}  \\ \hline
-        \textit{Spanish}      & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q11678}{Los juegos del hambre}} & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{género}}           & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{ficción distópica}}  \\ \hline
-        \textit{French}       & \multicolumn{1}{l|}{ \href{https://www.wikidata.org/wiki/Q11678}{Hunger Games}}         & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Property:P136}{genre artistique}} & \multicolumn{1}{l|}{\href{https://www.wikidata.org/wiki/Q15062348}{fiction dystopique}} \\ \hline
-        \multicolumn{1}{l|}{} & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Q11678}{Q11678}}                & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Property:P136}{P136}}             & \multicolumn{1}{c|}{\href{https://www.wikidata.org/wiki/Q15062348}{Q15062348} }         \\ \cline{2-4}
-    \end{tabular}
-    \caption[Including information about the genre of \textit{The Hunger Games}]{\label{tab:wikibase:graph}Including information about the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
+    \input{figures/tab_01_lang}
+    \caption[Including information about the genre of \textit{The Hunger Games}]{Including information about the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
+    \label{tab:language}
 \end{table}
 
 This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. Instead of storing attributes that are language-dependent; following this example, The \textit{statement} $s = \{ (\href{https://www.wikidata.org/wiki/Q11678}{Q11678}, \href{https://www.wikidata.org/wiki/Property:P136}{P136}, \href{https://www.wikidata.org/wiki/Q15062348}{Q15062348}, \{\}) \}$ is equivalent to: \textit{the genre of The Hunger games is dystopian fiction}. What we are doing is linking concepts.
@@ -47,11 +40,7 @@ For better understanding this formal definition, let me explain it step-by-step.
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
 
-\begin{table}[h]
-    \input{figures/tab_01_wikibaseGraph}
-    \caption{Example of a Wikibase graph according to its definition}
-    \label{tab:wikibase:graph}
-\end{table}
+\input{figures/tab_02_wikibaseGraph}
 
 The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
@@ -134,7 +123,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/architecture_pregel}
+    \includestandalone{figures/fig_06_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
