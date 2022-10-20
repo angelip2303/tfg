@@ -1,0 +1,26 @@
+% Longatable File '01_tab_wikibaseGraph.tex'
+\documentclass{standalone}
+\usepackage{longtable}
+\input{../commands}
+\begin{document}
+\begin{longtable}{ccl}
+    \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
+                  &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
+    \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
+                  &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \hspace{1mm} \}                       \\
+    \DataValueSet & = \{ & {\small 23 June 1912}, {\small 7 June 1954}, {\small 1938}, {\small 1945}\hspace{1mm} \}         \\
+    $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                                        \\
+                  &      & (\alanTuring, \dateOfBirth, {\small 23 June 1912}, \{\}),                                        \\
+                  &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                                            \\
+                  &      & (\alanTuring, \dateOfDeath, {\small 7 June 1954}, \{\}),                                         \\
+                  &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                                                   \\
+                  &      & (\alanTuring, \employer, \government, \{ \timeStart: {\small 1938}, \timeEnd: {\small 1945} \}), \\
+                  &      & (\bombe, \discoverer, \alanTuring, \{\}),                                                        \\
+                  &      & (\bombe, \manufacturer, \government, \{\}),                                                      \\
+                  &      & (\bombe, \instanceOf, \computer, \{\}),                                                          \\
+                  &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
+                  &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
+                  &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
+                  &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
+\end{longtable}
+\end{document}

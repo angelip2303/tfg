@@ -10,7 +10,7 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/architecture_wikibase}
+    \includestandalone{figures/fig_02_architectureWikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:architecture:wikibase}
 \end{figure}
@@ -47,34 +47,17 @@ For better understanding this formal definition, let me explain it step-by-step.
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
 
-\begin{longtable}{ccl}
-    \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
-                  &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
-    \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
-                  &      & \timeStart, \country, \timeEnd, \manufacturer, \instanceOf \hspace{1mm} \}                       \\
-    \DataValueSet & = \{ & {\small 23 June 1912}, {\small 7 June 1954}, {\small 1938}, {\small 1945}\hspace{1mm} \}         \\
-    $\StmtSet$    & = \{ & (\alanTuring, \instanceOf, \Human, \{\}),                                                        \\
-                  &      & (\alanTuring, \dateOfBirth, {\small 23 June 1912}, \{\}),                                        \\
-                  &      & (\alanTuring, \placeOfBirth, \warringtonLodge, \{\}),                                            \\
-                  &      & (\alanTuring, \dateOfDeath, {\small 7 June 1954}, \{\}),                                         \\
-                  &      & (\alanTuring, \placeOfDeath, \wilmslow, \{\}),                                                   \\
-                  &      & (\alanTuring, \employer, \government, \{ \timeStart: {\small 1938}, \timeEnd: {\small 1945} \}), \\
-                  &      & (\bombe, \discoverer, \alanTuring, \{\}),                                                        \\
-                  &      & (\bombe, \manufacturer, \government, \{\}),                                                      \\
-                  &      & (\bombe, \instanceOf, \computer, \{\}),                                                          \\
-                  &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
-                  &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
-                  &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
-                  &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
-    \caption{\label{tab:wikibase:graph}Example of a Wikibase graph according to its definition}
-\end{longtable}
-
+\begin{table}[h]
+    \input{figures/tab_01_wikibaseGraph}
+    \caption{Example of a Wikibase graph according to its definition}
+    \label{tab:wikibase:graph}
+\end{table}
 
 The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/wikibase_graph}
+    \includestandalone{figures/fig_03_wikibaseGraph}
     \caption[Visualization of an example of a Wikibase knowledge graph]{Visualization of the previous example of a Wikibase knowledge graph\footnote{\url{https://www.wikidata.org/wiki/Q7251}}}
     \label{fig:wikibase:graph}
 \end{figure}
@@ -124,13 +107,13 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 
 \subsection{Pregel model}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relavance for better understanding the architecture of this system ~\ref{section:architecture:pregel}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relevance for better understanding the architecture of this system ~\ref{section:architecture:pregel}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph\footnote{A graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.}, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones.
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/pregel_trace}
+    \includestandalone{figures/fig_04_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -139,7 +122,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[h]
     \centering
-    \includestandalone{figures/state_diagram}
+    \includestandalone{figures/fig_05_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
