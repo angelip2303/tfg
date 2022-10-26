@@ -8,7 +8,7 @@ A knowledge graph uses a graph-structured data model to represent knowledge of s
 
 Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one, that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includestandalone{figures/fig_02_architectureWikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
@@ -21,12 +21,13 @@ For values to be associated to properties, they must belong to some specific dat
 
 Lastly, an statement is a piece of data about an item\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}, and is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value. An example to that is:
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \input{figures/tab_01_lang}
-    \caption[Including information about the genre of \textit{The Hunger Games}]{Including information about the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
+    \caption[Including information about the genre of \textit{The Hunger Games}]{Including information about the genre of \textit{The Hunger Games}\footnotemark}
     \label{tab:language}
 \end{table}
+\footnotetext{\url{https://www.wikidata.org/wiki/Q11678}}
 
 This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. Instead of storing attributes that are language-dependent; following this example, The \textit{statement} $s = \{ (\href{https://www.wikidata.org/wiki/Q11678}{Q11678}, \href{https://www.wikidata.org/wiki/Property:P136}{P136}, \href{https://www.wikidata.org/wiki/Q15062348}{Q15062348}, \{\}) \}$ is equivalent to: \textit{the genre of The Hunger games is dystopian fiction}. What we are doing is linking concepts.
 
@@ -42,9 +43,9 @@ For better understanding this formal definition, let me explain it step-by-step.
 
 \input{figures/tab_02_wikibaseGraph}
 
-The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph.
+The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph. Notice that in table \ref{tab:wikibase:graph} a human-readable version of the wikibase graph is provided, each of the elements shown are language-agnostic URIs.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includestandalone{figures/fig_03_wikibaseGraph}
     \caption[Visualization of an example of a Wikibase knowledge graph]{Visualization of the previous example of a Wikibase knowledge graph\footnote{\url{https://www.wikidata.org/wiki/Q7251}}}
@@ -70,7 +71,11 @@ is represented as:
 
 \paragraph{Wikibase RDF serialization}
 
-is represented as\footnote{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}:
+was designed with the idea in mind of representing all the structures of the Wikibase data model in RDF. As an example to that, a fragment of the information about Alan Turing that models one of his employers is represented as follows\footnote{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}:
+
+\begin{example}
+    \alanTuring was \employer by \government between 1938 and 1945.
+\end{example}
 
 \begin{lstlisting}[style=Turtle]
 wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
@@ -100,7 +105,7 @@ Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system 
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includestandalone{figures/fig_04_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
@@ -109,7 +114,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 Notice that at the beginning of the execution, the state of all the nodes will be set to active. This initial stage is called \textit{superstep 0}. When a vertex is active, it sends a message to its neighbors, that will receive it in the next \textit{superstep}. In this case, the message we are propagating is the largest value that we have learned so far. As an example to that, the second to the left node starts with a value of 6 -- which is the maximum value of the graph -- and sends that number to its neighbors: 3 and 1. In the next \textit{superstep}, the vertices that have received a message have to compare both: the value they store and the received one. This comparison is what it's called the \textit{vprog} function, which will vary from one problem to another. Then, both nodes will update its state to 6. As they have updated their state, they will have to send the new value to its neighbors: beginning another iteration (\textit{superstep}). Notice that at the \textit{superstep 1}, the second to the left node is halted as it doesn't send any other message to its neighbors as it's value has not changed. When every node is halted -- inactive -- the execution of the algorithm finishes. In the figure \ref{fig:state} a simplified state machine is shown.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includestandalone{figures/fig_05_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
@@ -121,7 +126,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includestandalone{figures/fig_06_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}

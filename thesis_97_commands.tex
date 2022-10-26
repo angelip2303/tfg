@@ -1,8 +1,7 @@
+% creating some commands for reuse later on :D
 \newcommand{\myfont}[1]{\ensuremath{\mathcal{#1}}}
-
 \newcommand{\triple}[3]{\ensuremath{\langle #1,#2,#3 \rangle}}
 \newcommand{\quadruple}[4]{\ensuremath{\langle #1,#2,#3,#4\rangle}}
-
 \newcommand{\ItemSet}{\myfont{Q}}
 \newcommand{\PropSet}{\myfont{P}}
 \newcommand{\EntitySet}{\myfont{E}}
@@ -10,9 +9,7 @@
 \newcommand{\DataValueSet}{\myfont{D}}
 \newcommand{\StmtSet}{\rho}
 \newcommand{\FinSet}[1]{\ensuremath{FinSet(#1)}}
-
 \newcommand{\hrefc}[3][blue]{\href{#2}{\color{#1}{#3}}}%
-
 \newcommand{\elemento}[2]{\ensuremath{\hrefc[violet]{http://www.wikidata.org/entity/#2}{#1}}}
 \newcommand{\propiedad}[2]{\ensuremath{\hrefc[blue]{http://www.wikidata.org/entity/#2}{#1}}}
 \newcommand{\alanTuring}{\elemento{alanTuring}{Q7251}}
@@ -35,50 +32,3 @@
 \newcommand{\manufacturer}{\propiedad{manufacturer}{P176}}
 \newcommand{\Human}{\elemento{Human}{Q5}}
 \newcommand{\instanceOf}{\propiedad{instanceOf}{P31}}
-
-\setlength{\tabcolsep}{1mm}
-\renewcommand{\arraystretch}{1.5}
-
-
-\lstdefinestyle{Turtle}{
-    numberblanklines=false,
-    morekeywords={prefix, @prefix,
-            % Common prefixes...
-            cex:,cdt:,dc:,dct:,dbo:,dbr:,doap:,ex:,foaf:,lemon:,org:,owl:,qb:,qp:,rdf:,rdfs:,sh:,sx:,schema:,skos:,skosxl:,void:,wr:,wt:,wf:,xsd:},
-    alsoletter={:,@},
-    comment=[l]{\#},
-    morestring=[b]',
-    morestring=[b]"
-}
-
-
-\newcommand\JSONnumbervaluestyle{\color{blue}}
-\newcommand\JSONstringvaluestyle{\color{red}}
-
-% switch used as state variable
-\newif\ifcolonfoundonthisline
-
-\makeatletter
-
-
-\lstdefinestyle{JSON}
-{
-    showstringspaces    = false,
-    keywords            = {false,true},
-    alsoletter          = 0123456789.,
-    morestring          = [s]{"}{"},
-    stringstyle         = \ifcolonfoundonthisline\JSONstringvaluestyle\fi,
-    MoreSelectCharTable =%
-    \lst@DefSaveDef{`:}\colon@json{\processColon@json},
-    basicstyle          = \ttfamily,
-    keywordstyle        = \ttfamily\bfseries,
-}
-
-
-%% flip the switch if a colon is found in Pmode
-\newcommand\processColon@json{%
-    \colon@json%
-    \ifnum\lst@mode=\lst@Pmode%
-        \global\colonfoundonthislinetrue%
-    \fi
-}

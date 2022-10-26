@@ -1,32 +1,26 @@
-%
-% This template has been created by Theo J. Mertzimekis, PhD
-% It can be modified freely to meet your needs.
-% Help in using this thesis can be found here:
-% http://users.uoa.gr/~tmertzi/LaTeX
-%
-% As a minimal credit to the creator, please do not remove the lines above
-%
-\documentclass[11pt]{report}
-\usepackage{mystyle}
-
+\documentclass{legrand}
+\usepackage{thesis_98_packages}
 
 \begin{document}
-
 \pagenumbering{roman}
 
-
 % custom commands for use in the paper
-\input{commands}
+\input{thesis_97_commands}
+\input{thesis_99_listings}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
 
 % make title out of \author, \title, \date  specified in the preamble
 \input{thesis_01_titlepage}
 
 % include the abstract, written in a separate file called thesis_abstract.tex
 \setcounter{page}{0}
+\chapter*{Abstract}
 \include{thesis_02_abstract}
 \include{thesis_03_dedication}
 
 % Create table of contents - not mandatory
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
 \pdfbookmark{\contentsname}{toc}
 \tableofcontents
 
@@ -74,12 +68,11 @@
 
 \part{Annexes and References}
 
-\bibliographystyle{unsrt}
-\bibliography{thesis_biblio}
+\chapter{References} % Chapter heading image
+\printbibliography[heading=bibempty]
 
 
 \appendix
 \chapter{Software}
 \input{thesis_appx01_software}
-
 \end{document}
