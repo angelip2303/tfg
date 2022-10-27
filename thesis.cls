@@ -8,7 +8,7 @@
 %
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{thesis}[2022/10/26 Final Degree Project]
-\LoadClass[11pt]{book}
+\LoadClass[11pt]{report}
 
 % ---- COLORS ----
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -66,7 +66,6 @@
     pdfpagemode=UseOutlines
 } 
 
-% beautiful quotes at the beginning of each chapter
 % beautiful quotes at the beginning of each chapter
 \RequirePackage{epigraph}
 \setlength\epigraphwidth{8cm}

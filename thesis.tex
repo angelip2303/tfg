@@ -2,6 +2,13 @@
 \usepackage{thesis_98_packages}
 
 \begin{document}
+
+% Uncomment and fill out to include PDF metadata for the author and title of the book
+\hypersetup{
+    pdftitle={Analysis and implementation of an algorithm to validate Knowledge Graphs using Big data techniques},
+    pdfauthor={Ángel Iglesias Préstamo}
+}
+
 \pagenumbering{roman}
 
 % custom commands for use in the paper
@@ -13,9 +20,8 @@
 % make title out of \author, \title, \date  specified in the preamble
 \input{thesis_01_titlepage}
 
-% include the abstract, written in a separate file called thesis_abstract.tex
+% include the abstract, written in a separate file called thesis_02_abstract.tex
 \setcounter{page}{0}
-\chapter*{Abstract}
 \include{thesis_02_abstract}
 \include{thesis_03_dedication}
 

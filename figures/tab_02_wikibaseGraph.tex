@@ -1,12 +1,9 @@
-% Longatable File '01_tab_wikibaseGraph.tex'
+% File '01_tab_wikibaseGraph.tex'
 \documentclass{standalone}
 \usepackage{longtable}
-\input{../commands}
+\input{../thesis_97_commands}
 \begin{document}
-\begin{longtable}{ccl}
-    \caption{Example of a Wikibase graph according to its definition}
-    \label{tab:wikibase:graph}
-    \endlastfoot
+\begin{tabular}{ccl}
     \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
                   &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
     \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
@@ -24,6 +21,6 @@
                   &      & (\bombe, \country, \unitedKingdom, \{\})                                                         \\
                   &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
                   &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
-                  &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}                                \\
-\end{longtable}
+                  &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}
+\end{tabular}
 \end{document}
