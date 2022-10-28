@@ -1,5 +1,7 @@
 \epigraph{\textit{It doesn't matter how beautiful your theory is, it doesn't matter how smart you are. If it doesn't agree with experiment, it's wrong.}}{-- \textup{Richard P. Feynman }}
 
+In the following chapter, a description of the theoretical concepts needed for a proper understanding of this document is done. Ranging from \textit{knowledge graphs} to \textit{data-flow algorithms}, we are providing a firm foundation for the experiment to be conducted.
+
 \section{Knowledge graphs}
 
 A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
@@ -17,9 +19,13 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 Informally speaking, the Wikibase data model is composed by \textit{entities} and \textit{statements} (about those entities). This way, an entity can be either an \textit{item} or a \textit{property}. Items are used to represent all the \textit{things} from the human knowledge. Usually denoted by a \texttt{Q} followed by an identifier; for example, \href{https://www.wikidata.org/wiki/Q7251}{Q7251} represents Alan Turing in Wikidata. On the other hand, properties model a relationship between an item and a value, and are represented by a \texttt{P} followed by its identifier; as an example, \href{https://www.wikidata.org/wiki/Property:P31}{P31} is the property \textit{instance of} in Wikidata.
 
-For values to be associated to properties, they must belong to some specific data type\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include: URLs, time, quantities, mathematical expressions; to name a few.
+For values to be associated to properties, they must belong to some specific data type\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include: URLs, time, quantities, mathematical expressions; to name a few. Notice how more complex data types are also supported; those include \textit{properties} and \textit{items}, this way, relationships among entities are allowed.
 
-Lastly, an statement is a piece of data about an item\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}, and is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value. An example to that is:
+Lastly, an statement is a piece of data about an item, and is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through an statement, we add information to a certain item using some property and its value.
+
+\begin{example}[Adding information to an entity in Wikidata\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}]
+    In order to include information about the genre of \textit{The Hunger Games} in Wikidata, we would need to add a statement to the item itself: \href{https://www.wikidata.org/wiki/Q11679}{The Hunger Games (Q11679)}, using the property \href{https://www.wikidata.org/wiki/Property:P136}{genre (P136)}, we can then add the value \href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction (Q15062348)}. Notice how we are linking two entities (\textit{items}) of the Wikidata.
+\end{example}
 
 \begin{table}[ht]
     \centering
@@ -29,13 +35,17 @@ Lastly, an statement is a piece of data about an item\footnote{\url{https://www.
 \end{table}
 \footnotetext{\url{https://www.wikidata.org/wiki/Q11678}}
 
-This way, what we are achieving is a database where we link concepts in a language-agnostic approach. Notice that in the previous example there is only one \textit{statement} which relates the \textit{item} \texttt{Q11678} with the \textit{value} \texttt{Q15062348} through the \textit{property} \texttt{P136}. Instead of storing attributes that are language-dependent; following this example, The \textit{statement} $s = \{ (\href{https://www.wikidata.org/wiki/Q11678}{Q11678}, \href{https://www.wikidata.org/wiki/Property:P136}{P136}, \href{https://www.wikidata.org/wiki/Q15062348}{Q15062348}, \{\}) \}$ is equivalent to: \textit{the genre of The Hunger games is dystopian fiction}. What we are doing is linking concepts.
+\subsubsection{Opaque URIs}
+
+The main purpose of Wikidata is to store data about things that are described by pages in Wikipedia (in any language)\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/DataModel}}.
+
+Putting it all together, let's formally define what a Wikibase graph is.
 
 \begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
-For better understanding this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
+For a better understanding  of this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where each element represents a relation between two entities and a certain data value. Having that said, we can now see an example for further clarifications:
 
 \begin{example}
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
@@ -48,7 +58,7 @@ For better understanding this formal definition, let me explain it step-by-step.
     \label{tab:wikibase:graph}
 \end{table}
 
-The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph. Notice that in table \ref{tab:wikibase:graph} a human-readable version of the wikibase graph is provided, each of the elements shown are language-agnostic URIs.
+The figure \ref{fig:wikibase:graph} shows a visualization of the previously described \ref{tab:wikibase:graph} Wikibase graph.
 
 \begin{figure}[ht]
     \centering

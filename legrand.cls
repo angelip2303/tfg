@@ -43,6 +43,7 @@
 \setlength\epigraphwidth{8cm}
 \setlength\epigraphrule{0pt}
 \renewcommand{\textflush}{flushepinormal}
+\setlength{\beforeepigraphskip}{0cm}
 
 %----------------------------------------------------------------------------------------
 %	MARGINS, SPACING and PARAGRAPHS
@@ -74,7 +75,7 @@
 
 %\usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
-\usepackage{notomath} %for math
+\usepackage{notomath} % Use the Noto font for the whole document
 
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
@@ -332,8 +333,8 @@
     linewidth=4pt]{eBox}	
 
 % Definition box
-\newmdenv[skipabove=7pt,
-    skipbelow=7pt,
+\newmdenv[skipabove=8pt,
+    skipbelow=0pt,
     rightline=false,
     leftline=true,
     topline=false,
