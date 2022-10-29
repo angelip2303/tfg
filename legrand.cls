@@ -333,7 +333,7 @@
     linewidth=4pt]{eBox}	
 
 % Definition box
-\newmdenv[skipabove=8pt,
+\newmdenv[skipabove=1em,
     skipbelow=0pt,
     rightline=false,
     leftline=true,
@@ -405,7 +405,7 @@
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}
 {-2ex \@plus-.2ex \@minus .2ex}
 {.1ex}
-{\normalfont\small\sffamily\bfseries}}
+{\normalfont\footnotesize\sffamily\bfseries}}
 
 %----------------------------------------------------------------------------------------
 %	PART HEADINGS
