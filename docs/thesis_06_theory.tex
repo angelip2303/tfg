@@ -54,7 +54,7 @@ What we have seen so far is an overview of the Wikibase \textit{data model}; inc
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
-For a better understanding  of this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where relationships among the previous elements are annotated. This way, through the relationships in $\mathcal{P}$, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
+For a better understanding  of this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where relationships among the previous elements are annotated. This way, through the relationships in $\mathcal{P}$, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
 
 \begin{example}
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
@@ -74,13 +74,15 @@ For a better understanding  of this formal definition, let me explain it step-by
 
 \subsubsection{Wikibase data serialization}
 
-The Wikibase data model supports two export formats: JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles.
+The Wikibase data model supports two export formats: JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles. A fragment of both formats is shown below.
 
-\begin{example}
-    fragment of the information about Alan Turing that models one of his employers is represented as follows\footnote{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
+\begin{example}[Seralization of a node using JSON and RDF]
+    \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)} was \href{https://www.wikidata.org/wiki/Property:P108}{employed (P108)} by the \href{https://www.wikidata.org/wiki/Q220798}{Government Communications Headquarters (Q220798)} of the United Kingdom, during the World War II (1938-1945).
 \end{example}
 
 \paragraph{Wikibase JSON serialization}
+
+The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
 \begin{lstlisting}[style=JSON]
 [
@@ -91,7 +93,10 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 ]
 \end{lstlisting}
 
-\paragraph{Wikibase RDF serialization}
+\paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
+\footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
+
+The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described above (see figure \ref{fig:architecture:wikibase}). The main goal of this formatting is providing support to semantic web technologies.
 
 \begin{lstlisting}[style=Turtle]
 wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
@@ -116,8 +121,9 @@ The main focus of this document is implementing a Big data solution using the Pr
 Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184} .
 
 \subsection{Pregel model}
+\label{section:pregel}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring\footnote{We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relevance for better understanding the architecture of this system ~\ref{section:architecture:pregel}.} ones. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones. Notice how a graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring ones. We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relevance for better understanding the architecture of this system depicted in Figure \ref{fig:architecture:pregel}. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones. Notice how a graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
@@ -138,7 +144,6 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 \end{figure}
 
 \subsubsection{Architecture of a Pregel system}
-\label{section:architecture:pregel}
 
 It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 

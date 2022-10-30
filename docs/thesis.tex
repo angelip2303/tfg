@@ -1,6 +1,10 @@
 \documentclass{legrand}
 \usepackage{thesis_98_packages}
 
+% we include the glossary entries
+\makenoidxglossaries
+\input{thesis_96_glossaries.tex}
+
 \begin{document}
 
 \title{Analysis and implementation of an algorithm to validate Knowledge Graphs using Big data techniques}
@@ -84,4 +88,7 @@
 \appendix
 \chapter{Software}
 \input{thesis_appx01_software}
-\end{document}
+
+\printnoidxglossaries
+
+\end{document}makeglossaries
