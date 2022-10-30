@@ -32,7 +32,6 @@
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph0-2" x="111.651" y="18.175"/>
 </g>
-<path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 14.771969 0.00146875 C 38.705562 13.817875 61.705562 13.817875 85.240719 0.228031 " transform="matrix(1,0,0,-1,14.771,14.771)"/>
-<path style="fill:none;stroke-width:0.31879;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M -1.196576 1.594792 C -1.0941 0.995403 0.00103875 0.0985648 0.297527 -0.000899449 C -0.00098142 -0.101069 -1.095434 -0.994554 -1.195975 -1.593876 " transform="matrix(0.86601,0.49998,0.49998,-0.86601,100.01232,14.54187)"/>
+<path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 14.771969 0.00146875 L 85.639156 0.00146875 " transform="matrix(1,0,0,-1,14.771,14.771)"/>
 </g>
 </svg>

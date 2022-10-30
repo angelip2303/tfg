@@ -9,6 +9,6 @@
     \node[vertex,label={[yshift=-2cm]The Hunger Games}] (thg) {A};
     \node[vertex,label={[yshift=-2cm]dystopian fiction}] (dystopian) [right=2.5cm of thg] {B};
 
-    \path[-to] (thg.east) edge[bend left] node[predicate,above] {genre} (dystopian.west);
+    \path[-to] (thg) edge[bend left] node[predicate,above] {genre} (dystopian);
 \end{tikzpicture}
 \end{document}
