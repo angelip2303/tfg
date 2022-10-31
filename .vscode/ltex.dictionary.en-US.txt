@@ -1,0 +1,11 @@
+Escuela
+Informática
+Labra
+Gayo
+Préstamo
+Wikibase
+Pregel
+superstep
+MapReduce
+BlazeGraph
+Banca

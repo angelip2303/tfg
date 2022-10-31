@@ -4,7 +4,7 @@ In the following chapter, a description of the theoretical concepts needed for a
 
 \section{Knowledge graphs}
 
-A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for a specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
+A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
 
 \subsection{Wikibase graphs}
 
@@ -73,6 +73,7 @@ For a better understanding  of this formal definition, let me explain it step-by
 \end{figure}
 
 \subsubsection{Wikibase data serialization}
+\label{section:wikibase:serialization}
 
 The Wikibase data model supports two export formats: JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles. A fragment of both formats is shown below.
 
@@ -86,8 +87,8 @@ The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.
 
 \begin{lstlisting}[style=JSON]
 [
-    { "type": "item", "id": "Q42", "claims": { "P31": [...
-    { "type": "item", "id": "Q80", "claims": { "P108": [...
+    { "type": "item", "id": "Q220798", "claims": { "P31": [...
+    { "type": "item", "id": "Q7251", "claims": { "P108": [...
     { "type": "property", "id": "P108", "claims": { ... 
     ... 
 ]
@@ -96,7 +97,7 @@ The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
-The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described above (see figure \ref{fig:architecture:wikibase}). The main goal of this formatting is providing support to semantic web technologies.
+The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies.
 
 \begin{lstlisting}[style=Turtle]
 wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
@@ -118,7 +119,7 @@ The main focus of this document is implementing a Big data solution using the Pr
 
 \subsection{MapReduce}
 
-Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184} .
+Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184}.
 
 \subsection{Pregel model}
 \label{section:pregel}
@@ -134,7 +135,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
     \label{fig:pregel}
 \end{figure}
 
-Notice that at the beginning of the execution, the state of all the nodes will be set to active. This initial stage is called \textit{superstep 0}. When a vertex is active, it sends a message to its neighbors, that will receive it in the next \textit{superstep}. In this case, the message we are propagating is the largest value that we have learned so far. As an example to that, the second to the left node starts with a value of 6 -- which is the maximum value of the graph -- and sends that number to its neighbors: 3 and 1. In the next \textit{superstep}, the vertices that have received a message have to compare both: the value they store and the received one. This comparison is what it's called the \textit{vprog} function, which will vary from one problem to another. Then, both nodes will update its state to 6. As they have updated their state, they will have to send the new value to its neighbors: beginning another iteration (\textit{superstep}). Notice that at the \textit{superstep 1}, the second to the left node is halted as it doesn't send any other message to its neighbors as it's value has not changed. When every node is halted -- inactive -- the execution of the algorithm finishes. In the figure \ref{fig:state} a simplified state machine is shown.
+Notice that at the beginning of the execution, the state of all the nodes will be set to active. This initial stage is called \textit{superstep 0}. When a vertex is active, it sends a message to its neighbors, that will receive it in the next \textit{superstep}. In this case, the message we are propagating is the largest value that we have learned so far. As an example to that, the second to the left node starts with a value of 6 -- which is the maximum value of the graph -- and sends that number to its neighbors: 3 and 1. In the next \textit{superstep}, the vertices that have received a message have to compare both: the value they store and the received one. This comparison is what it's called the \textit{vProg} function, which will vary from one problem to another. Then, both nodes will update its state to 6. As they have updated their state, they will have to send the new value to its neighbors: beginning another iteration (\textit{superstep}). Notice that at the \textit{superstep 1}, the second to the left node is halted as it doesn't send any other message to its neighbors as its value has not changed. When every node is halted -- inactive -- the execution of the algorithm finishes. In Figure \ref{fig:state} a simplified state machine is shown.
 
 \begin{figure}[ht]
     \centering
@@ -149,9 +150,11 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_06_pregelArchitecture}
+    \includestandalone[width=0.75\textwidth]{figures/fig_06_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
 
 \section{Knowledge graph validation}
+
+As a brief introduction to this section, let's first define what validation -- in the context of Knowledge graphs -- is. The distributed nature of Wikibase affects the \textit{validity} of the data it contains. Wikibase manages its data following the FAIR principles: \fb{findable}, \fb{accessible}, \fb{interoperable} and \fb{reusable}~\cite{10.1038/sdata.2016.18}.  We must distinguish a \textit{well-formed} document: syntactically correct, from a \textit{valid} one, where in addition to being \textit{well-formed}, it must conform to some type definition. We have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata, being RDF one of those.

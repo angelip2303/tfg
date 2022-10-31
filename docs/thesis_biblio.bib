@@ -1,5 +1,16 @@
 % Encoding: UTF-8
 
+@article{10.1038/sdata.2016.18,
+  author  = {Wilkinson M., Dumontier M., Aalbersberg I. et al},
+  year    = {2016},
+  month   = {03},
+  pages   = {9},
+  title   = {The FAIR Guiding Principles for scientific data management and stewardship},
+  volume  = {3},
+  journal = {Scientific Data},
+  doi     = {10.1038/sdata.2016.18}
+}
+
 @inproceedings{10.1145/1807167.1807184,
   author    = {Malewicz, Grzegorz and Austern, Matthew H. and Bik, Aart J.C and Dehnert, James C. and Horn, Ilan and Leiser, Naty and Czajkowski, Grzegorz},
   title     = {Pregel: A System for Large-Scale Graph Processing},
@@ -16,6 +27,24 @@
   keywords  = {distributed computing, graph algorigthms},
   location  = {Indianapolis, Indiana, USA},
   series    = {SIGMOD '10}
+}
+
+@inproceedings{10.1145/2872427.2874809,
+  author    = {Pellissier Tanon, Thomas and Vrande\v{c}i\'{c}, Denny and Schaffert, Sebastian and Steiner, Thomas and Pintscher, Lydia},
+  title     = {From Freebase to Wikidata: The Great Migration},
+  year      = {2016},
+  isbn      = {9781450341431},
+  publisher = {International World Wide Web Conferences Steering Committee},
+  address   = {Republic and Canton of Geneva, CHE},
+  url       = {https://doi.org/10.1145/2872427.2874809},
+  doi       = {10.1145/2872427.2874809},
+  abstract  = {Collaborative knowledge bases that make their data freely available in a machine-readable form are central for the data strategy of many projects and organizations. The two major collaborative knowledge bases are Wikimedia's Wikidata and Google's Freebase. Due to the success of Wikidata, Google decided in 2014 to offer the content of Freebase to the Wikidata community. In this paper, we report on the ongoing transfer efforts and data mapping challenges, and provide an analysis of the effort so far. We describe the Primary Sources Tool, which aims to facilitate this and future data migrations. Throughout the migration, we have gained deep insights into both Wikidata and Freebase, and share and discuss detailed statistics on both knowledge bases.},
+  booktitle = {Proceedings of the 25th International Conference on World Wide Web},
+  pages     = {1419-1428},
+  numpages  = {10},
+  keywords  = {crowdsourcing systems, freebase, wikidata, semantic web},
+  location  = {Montr\'{e}al, Qu\'{e}bec, Canada},
+  series    = {WWW '16}
 }
 
 @article{10.1145/3349265,
@@ -40,7 +69,7 @@
   issn       = {2150-8097},
   url        = {https://doi.org/10.14778/2212351.2212354},
   doi        = {10.14778/2212351.2212354},
-  abstract   = {While high-level data parallel frameworks, like MapReduce, simplify the design and implementation of large-scale data processing systems, they do not naturally or efficiently support many important data mining and machine learning algorithms and can lead to inefficient learning systems. To help fill this critical void, we introduced the GraphLab abstraction which naturally expresses asynchronous, dynamic, graph-parallel computation while ensuring data consistency and achieving a high degree of parallel performance in the shared-memory setting. In this paper, we extend the GraphLab framework to the substantially more challenging distributed setting while preserving strong data consistency guarantees.We develop graph based extensions to pipelined locking and data versioning to reduce network congestion and mitigate the effect of network latency. We also introduce fault tolerance to the GraphLab abstraction using the classic Chandy-Lamport snapshot algorithm and demonstrate how it can be easily implemented by exploiting the GraphLab abstraction itself. Finally, we evaluate our distributed implementation of the GraphLab abstraction on a large Amazon EC2 deployment and show 1-2 orders of magnitude performance gains over Hadoop-based implementations.},
+  abstract   = {While high-level data parallel frameworks, like MapReduce, simplify the design and implementation of large-scale data processing systems, they do not naturally or efficiently support many important data mining and machine learning algorithms and can lead to inefficient learning systems. To help fill this critical void, we introduced the GraphLab abstraction which naturally expresses asynchronous, dynamic, graph-parallel computation while ensuring data consistency and achieving a high degree of parallel performance in the shared-memory setting. In this paper, we extend the GraphLab framework to the substantially more challenging distributed setting while preserving strong data consistency guarantees. We develop graph based extensions to pipelined locking and data versioning to reduce network congestion and mitigate the effect of network latency. We also introduce fault tolerance to the GraphLab abstraction using the classic Chandy-Lamport snapshot algorithm and demonstrate how it can be easily implemented by exploiting the GraphLab abstraction itself. Finally, we evaluate our distributed implementation of the GraphLab abstraction on a large Amazon EC2 deployment and show 1-2 orders of magnitude performance gains over Hadoop-based implementations.},
   journal    = {Proc. VLDB Endow.},
   month      = {apr},
   pages      = {716–727},
@@ -180,6 +209,15 @@
   note   = {Last accessed 7 October 2022. {\small  \url{https://engineering.linkedin.com/blog/2016/10/building-the-linkedin-knowledge-graph}}}
 }
 
+@article{LabraGayo2015MultilingualLD,
+  title   = {Multilingual linked data patterns},
+  author  = {Jose Emilio Labra Gayo and Dimitris Kontokostas and S. Auer},
+  journal = {Semantic Web},
+  year    = {2015},
+  volume  = {6},
+  pages   = {319-337}
+}
+
 @misc{web:knowledge_graphs:google,
   author = {Google},
   title  = {Introducing the Knowledge Graph: things, not strings},
@@ -207,6 +245,7 @@
   note   = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Haskell&oldid=1110793134}}}
 }
 
+
 @misc{wiki:MapReduce,
   author       = {Wikipedia},
   title        = {{MapReduce} --- {W}ikipedia{,} The Free Encyclopedia},
@@ -222,7 +261,6 @@
   note   = {Last accessed 2 October 2022. {\small  \url{http://en.wikipedia.org/w/index.php?title=Scala\%20(programming\%20language)&oldid=1110155532}}}
 }
 
-
 @article{wikidata:dumps,
   title      = {wikidata-20220103-all.json.gz},
   journal    = {},
@@ -234,31 +272,4 @@
   terms      = {},
   license    = {https://creativecommons.org/publicdomain/zero/1.0/},
   superseded = {}
-}
-
-@inproceedings{10.1145/2872427.2874809,
-author = {Pellissier Tanon, Thomas and Vrande\v{c}i\'{c}, Denny and Schaffert, Sebastian and Steiner, Thomas and Pintscher, Lydia},
-title = {From Freebase to Wikidata: The Great Migration},
-year = {2016},
-isbn = {9781450341431},
-publisher = {International World Wide Web Conferences Steering Committee},
-address = {Republic and Canton of Geneva, CHE},
-url = {https://doi.org/10.1145/2872427.2874809},
-doi = {10.1145/2872427.2874809},
-abstract = {Collaborative knowledge bases that make their data freely available in a machine-readable form are central for the data strategy of many projects and organizations. The two major collaborative knowledge bases are Wikimedia's Wikidata and Google's Freebase. Due to the success of Wikidata, Google decided in 2014 to offer the content of Freebase to the Wikidata community. In this paper, we report on the ongoing transfer efforts and data mapping challenges, and provide an analysis of the effort so far. We describe the Primary Sources Tool, which aims to facilitate this and future data migrations. Throughout the migration, we have gained deep insights into both Wikidata and Freebase, and share and discuss detailed statistics on both knowledge bases.},
-booktitle = {Proceedings of the 25th International Conference on World Wide Web},
-pages = {1419-1428},
-numpages = {10},
-keywords = {crowdsourcing systems, freebase, wikidata, semantic web},
-location = {Montr\'{e}al, Qu\'{e}bec, Canada},
-series = {WWW '16}
-}
-
-@article{LabraGayo2015MultilingualLD,
-  title={Multilingual linked data patterns},
-  author={Jose Emilio Labra Gayo and Dimitris Kontokostas and S. Auer},
-  journal={Semantic Web},
-  year={2015},
-  volume={6},
-  pages={319-337}
 }

@@ -15,7 +15,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2022/10/26 Final Degree Project]
+\ProvidesClass{legrand}[2022/10/26 Final Degree Project]
 \LoadClass[10pt]{book}
 
 %----------------------------------------------------------------------------------------
