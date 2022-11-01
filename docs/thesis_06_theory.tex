@@ -57,6 +57,7 @@ What we have seen so far is an overview of the Wikibase \textit{data model}; inc
 For a better understanding  of this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where relationships among the previous elements are annotated. This way, through the relationships in $\mathcal{P}$, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
 
 \begin{example}
+    \label{example:knowledgeGraph}
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
 
@@ -113,6 +114,45 @@ pqv:P582 v:db243e11a2e2c6bb034f59e082f66d29 ;
 prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .
 \end{lstlisting}
 
+\section{Knowledge graph validation}
+
+As a brief introduction to this section, let's first define what validation -- in the context of Knowledge graphs -- is. Wikibase manages its data following the FAIR principles: \fb{findable}, \fb{accessible}, \fb{interoperable} and \fb{reusable}~\cite{10.1038/sdata.2016.18}. This means, several systems may interact with Wikibase through CRUD operations. Thus,  the distributed nature of Wikibase may affect the \textit{validity} of the data it contains. First, we will say that a document is valid if in addition to being \textit{well-formed}: syntactically correct, it conforms to some type definition. Second, as we have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata include RDF as one of those. Putting it all together, we require a mechanism for ensuring the \textit{validity} of the RDF documents stored in Wikibase.
+
+\subsection{RDF (Resource Description Framework)}
+
+Resource Description Framework (RDF) is a data interchange W3C standard for the web. It has been used as a method for description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, provided a variety of syntax notations and formats, with Turtle being the most used one. One of the main features of RDF it that it allows the combination of different data-sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
+
+RDF is a directed graph composed of triple statements, in the way of \textit{subject-predicate-object}. Each of the elements identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. That leads us to the following graph representation:
+
+\begin{figure}[ht]
+    \centering
+    \includestandalone{figures/fig_04_RDF}
+    \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
+    \label{fig:RDF}
+\end{figure}
+
+We have mentioned that the most common used syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. According to this notation, each line is a single triple \texttt{<subject> <predicate> <object> .} (notice the dot at the end), that together form a directed knowledge graph\footnote{\url{https://medium.com/wallscope/understanding-linked-data-formats-rdf-xml-vs-turtle-vs-n-triples-eb931dbe9827}}. More in more, each element of a \texttt{.nt} file is identified by a URI. Putting it all together, let's see an example of an RDF graph represented using N-Triples notation.
+
+\begin{example}[RDF knowledge graph using N-Triples notation]
+    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidata.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
+\end{example}
+
+\begin{lstlisting}[style=NTriples]
+# Notice how http://wikidata.org/wiki/ID is abbreviated into http://wikidata/wiki/ID for short
+<http://wikidata/wiki/Q7251>   <http://wikidata/entity/P19>  <http://wikidata/wiki/Q20895942> .
+<http://wikidata/wiki/Q7251>   <http://wikidata/entity/P108> <http://wikidata/wiki/Q220798> .
+<http://wikidata/wiki/Q220798> <http://wikidata/entity/P176> <http://wikidata/wiki/Q480476> .
+<http://wikidata/wiki/Q480476> <http://wikidata/entity/P61>  <http://wikidata/wiki/Q7251> .
+\end{lstlisting}
+
+\subsection{ShEx (Shape Expressions)}
+
+Shape Expressions (ShEX) were designed as a high-level and concise domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics is inspired by RelaxNG and XML Schema.
+
+\subsubsection{WShEx}
+
+
+
 \section{Data-flow algorithms}
 
 The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system.
@@ -130,7 +170,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_04_pregelTrace}
+    \includestandalone{figures/fig_05_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -139,7 +179,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_05_stateDiagram}
+    \includestandalone{figures/fig_06_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -150,11 +190,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.75\textwidth]{figures/fig_06_pregelArchitecture}
+    \includestandalone[width=0.75\textwidth]{figures/fig_07_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
-
-\section{Knowledge graph validation}
-
-As a brief introduction to this section, let's first define what validation -- in the context of Knowledge graphs -- is. Wikibase manages its data following the FAIR principles: \fb{findable}, \fb{accessible}, \fb{interoperable} and \fb{reusable}~\cite{10.1038/sdata.2016.18}. Thus, the distributed nature of Wikibase affects the \textit{validity} of the data it contains. We must distinguish a \textit{well-formed} document: syntactically correct, from a \textit{valid} one, where in addition to being \textit{well-formed}, it must conform to some type definition. We have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata, being RDF one of those.

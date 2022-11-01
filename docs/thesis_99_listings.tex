@@ -20,7 +20,8 @@
 
 \lstset{style=mystyle}
 
-\lstdefinestyle{Turtle}{
+\lstdefinestyle{Turtle}
+{
     numberblanklines=false,
     morekeywords={prefix, @prefix,
             % Common prefixes...
@@ -51,7 +52,16 @@
     keywordstyle        = \ttfamily\bfseries,
 }
 
-% flip the switch if a colon is found in Pmode TODO: understand this
+\lstdefinestyle{NTriples}
+{
+    basicstyle=\ttfamily\scriptsize,
+    alsoletter={<,>,.},
+    comment=[l]{\#},
+    morestring=[b]',
+    morestring=[b]"
+}
+
+% flip the switch if a colon is found in Pmode
 \newcommand\processColon@json{%
     \colon@json%
     \ifnum\lst@mode=\lst@Pmode%
