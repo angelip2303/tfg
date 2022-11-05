@@ -55,7 +55,7 @@ What we have seen so far is an overview of the Wikibase \textit{data model}; inc
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
-For a better understanding  of this formal definition, let me explain it step-by-step. First,WShExcan add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
+For a better understanding  of this formal definition, let me explain it step-by-step. First, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
 
 \begin{example}
     \label{example:knowledgeGraph}
@@ -99,7 +99,7 @@ The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
-The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies.
+The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
 \begin{lstlisting}[style=Turtle]
 wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
@@ -117,13 +117,14 @@ prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .
 
 \section{Knowledge graph validation}
 
-As a brief introduction to this section, let's first define what validation -- in the context of Knowledge graphs -- is. Wikibase manages its data following the FAIR principles: \fb{findable}, \fb{accessible}, \fb{interoperable} and \fb{reusable}~\cite{10.1038/sdata.2016.18}. This means, several systems may interact with Wikibase through CRUD operations. Thus,  the distributed nature of Wikibase may affect the \textit{validity} of the data it contains. First, we will say that a document is valid if in addition to being \textit{well-formed}: syntactically correct, it conforms to some type definition. Second, as we have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata include RDF as one of those. Putting it all together, we require a mechanism for ensuring the \textit{validity} of the RDF documents stored in Wikibase.
+As a brief introduction to this section, let's first describe what validation -- in the context of Knowledge graphs -- is. Wikibase is a collection of data that anyone can edit. This can lead to some concerns regarding the integrity of what is posted in Wikibase, as there is no single point of truth for any given piece of information. According to this, for some piece of data to be considered valid, its description needs to be both syntactically correct and adhere to some type definition. As we have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata include RDF as one of those. Putting it all together, we require a mechanism for ensuring the \textit{validity} of the RDF documents stored in Wikibase.
 
 \subsection{RDF (Resource Description Framework)}
+\label{section:RDF}
 
-Resource Description Framework (RDF) is a data interchange W3C standard for the web. It has been used as a method for description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, provided a variety of syntax notations and formats, with Turtle being the most used one. One of the main features of RDF it that it allows the combination of different data-sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
+Resource Description Framework (RDF) is a data interchange W3C standard for the web. It has been used as a method for description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, providing a variety of syntax notations and formats, with Turtle being the most used one. One of the main features of RDF it that it allows the combination of different data-sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
 
-RDF is a directed graph composed of triple statements, in the way of \textit{subject-predicate-object}. Each of the elements identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. That leads us to the following graph representation:
+RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. That leads us to the following graph representation:
 
 \begin{figure}[ht]
     \centering
@@ -132,43 +133,41 @@ RDF is a directed graph composed of triple statements, in the way of \textit{sub
     \label{fig:RDF}
 \end{figure}
 
-We have mentioned that the most common used syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. According to this notation, each line is a single triple \texttt{<subject> <predicate> <object> .} (notice the dot at the end), that together form a directed knowledge graph\footnote{\url{https://medium.com/wallscope/understanding-linked-data-formats-rdf-xml-vs-turtle-vs-n-triples-eb931dbe9827}}. More in more, each element of a \texttt{.nt} file is identified by a URI. Putting it all together, let's see an example of an RDF graph represented using N-Triples notation.
+We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
 
 \begin{example}[RDF knowledge graph using N-Triples notation]
     \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
 \begin{lstlisting}[style=NTriples]
-# Notice how http://wikidata.org/wiki/ID is abbreviated into http://wikidata/wiki/ID for short
-<http://wikidata/wiki/Q7251>   <http://wikidata/entity/P19>  <http://wikidata/wiki/Q20895942> .
-<http://wikidata/wiki/Q7251>   <http://wikidata/entity/P108> <http://wikidata/wiki/Q220798> .
-<http://wikidata/wiki/Q220798> <http://wikidata/entity/P176> <http://wikidata/wiki/Q480476> .
-<http://wikidata/wiki/Q480476> <http://wikidata/entity/P61>  <http://wikidata/wiki/Q7251> .
+# Notice how http://wikidata.org/wiki/ID is written as http://wikidata.org/ID for short
+<http://wikidata.org/Q7251> <http://wikidata.org/P19>  <http://wikidata.org/Q20895942> .
+<http://wikidata.org/Q7251> <http://wikidata.org/P108> <http://wikidata.org/Q220798> .
+<http://wikidata.org/Q220798> <http://wikidata.org/P176> <http://wikidata.org/Q480476> .
+<http://wikidata.org/Q480476> <http://wikidata.org/P61>  <http://wikidata.org/Q7251> .
 \end{lstlisting}
 
 \subsection{ShEx (Shape Expressions)}
 
-Shape Expressions (ShEx) were designed as a high-level and concise domain-specific language WShExfor describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics is inspired by RelaxNG and XML Schema.
+Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics is inspired by RelaxNG and XML Schema.
 
 \begin{lstlisting}[style=Turtle]
 :Person {
     :birthPlace @:Place ;
     :birthDate @:Date ;
-    :employer @:Organizati o n ;
-    }
-    :Place {
+    :employer @:Organization ;
+}
+:Place {
     :country @:Country
-    }
-    :Country {}
-    :Organization {}
-    :Date {} 
+}
+:Country {}
+:Organization {}
+:Date {} 
 \end{lstlisting}
 
 \subsubsection{EntitySchemas}
 
-Back in 2019, Wikibase adopted ShEx as the language to define entity schemas. However, instead of directly describing the Wikibase data model, they describe the RDF serialization of Wikibase entities. As we have seen in section \ref{section:wikibase:serialization}, RDF serialization is just a copy -- in RDF -- of the JSON dump, and we cannot use ShEx for JSON validation. This means, the solution provided using ShEx is further away from the Wikibase data model.
-
-\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}
+Back in 2019, Wikibase adopted ShEx as the language to define entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. However, instead of describing the Wikibase data model, they describe the RDF serialization of Wikibase entities. As we have seen in section \ref{section:wikibase:serialization}, RDF serialization is just a copy -- in RDF -- of the JSON dump, and we cannot use ShEx for JSON validation. This means, the solution provided using ShEx is further away from the Wikibase data model.
 
 \begin{lstlisting}[style=Turtle]
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
