@@ -3,6 +3,7 @@
 In the following chapter, a description of the theoretical concepts needed for a proper understanding of this document is done. Ranging from \textit{knowledge graphs} to \textit{data-flow algorithms}, we are providing a firm foundation for the experiment to be conducted.
 
 \section{Knowledge graphs}
+\label{section:knowledgeGraph}
 
 A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
 
@@ -54,7 +55,7 @@ What we have seen so far is an overview of the Wikibase \textit{data model}; inc
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
-For a better understanding  of this formal definition, let me explain it step-by-step. First, let us clarify what the described symbols are: $\mathcal{Q}$ is the set containing the different entities (\textit{things}), $\mathcal{P}$ is the set with the different possible relationships in the graph, $\mathcal{D}$ is the set containing data values and $\rho$ is the set where relationships among the previous elements are annotated. This way, through the relationships in $\mathcal{P}$, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
+For a better understanding  of this formal definition, let me explain it step-by-step. First,WShExcan add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
 
 \begin{example}
     \label{example:knowledgeGraph}
@@ -134,7 +135,7 @@ RDF is a directed graph composed of triple statements, in the way of \textit{sub
 We have mentioned that the most common used syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. According to this notation, each line is a single triple \texttt{<subject> <predicate> <object> .} (notice the dot at the end), that together form a directed knowledge graph\footnote{\url{https://medium.com/wallscope/understanding-linked-data-formats-rdf-xml-vs-turtle-vs-n-triples-eb931dbe9827}}. More in more, each element of a \texttt{.nt} file is identified by a URI. Putting it all together, let's see an example of an RDF graph represented using N-Triples notation.
 
 \begin{example}[RDF knowledge graph using N-Triples notation]
-    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidata.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
+    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
 \begin{lstlisting}[style=NTriples]
@@ -147,11 +148,108 @@ We have mentioned that the most common used syntax notation for RDF is Turtle; h
 
 \subsection{ShEx (Shape Expressions)}
 
-Shape Expressions (ShEX) were designed as a high-level and concise domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics is inspired by RelaxNG and XML Schema.
+Shape Expressions (ShEx) were designed as a high-level and concise domain-specific language WShExfor describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics is inspired by RelaxNG and XML Schema.
+
+\begin{lstlisting}[style=Turtle]
+:Person {
+    :birthPlace @:Place ;
+    :birthDate @:Date ;
+    :employer @:Organizati o n ;
+    }
+    :Place {
+    :country @:Country
+    }
+    :Country {}
+    :Organization {}
+    :Date {} 
+\end{lstlisting}
+
+\subsubsection{EntitySchemas}
+
+Back in 2019, Wikibase adopted ShEx as the language to define entity schemas. However, instead of directly describing the Wikibase data model, they describe the RDF serialization of Wikibase entities. As we have seen in section \ref{section:wikibase:serialization}, RDF serialization is just a copy -- in RDF -- of the JSON dump, and we cannot use ShEx for JSON validation. This means, the solution provided using ShEx is further away from the Wikibase data model.
+
+\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}
+
+\begin{lstlisting}[style=Turtle]
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+start = @<human>
+
+<human> EXTRA wdt:P31 {
+    wdt:P31 [wd:Q5];
+    wdt:P18 . * ;               # image (portrait)
+    wdt:P21 [wd:Q48270 wd:Q48279 wd:Q179294 wd:Q189125 wd:Q207959 wd:Q301702 wd:Q350374 wd:Q505371 wd:Q660882 wd:Q746411 wd:Q859614 wd:Q1052281 wd:Q1097630 wd:Q1289754 wd:Q1399232 wd:Q2449503 wd:Q3177577 wd:Q3277905 wd:Q6581072 wd:Q6581097 wd:Q7130936 wd:Q12964198 wd:Q15145778 wd:Q15145779 wd:Q18116794 wd:Q27679684 wd:Q27679766 wd:Q52261234 wd:Q93954933 wd:Q93955709 wd:Q96000630 wd:Q25388691 wd:Q56315990]?;   # gender
+    wdt:P19 . ?;                      # place of birth
+    wdt:P20 . ?;                      # place of death
+    wdt:P569 . ? ;                    # date of birth
+    wdt:P570 . ? ;                   # date of death
+    wdt:P735 . * ;                    # given name
+    wdt:P734 . * ;                    # family name
+    wdt:P106 . * ;                    # occupation
+    wdt:P1559 . ? ;              #name in native language
+    wdt:P27 @<country> *;           # country of citizenship
+    wdt:P22 @<human> *;             # father
+    wdt:P25 @<human> *;             # mother
+    wdt:P3373 @<human> *;           # sibling
+    wdt:P26 @<human> *;             # spouse
+    wdt:P40 @<human> *;             # children
+    wdt:P1038 @<human> *;           # relatives
+    wdt:P103 @<language> *;         # native language
+    wdt:P1412 @<language> *;        # languages spoken, written or signed
+    wdt:P6886  @<language> *;       # writing language
+    rdfs:label rdf:langString+;
+}
+
+<country> EXTRA wdt:P31 {
+    wdt:P31 [wd:Q6256 wd:Q3024240 wd:Q3624078] +;
+}
+
+<language> EXTRA wdt:P31 {
+    wdt:P31 [wd:Q34770 wd:Q1288568] +;
+}  
+\end{lstlisting}
 
 \subsubsection{WShEx}
 
+WShEx is a language inspired by ShEx that provides a support for the Wikibase data model and can be used to describe and validate Wikibase entities~\cite{https://doi.org/10.48550/arxiv.2208.02697}. What's more, the main motivation for developing this language was to create subsets of Wikidata using a human-readable language.
 
+As a solution to the problem described before, an extension of ShEx for describing the Wikibase data model was designed. Figure \ref{fig:WShEx} represents the relationships between ShEx, WShEx and the Wikibase data model.
+
+\begin{figure}[ht]
+    \centering
+    \includestandalone{figures/fig_05_WShEx}
+    \caption[Relationships between ShEx, WShEx and the Wikibase data model]{Relationships between ShEx, WShEx and the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
+    \label{fig:WShEx}
+\end{figure}
+
+\begin{lstlisting}[style=Turtle]
+:Human {
+    birthPlace @ < Place > ;
+    birthDate @ < Time > ;
+    employer @ < Organization > *
+        {{ :start @:Date ,
+        :end @:Date
+        }} ;
+    awarded @ < Award > *
+        {{ :pointTime @:Date ,
+        :togetherWith @:Person
+        }}
+}
+:Place { country @ < Country > }
+:Organization {}
+:Award { country @ < Country > }
+:Country {}
+:Date xsd:date
+\end{lstlisting}
+
+\subsection{Validating Wikibase graphs}
+
+In the previous paragraphs we have discussed different technologies related to Knowledge graph validation; however, as we have stated in section \ref{section:knowledgeGraph}, we are aiming for a solution to validate Wikibase Graphs.
+
+\section{Knowledge graph Subsets}
 
 \section{Data-flow algorithms}
 
@@ -170,7 +268,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_05_pregelTrace}
+    \includestandalone{figures/fig_06_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -179,7 +277,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_06_stateDiagram}
+    \includestandalone{figures/fig_07_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -190,7 +288,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.75\textwidth]{figures/fig_07_pregelArchitecture}
+    \includestandalone[width=0.75\textwidth]{figures/fig_08_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
