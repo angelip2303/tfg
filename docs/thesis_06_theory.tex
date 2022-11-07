@@ -36,10 +36,13 @@ Lastly, a statement is a piece of data about an item, and is recorded in the pag
 \end{table}
 \footnotetext{\url{https://www.wikidata.org/wiki/Q11678}}
 
+\href{https://www.wikidata.org/wiki/Q11679}{The Hunger Games (Q11679)} item in Wikidata has the attribute \href{https://www.wikidata.org/wiki/Property:P136}{genre (P136)} with the value \href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction (Q15062348)}, simulating the example above. The outcome is that the final statement will look like Figure \ref{fig:thg}. There is no need for coding because this procedure is carried out through a front-end. This allows any user, regardless of technical proficiency, to add data about any entity to Wikidata. You'll note that the statement can be modified by adding more details, amended, or even deleted.
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{../img/wikidata_statement.png}
     \caption[Example of a simple statement annotating the genre of \textit{The Hunger Games}]{Example of a simple statement annotating the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
+    \label{fig:thg}
     \vspace{-3mm}
 \end{figure}
 
@@ -50,13 +53,13 @@ As noted above, the main purpose of Wikidata is to store data about things that 
 
 The characters that appear in a URI tend to be related to the concept they represent, improving human-readability. As an example, \texttt{https://example.com/España} could -- potentially -- be an identifier for the Spanish country. However, for those non-Spanish speakers, that identifier is meaningless. What's more, the use of non-ASCII characters may lead to problems in an internationalized system. Opposed to \textit{descriptive URIs}, \textit{opaque} ones are not intended to represent terms in a natural language~\cite{LabraGayo2015MultilingualLD}. An example to that is: \url{https://www.wikidata.org/wiki/Q11679}, where item \texttt{Q11679} represents \textit{The Hunger Games} in Wikidata. However -- under some situations -- it is handful for users to interact with human-readable names. In Wikidata, this is solved through \textit{labels}, which are language-dependent. Following the previous example, the label tagged to the entity \texttt{Q11679} is the actual title of the book: \textit{The Hunger Games}. Translations for several languages can also be provided. Notice Table~\ref{tab:language} for an example of possible \textit{labels} for some \textit{opaque URIs}.
 
-What we have seen so far is an overview of the Wikibase \textit{data model}; including: \textit{statements}, \textit{properties}, \textit{values} and the appropriate mechanism for identifying them (in a multilingual approach). Putting it all together, the next step is to formally define a Wikibase graph.
+What we have seen so far is an overview of the Wikibase \textit{data model}; including: \textit{statements}, \textit{properties}, \textit{values} and the appropriate mechanism for identifying them (in a multilingual approach). The next step is to formally define what a Wikibase graph is.
 
 \begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
     Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
 \end{definition}
 
-For a better understanding  of this formal definition, let me explain it step-by-step. First, we can add information ($\mathcal{Q}$, $\mathcal{P}$ or $\mathcal{D}$) to any item in $\mathcal{Q}$. Lastly, $\mathcal{V}$ provides extra information to a certain relationship. This is useful when you want to include more data to a particular statement; as an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937}{Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
+For a better understanding of this formal definition, let me explain it step-by-step. Any item in $mathcal{Q}$ can have information added to it using $\mathcal{Q}$ \textit{entities}, $\mathcal{P}$ \textit{properties}, or $\mathcal{D}$ \textit{data values}. This means we can add a statement about a particular entity in $mathcal{Q}$ using the aforementioned set of values. For us to provide extra information to a certain relationship, we may include it in the set $\mathcal{V}$. As an example, in order to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937} {Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarifications, let us model the Wikibase graph of a certain scenario.
 
 \begin{example}
     \label{example:knowledgeGraph}
@@ -188,10 +191,10 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 start = @<human>
 
 <human> EXTRA wdt:P31 {
-    wdt:P31 [wd:Q5];          # instance of Human
-    wdt:P19  @<place> ?;      # place of birth
-    wdt:P569 xsd:dateTime ? ; # date of birth
-    wdt:P108 . * ;            # employer
+    wdt:P31 [wd:Q5];         # instance of Human
+    wdt:P19  @<place> ?;     # place of birth
+    wdt:P569 xsd:dateTime ?; # date of birth
+    wdt:P108 . *;            # employer
 }
 
 <place> EXTRA wdt:P31 {
@@ -230,10 +233,6 @@ As a solution to the problem described before, an extension of ShEx for describi
 :Country {}
 :Date xsd:date
 \end{lstlisting}
-
-\subsection{Validating Wikibase graphs}
-
-In the previous paragraphs we have discussed different technologies related to Knowledge graph validation; however, as we have stated in section \ref{section:knowledgeGraph}, we are aiming for a solution to validate Wikibase Graphs.
 
 \section{Knowledge graph Subsets}
 
