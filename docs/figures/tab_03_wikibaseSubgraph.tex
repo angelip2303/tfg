@@ -1,0 +1,14 @@
+% File 'tab_03_wikibaseGraph.tex'
+\documentclass{standalone}
+\usepackage{longtable}
+\input{../thesis_97_commands}
+\begin{document}
+\begin{tabular}{ccl}
+    \ItemSet'      & = \{ & \alanTuring, \wilmslow, \government\hspace{1mm} \}                          \\
+    \PropSet'      & = \{ & \placeOfBirth, \employer, \timeStart\hspace{1mm} \}                         \\
+    \DataValueSet' & = \{ & {\small 1938}, {\small 1945}\hspace{1mm} \}                                 \\
+    $\StmtSet$'    & = \{ & (\alanTuring, \placeOfBirth, \wilmslow, \{\}),                              \\
+                   &      & (\alanTuring, \employer, \government, \{\timeStart: 1938 \}),               \\
+                   &      & (\alanTuring, \employer, \government, \{\timeStart: 1945 \})\hspace{1mm} \} \\
+\end{tabular}
+\end{document}

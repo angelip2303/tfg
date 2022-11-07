@@ -25,6 +25,7 @@ For values to be associated to properties, they must belong to some specific dat
 Lastly, a statement is a piece of data about an item, and is recorded in the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through a statement, we add information to a certain item using some property and its value.
 
 \begin{example}[Adding information to an entity in Wikidata\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}]
+    \label{example:wikibaseGraph}
     In order to include information about the genre of \textit{The Hunger Games} in Wikidata, we would need to add a statement to the item itself: \href{https://www.wikidata.org/wiki/Q11679}{The Hunger Games (Q11679)}, using the property \href{https://www.wikidata.org/wiki/Property:P136}{genre (P136)}, we can then add the value \href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction (Q15062348)}. Notice how we are linking two entities (\textit{items}) of the Wikidata.
 \end{example}
 
@@ -177,7 +178,7 @@ Following the previous example, another possibility is to visualize ShEx schemas
     \caption{ShEx schema visualization as UML-like diagrams}
 \end{figure}
 
-\paragraph{WikiProject Schemas}
+\paragraph{Entity Schemas}
 
 The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. Expectations for a particular collection of Wikidata items are outlined in Wikidata Schemas in order for us to address that issue. Wikidata's subsets can be examined in this manner to see if they adhere to a particular schema. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
 
@@ -235,6 +236,22 @@ As a solution to the problem described before, an extension of ShEx for describi
 \end{lstlisting}
 
 \section{Knowledge graph Subsets}
+
+Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, Replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
+
+\begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
+    Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
+\end{definition}
+
+\begin{example}[Example of wikibase subgraph]
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase sub-graph of $\Graph$.
+\end{example}
+
+\begin{table}[h]
+    \vspace{-2mm}
+    \centering
+    \input{figures/tab_03_wikibaseSubgraph}
+\end{table}
 
 \section{Data-flow algorithms}
 

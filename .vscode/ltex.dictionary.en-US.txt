@@ -10,3 +10,4 @@ MapReduce
 BlazeGraph
 Banca
 conformant
+scopeless
