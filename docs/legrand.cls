@@ -16,7 +16,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{legrand}[2022/10/26 Final Degree Project]
-\LoadClass[10pt]{book}
+\LoadClass[10pt,oneside]{book}
 
 %-------------------------------------------------------------------------------
 %	VARIOUS REQUIRED PACKAGES AND CONFIGURATIONS
@@ -210,14 +210,14 @@
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrulewidth}{0pt}} % Style for when a plain pagestyle is specified
 
 % Removes the header from odd empty pages at the end of chapters
-\makeatletter
-\renewcommand{\cleardoublepage}{
-\clearpage\ifodd\c@page\else
-\hbox{}
-\vspace*{\fill}
-\thispagestyle{empty}
-\newpage
-\fi}
+%\makeatletter
+%\renewcommand{\cleardoublepage}{
+%\clearpage\ifodd\c@page\else
+%\hbox{}
+%\vspace*{\fill}
+%\thispagestyle{empty}
+%\newpage
+%\fi}
 
 %-------------------------------------------------------------------------------
 %	THEOREM STYLES
