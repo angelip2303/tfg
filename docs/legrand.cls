@@ -92,7 +92,7 @@
  sorting=nyt,
  sortcites=true,
  autopunct=true,
- babel=hyphen,
+ autolang=hyphen,
  hyperref=true,
  abbreviate=false,
  backref=true,
@@ -201,9 +201,9 @@
 \pagestyle{fancy}
 \renewcommand{\chaptermark}[1]{\markboth{\sffamily\normalsize\bfseries\chaptername\ \thechapter.\ #1}{}} % Chapter text font settings
 \renewcommand{\sectionmark}[1]{\markright{\sffamily\normalsize\thesection\hspace{5pt}#1}{}} % Section text font settings
-\fancyhf{} \fancyhead[LE,RO]{\sffamily\normalsize\thepage} % Font setting for the page number in the header
+\fancyhf{} \fancyhead[L,RO]{\sffamily\normalsize\thepage} % Font setting for the page number in the header
 \fancyhead[LO]{\rightmark} % Print the nearest section name on the left side of odd pages
-\fancyhead[RE]{\leftmark} % Print the current chapter name on the right side of even pages
+\fancyhead[R]{\leftmark} % Print the current chapter name on the right side of even pages
 \renewcommand{\headrulewidth}{0.5pt} % Width of the rule under the header
 \addtolength{\headheight}{2.5pt} % Increase the spacing around the header slightly
 \renewcommand{\footrulewidth}{0pt} % Removes the rule in the footer
