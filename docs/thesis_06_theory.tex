@@ -92,21 +92,35 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
-\begin{lstlisting}[style=JSON]
+\begin{minted}[
+    mathescape,
+    linenos,
+    numbersep=5pt,
+    autogobble,
+    frame=lines,
+    framesep=2mm
+]{json}
 [
-    { "type": "item", "id": "Q220798", "claims": { "P31": [...
-    { "type": "item", "id": "Q7251", "claims": { "P108": [...
+    { "type": "item", "id": "Q220798", "claims": { "P31": [ ...
+    { "type": "item", "id": "Q7251", "claims": { "P108": [ ...
     { "type": "property", "id": "P108", "claims": { ... 
     ... 
 ]
-\end{lstlisting}
+\end{minted}
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
-\begin{lstlisting}[style=Turtle]
+\begin{minted}[
+    mathescape,
+    linenos,
+    numbersep=5pt,
+    autogobble,
+    frame=lines,
+    framesep=2mm
+]{turtle}
 wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
 
 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 a wikibase:Statement,
@@ -118,7 +132,7 @@ pqv:P580 v:560845b053d80d9ba30cc757808172fd ;
 pq:P582 "1945-01-01T00:00:00Z"^^xsd:dateTime ;
 pqv:P582 v:db243e11a2e2c6bb034f59e082f66d29 ;
 prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .
-\end{lstlisting}
+\end{minted}
 
 \section{Knowledge graph validation}
 
@@ -144,31 +158,48 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
     \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
-\begin{lstlisting}[style=NTriples]
-# Notice how http://wikidata.org/wiki/ID is written as http://wikidata.org/ID for short
-<http://wikidata.org/Q7251> <http://wikidata.org/P19>  <http://wikidata.org/Q20895942> .
-<http://wikidata.org/Q7251> <http://wikidata.org/P108> <http://wikidata.org/Q220798> .
-<http://wikidata.org/Q220798> <http://wikidata.org/P176> <http://wikidata.org/Q480476> .
-<http://wikidata.org/Q480476> <http://wikidata.org/P61>  <http://wikidata.org/Q7251> .
-\end{lstlisting}
+\begin{minted}[
+    mathescape,
+    linenos,
+    numbersep=5pt,
+    autogobble,
+    frame=lines,
+    framesep=2mm
+]{turtle}
+# Notice how http://wikidata.org/wiki/ID is written as ID for short
+<Q7251> <P19>  <Q20895942> .
+<Q7251> <P108> <Q220798> .
+<Q220798> <P176> <Q480476> .
+<Q480476> <P61>  <Q7251> .
+\end{minted}
 
 \subsection{ShEx (Shape Expressions)}
 
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
-\begin{lstlisting}[caption={ShExC syntax example declaring that nodes of the shape Person must fulfill some schema},captionpos=b,style=Turtle]
-:Person {
-    :birthPlace @:Place ;
-    :birthDate @:Date ;
-    :employer @:Organization ;
-}
-:Place {
-    :country @:Country
-}
-:Country {}
-:Organization {}
-:Date {} 
-\end{lstlisting}
+\begin{listing}[H]
+    \begin{minted}[
+        mathescape,
+        linenos,
+        numbersep=5pt,
+        autogobble,
+        frame=lines,
+        framesep=2mm
+    ]{shexc}
+    :Person {
+        :birthPlace @:Place ;
+        :birthDate @:Date ;
+        :employer @:Organization ;
+    }
+    :Place {
+        :country @:Country
+    }
+    :Country {}
+    :Organization {}
+    :Date {} 
+    \end{minted}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
+\end{listing}
 
 Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the following representation arises:
 
@@ -184,24 +215,34 @@ The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) 
 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
-\begin{lstlisting}[caption={ShExC syntax example declaring that nodes of the shape Person must fulfill some schema},captionpos=b,style=Turtle]
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+\begin{listing}[H]
+    \begin{minted}[
+        mathescape,
+        linenos,
+        numbersep=5pt,
+        autogobble,
+        frame=lines,
+        framesep=2mm
+    ]{shexc}
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX wd: <http://www.wikidata.org/entity/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-start = @<human>
+    start = @<human>
 
-<human> EXTRA wdt:P31 {
-    wdt:P31 [wd:Q5];         # instance of Human
-    wdt:P19  @<place> ?;     # place of birth
-    wdt:P569 xsd:dateTime ?; # date of birth
-    wdt:P108 . *;            # employer
-}
+    <human> EXTRA wdt:P31 {
+        wdt:P31 [wd:Q5];         # instance of Human
+        wdt:P19  @<place> ?;     # place of birth
+        wdt:P569 xsd:dateTime ?; # date of birth
+        wdt:P108 . *;            # employer
+    }
 
-<place> EXTRA wdt:P31 {
-    wdt:P31 [wd:Q515 wd:Q41176] +;
-}
-\end{lstlisting}
+    <place> EXTRA wdt:P31 {
+        wdt:P31 [wd:Q515 wd:Q41176] +;
+    }
+    \end{minted}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
+\end{listing}
 
 \subsubsection{WShEx}
 \label{section:WShEx}
@@ -215,25 +256,35 @@ As a solution to the problem described before, an extension of ShEx for describi
     \label{fig:WShEx}
 \end{figure}
 
-\begin{lstlisting}[caption={ShExC syntax example declaring that nodes of the shape Person must fulfill some schema},style=Turtle]
-:Human {
-    birthPlace @ < Place > ;
-    birthDate @ < Time > ;
-    employer @ < Organization > *
-        {{ :start @:Date ,
-        :end @:Date
-        }} ;
-    awarded @ < Award > *
-        {{ :pointTime @:Date ,
-        :togetherWith @:Person
-        }}
-}
-:Place { country @ < Country > }
-:Organization {}
-:Award { country @ < Country > }
-:Country {}
-:Date xsd:date
-\end{lstlisting}
+\begin{listing}[H]
+    \begin{minted}[
+        mathescape,
+        linenos,
+        numbersep=5pt,
+        autogobble,
+        frame=lines,
+        framesep=2mm
+    ]{shexc}
+    :Human {
+        birthPlace @ < Place > ;
+        birthDate @ < Time > ;
+        employer @ < Organization > *
+            {{ :start @:Date ,
+            :end @:Date
+            }} ;
+        awarded @ < Award > *
+            {{ :pointTime @:Date ,
+            :togetherWith @:Person
+            }}
+    }
+    :Place { country @ < Country > }
+    :Organization {}
+    :Award { country @ < Country > }
+    :Country {}
+    :Date xsd:date
+    \end{minted}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
+\end{listing}
 
 \section{Knowledge graph Subsets}
 
