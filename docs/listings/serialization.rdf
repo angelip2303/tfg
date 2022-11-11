@@ -1,0 +1,11 @@
+wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
+
+s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 a wikibase:Statement,
+wikibase:BestRank ;
+wikibase:rank wikibase:NormalRank ;
+ps:P108 wd:Q220798 ;
+pq:P580 "1938-01-01T00:00:00Z"^^xsd:dateTime ;
+pqv:P580 v:560845b053d80d9ba30cc757808172fd ;
+pq:P582 "1945-01-01T00:00:00Z"^^xsd:dateTime ;
+pqv:P582 v:db243e11a2e2c6bb034f59e082f66d29 ;
+prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .

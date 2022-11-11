@@ -13,7 +13,7 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.5\textwidth]{figures/fig_02_architectureWikibase}
+    \includestandalone[width=0.5\textwidth]{diagrams/3-1_architectureWikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:architecture:wikibase}
 \end{figure}
@@ -31,21 +31,11 @@ Lastly, a statement is a piece of data about an item, and is recorded in the pag
 
 \begin{table}[ht]
     \centering
-    \input{figures/tab_01_lang}
+    \input{figures/tables/3-1_lang}
     \caption[Including information about the genre of \textit{The Hunger Games}]{Including information about the genre of \textit{The Hunger Games}\footnotemark}
     \label{tab:language}
 \end{table}
 \footnotetext{\url{https://www.wikidata.org/wiki/Q11678}}
-
-\href{https://www.wikidata.org/wiki/Q11679}{The Hunger Games (Q11679)} item in Wikidata has the attribute \href{https://www.wikidata.org/wiki/Property:P136}{genre (P136)} with the value \href{https://www.wikidata.org/wiki/Q15062348}{dystopian fiction (Q15062348)}, simulating the example above. The outcome is that the final statement will look like Figure \ref{fig:thg}. There is no need for coding because this procedure is carried out through a front-end. This allows any user, regardless of technical proficiency, to add data about any entity to Wikidata. You'll note that the statement can be modified by adding more details, amended, or even deleted.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../img/wikidata_statement.png}
-    \caption[Example of a simple statement annotating the genre of \textit{The Hunger Games}]{Example of a simple statement annotating the genre of \textit{The Hunger Games}\footnote{\url{https://www.wikidata.org/wiki/Q11678}}}
-    \label{fig:thg}
-    \vspace{-3mm}
-\end{figure}
 
 \subsubsection{Opaque URIs}
 \label{section:opaqueURIs}
@@ -67,15 +57,11 @@ For a better understanding of this formal definition, let me explain it step-by-
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
 
-\begin{table}[h]
-    \vspace{-2mm}
-    \centering
-    \input{figures/tab_02_wikibaseGraph}
-\end{table}
+\input{figures/tables/3-2_wikibaseGraph}
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.9\textwidth]{figures/fig_03_wikibaseGraph}
+    \includestandalone[width=0.9\textwidth]{diagrams/3-2_wikibaseGraph}
     \caption[Formal description and visualization of Turing's Wikibase graph]{Formal description and visualization of Turing's Wikibase graph}
 \end{figure}
 
@@ -92,47 +78,14 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
-\begin{minted}[
-    mathescape,
-    linenos,
-    numbersep=5pt,
-    autogobble,
-    frame=lines,
-    framesep=2mm
-]{json}
-[
-    { "type": "item", "id": "Q220798", "claims": { "P31": [ ...
-    { "type": "item", "id": "Q7251", "claims": { "P108": [ ...
-    { "type": "property", "id": "P108", "claims": { ... 
-    ... 
-]
-\end{minted}
+\inputminted{json}{listings/serialization.json}
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
-\begin{minted}[
-    mathescape,
-    linenos,
-    numbersep=5pt,
-    autogobble,
-    frame=lines,
-    framesep=2mm
-]{turtle}
-wd:Q7251 p:P108 s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 .
-
-s:Q7251-5c5c1b1c-40a4-b9c0-40a6-dfaccd56f273 a wikibase:Statement,
-wikibase:BestRank ;
-wikibase:rank wikibase:NormalRank ;
-ps:P108 wd:Q220798 ;
-pq:P580 "1938-01-01T00:00:00Z"^^xsd:dateTime ;
-pqv:P580 v:560845b053d80d9ba30cc757808172fd ;
-pq:P582 "1945-01-01T00:00:00Z"^^xsd:dateTime ;
-pqv:P582 v:db243e11a2e2c6bb034f59e082f66d29 ;
-prov:wasDerivedFrom ref:7d58b689209415697990098179e8ace8b04630a1 .
-\end{minted}
+\inputminted{turtle}{listings/serialization.rdf}
 
 \section{Knowledge graph validation}
 
@@ -143,14 +96,14 @@ As a brief introduction to this section, let's first describe what validation --
 
 Resource Description Framework (RDF) is a data interchange W3C standard for the web. It has been used as a method for description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, providing a variety of syntax notations and formats, with Turtle being the most used one. One of the main features of RDF it that it allows the combination of different data-sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
 
-RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. That leads us to the following graph representation:
-
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.8\textwidth]{figures/fig_04_RDF}
+    \includestandalone[width=0.8\textwidth]{diagrams/3-3_RDF}
     \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
     \label{fig:RDF}
 \end{figure}
+
+RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. This representation can be seen in Figure \ref{fig:RDF}.
 
 We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
 
@@ -158,91 +111,35 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
     \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
-\begin{minted}[
-    mathescape,
-    linenos,
-    numbersep=5pt,
-    autogobble,
-    frame=lines,
-    framesep=2mm
-]{turtle}
-# Notice how http://wikidata.org/wiki/ID is written as ID for short
-<Q7251> <P19>  <Q20895942> .
-<Q7251> <P108> <Q220798> .
-<Q220798> <P176> <Q480476> .
-<Q480476> <P61>  <Q7251> .
-\end{minted}
+\inputminted{turtle}{listings/serialization.nt}
 
 \subsection{ShEx (Shape Expressions)}
 
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
-\begin{listing}[H]
-    \begin{minted}[
-        mathescape,
-        linenos,
-        numbersep=5pt,
-        autogobble,
-        frame=lines,
-        framesep=2mm
-    ]{shexc}
-    :Person {
-        :birthPlace @:Place ;
-        :birthDate @:Date ;
-        :employer @:Organization ;
-    }
-    :Place {
-        :country @:Country
-    }
-    :Country {}
-    :Organization {}
-    :Date {} 
-    \end{minted}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
-\end{listing}
+\begin{code}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
+    \inputminted{shex}{listings/shex.shex}
+\end{code}
 
 Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the following representation arises:
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\textwidth]{fig_05_ShEx.eps}
+    \includegraphics[width=0.4\textwidth]{diagrams/3-4_ShEx.pdf}
     \caption{ShEx schema visualization as UML-like diagrams}
 \end{figure}
 
-\paragraph{Entity Schemas}
+\subsubsection{Entity Schemas}
 
 The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. Expectations for a particular collection of Wikidata items are outlined in Wikidata Schemas in order for us to address that issue. Wikidata's subsets can be examined in this manner to see if they adhere to a particular schema. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
-\begin{listing}[H]
-    \begin{minted}[
-        mathescape,
-        linenos,
-        numbersep=5pt,
-        autogobble,
-        frame=lines,
-        framesep=2mm
-    ]{shexc}
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    PREFIX wd: <http://www.wikidata.org/entity/>
-    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-
-    start = @<human>
-
-    <human> EXTRA wdt:P31 {
-        wdt:P31 [wd:Q5];         # instance of Human
-        wdt:P19  @<place> ?;     # place of birth
-        wdt:P569 xsd:dateTime ?; # date of birth
-        wdt:P108 . *;            # employer
-    }
-
-    <place> EXTRA wdt:P31 {
-        wdt:P31 [wd:Q515 wd:Q41176] +;
-    }
-    \end{minted}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
-\end{listing}
+\begin{code}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
+    \inputminted{shex}{listings/wikibase.shex}
+\end{code}
 
 \subsubsection{WShEx}
 \label{section:WShEx}
@@ -251,58 +148,15 @@ As a solution to the problem described before, an extension of ShEx for describi
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.6\textwidth]{figures/fig_06_WShEx}
+    \includestandalone[width=0.6\textwidth]{diagrams/3-5_WShEx}
     \caption[Relationships between ShEx, WShEx and the Wikibase data model]{Relationships between ShEx, WShEx and the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:WShEx}
 \end{figure}
 
-\begin{listing}[H]
-    \begin{minted}[
-        mathescape,
-        linenos,
-        numbersep=5pt,
-        autogobble,
-        frame=lines,
-        framesep=2mm
-    ]{shexc}
-    :Human {
-        birthPlace @ < Place > ;
-        birthDate @ < Time > ;
-        employer @ < Organization > *
-            {{ :start @:Date ,
-            :end @:Date
-            }} ;
-        awarded @ < Award > *
-            {{ :pointTime @:Date ,
-            :togetherWith @:Person
-            }}
-    }
-    :Place { country @ < Country > }
-    :Organization {}
-    :Award { country @ < Country > }
-    :Country {}
-    :Date xsd:date
-    \end{minted}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill some schema}
-\end{listing}
-
-\section{Knowledge graph Subsets}
-
-Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, Replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
-
-\begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
-    Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
-\end{definition}
-
-\begin{example}[Example of wikibase subgraph]
-    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase sub-graph of $\Graph$.
-\end{example}
-
-\begin{table}[h]
-    \vspace{-2mm}
-    \centering
-    \input{figures/tab_03_wikibaseSubgraph}
-\end{table}
+\begin{code}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
+    \inputminted{shex}{listings/wshex.shex}
+\end{code}
 
 \section{Data-flow algorithms}
 
@@ -321,7 +175,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_07_pregelTrace}
+    \includestandalone{diagrams/3-6_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -330,7 +184,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{figures/fig_08_stateDiagram}
+    \includestandalone{diagrams/3-7_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -341,7 +195,28 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.75\textwidth]{figures/fig_09_pregelArchitecture}
+    \includestandalone[width=0.75\textwidth]{diagrams/3-8_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
+
+\section{Knowledge graph Subsets}
+
+Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, Replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
+
+\begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
+    Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
+\end{definition}
+
+\begin{example}[Example of wikibase subgraph]
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase sub-graph of $\Graph$.
+\end{example}
+
+\begin{table}[ht]
+    \centering
+    \input{figures/tables/3-3_wikibaseSubgraph}
+\end{table}
+
+\subsection{ShEx-based Matching generated subsets}
+
+\subsection{ShEx + Pregel generated subsets}

@@ -1,0 +1,16 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+start = @<human>
+
+<human> EXTRA wdt:P31 {
+    wdt:P31 [wd:Q5];         # instance of Human
+    wdt:P19  @<place> ?;     # place of birth
+    wdt:P569 xsd:dateTime ?; # date of birth
+    wdt:P108 . *;            # employer
+}
+
+<place> EXTRA wdt:P31 {
+    wdt:P31 [wd:Q515 wd:Q41176] +;
+}

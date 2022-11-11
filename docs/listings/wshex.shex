@@ -1,0 +1,17 @@
+:Human {
+    birthPlace @ < Place > ;
+    birthDate @ < Time > ;
+    employer @ < Organization > *
+        {{ :start @:Date ,
+        :end @:Date
+        }} ;
+    awarded @ < Award > *
+        {{ :pointTime @:Date ,
+        :togetherWith @:Person
+        }}
+}
+:Place { country @ < Country > }
+:Organization {}
+:Award { country @ < Country > }
+:Country {}
+:Date xsd:date

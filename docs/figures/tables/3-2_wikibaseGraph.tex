@@ -1,9 +1,8 @@
-% File 'tab_02_wikibaseGraph.tex'
 \documentclass{standalone}
 \usepackage{longtable}
 \input{../thesis_97_commands}
 \begin{document}
-\begin{tabular}{ccl}
+\begin{longtable}{ccl}
     \ItemSet      & = \{ & \alanTuring, \wilmslow, \government, \unitedKingdom, \warringtonLodge,                           \\
                   &      & \bombe, \town, \computer \hspace{1mm} \}                                                         \\
     \PropSet      & = \{ & \dateOfBirth, \placeOfBirth, \employer, \dateOfDeath, \placeOfDeath,                             \\
@@ -22,5 +21,5 @@
                   &      & (\wilmslow, \country, \unitedKingdom, \{\})                                                      \\
                   &      & (\wilmslow, \instanceOf, \town, \{\})                                                            \\
                   &      & (\warringtonLodge, \country, \unitedKingdom, \{\})\hspace{1mm} \}
-\end{tabular}
+\end{longtable}
 \end{document}

@@ -1,0 +1,5 @@
+# Notice how http://wikidata.org/wiki/ID is written as ID for short
+<Q7251> <P19>  <Q20895942> .
+<Q7251> <P108> <Q220798> .
+<Q220798> <P176> <Q480476> .
+<Q480476> <P61>  <Q7251> .

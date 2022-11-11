@@ -16,7 +16,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{legrand}[2022/10/26 Final Degree Project]
-\LoadClass[10pt,oneside]{book}
+\LoadClass[10pt,openany]{book}
 
 %-------------------------------------------------------------------------------
 %	VARIOUS REQUIRED PACKAGES AND CONFIGURATIONS
@@ -24,11 +24,7 @@
 
 % we specify some colors for later use
 \usepackage[table]{xcolor} % Required for specifying colors by name
-\definecolor{blueUniovi}{RGB}{0,51,170} % Define the orange color used for highlighting throughout the book
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{blueUniovi}{RGB}{0,51,170} % Define the blue color used for highlighting throughout the book
 
 \usepackage{graphicx} % Required for including pictures
 \graphicspath{{figures}} % Specifies the directory where pictures are stored
@@ -201,23 +197,13 @@
 \pagestyle{fancy}
 \renewcommand{\chaptermark}[1]{\markboth{\sffamily\normalsize\bfseries\chaptername\ \thechapter.\ #1}{}} % Chapter text font settings
 \renewcommand{\sectionmark}[1]{\markright{\sffamily\normalsize\thesection\hspace{5pt}#1}{}} % Section text font settings
-\fancyhf{} \fancyhead[L,RO]{\sffamily\normalsize\thepage} % Font setting for the page number in the header
+\fancyhf{} \fancyhead[LE,RO]{\sffamily\normalsize\thepage} % Font setting for the page number in the header
 \fancyhead[LO]{\rightmark} % Print the nearest section name on the left side of odd pages
-\fancyhead[R]{\leftmark} % Print the current chapter name on the right side of even pages
+\fancyhead[RE]{\leftmark} % Print the current chapter name on the right side of even pages
 \renewcommand{\headrulewidth}{0.5pt} % Width of the rule under the header
 \addtolength{\headheight}{2.5pt} % Increase the spacing around the header slightly
 \renewcommand{\footrulewidth}{0pt} % Removes the rule in the footer
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrulewidth}{0pt}} % Style for when a plain pagestyle is specified
-
-% Removes the header from odd empty pages at the end of chapters
-%\makeatletter
-%\renewcommand{\cleardoublepage}{
-%\clearpage\ifodd\c@page\else
-%\hbox{}
-%\vspace*{\fill}
-%\thispagestyle{empty}
-%\newpage
-%\fi}
 
 %-------------------------------------------------------------------------------
 %	THEOREM STYLES
@@ -391,21 +377,21 @@
 \makeatletter
 \renewcommand{\@seccntformat}[1]{\llap{\textcolor{blueUniovi}{\csname the#1\endcsname}\hspace{1em}}}                    
 \renewcommand{\section}{\@startsection{section}{1}{\z@}
-{-4ex \@plus -1ex \@minus -.4ex}
+{-2ex \@plus -1ex \@minus -.4ex}
 {1ex \@plus.2ex }
-{\normalfont\large\sffamily\bfseries}}
+{\normalfont\Large\sffamily\bfseries}}
 \renewcommand{\subsection}{\@startsection {subsection}{2}{\z@}
-{-3ex \@plus -0.1ex \@minus -.4ex}
+{-2ex \@plus -0.1ex \@minus -.4ex}
 {0.5ex \@plus.2ex }
-{\normalfont\sffamily\bfseries}}
+{\normalfont\large\sffamily\bfseries}}
 \renewcommand{\subsubsection}{\@startsection {subsubsection}{3}{\z@}
-{-2ex \@plus -0.1ex \@minus -.2ex}
+{-1.5ex \@plus -0.1ex \@minus -.2ex}
 {.2ex \@plus.2ex }
-{\normalfont\small\sffamily\bfseries}}                        
+{\normalfont\normalsize\sffamily\bfseries}}                        
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}
-{-2ex \@plus-.2ex \@minus .2ex}
-{.1ex}
-{\normalfont\footnotesize\sffamily\bfseries}}
+{-1ex \@plus -0.1ex \@minus -.2ex}
+{.2ex \@plus.2ex }
+{\normalfont\small\sffamily\bfseries}}
 
 %-------------------------------------------------------------------------------
 %	PART HEADINGS
@@ -555,3 +541,37 @@ addtohook={%
 \fi
 }
 }
+
+%-------------------------------------------------------------------------------
+%	CODE LISTINGS IN THE DOCUMENTS
+%-------------------------------------------------------------------------------
+\RequirePackage{caption}
+\RequirePackage[outputdir=build,newfloat]{minted}
+\newenvironment{code}{
+    \vspace*{1em}
+    \captionsetup{type=listing}
+    \vspace*{1em}
+}{}
+\SetupFloatingEnvironment{listing}{name=Listing}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\noindent\colorbox{blueUniovi}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\normalfont\sffamily#1#2#3}}}
+\captionsetup[listing]{ format=listing,
+                        labelfont=white,
+                        textfont=white,
+                        position=top,
+                        skip=0.15pt}
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\setminted{ mathescape,
+            linenos,
+            numbersep=5pt,
+            bgcolor=bg,
+            autogobble } % formatting for the minted package :D
+\usepackage{etoolbox,xpatch}
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\xpatchcmd{\inputminted}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
+\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{} % see https://tex.stackexchange.com/a/401250/
+\makeatother
+\xpretocmd{\inputminted}{\par\vspace{0em}}{}{} % spacing above and below
+\xapptocmd{\inputminted}{\par\vspace{0em}}{}{}
