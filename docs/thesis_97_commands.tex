@@ -1,6 +1,13 @@
 % creating some commands for reuse later on :D
 \newcommand{\myfont}[1]{\ensuremath{\mathcal{#1}}}
 
+\newcommand{\VertSet}{\myfont{V}}
+\newcommand{\NodeSet}{\myfont{N}}
+\newcommand{\EdgeSet}{\myfont{E}}
+\newcommand{\LabelSet}{\myfont{L}}
+\newcommand{\PLabelSet}{\myfont{T}}
+\newcommand{\MsgSet}{\myfont{M}}
+
 \newcommand{\triple}[3]{\ensuremath{\langle #1,#2,#3 \rangle}}
 \newcommand{\quadruple}[4]{\ensuremath{\langle #1,#2,#3,#4\rangle}}
 \newcommand{\ItemSet}{\myfont{Q}}
@@ -38,3 +45,73 @@
 
 \newcommand{\fb}[1]{\dofb#1}
 \newcommand{\dofb}[1]{\textbf{#1}\nobreak\hspace{0pt}}
+
+\newcommand{\mi}[1]{\ensuremath{\mathit{#1}}}
+
+\newcommand{\emptyGraph}{\ensuremath{\emptyset}}
+\newcommand{\EmptyGraph}{\ensuremath{\emptyset}}
+\newcommand{\addTriple}{\ensuremath{\rtimes}}
+\newcommand{\unionGraphs}{\ensuremath{\cup}}
+\newcommand\neighs[2]{\ensuremath{neighs(#1,#2)}}
+\newcommand\nodes[1]{\ensuremath{nodes(#1)}}
+\newcommand{\node}{\mi{n}}
+\newcommand{\lbl}{\mi{l}}
+
+% Algorithmic definitions
+\renewcommand{\c}[1]{\texttt{#1}}
+
+\SetKwProg{Def}{def}{$\,$:}{}
+\SetKwProg{Defn}{def}{~$=$}{}
+\SetKw{defn}{def}
+\newcommand{\DefInline}[2]{\defn #1 = #2}
+\SetKwProg{DefnCustom}{\defn}{}{}
+\SetKw{Let}{let}
+\SetKwInput{KwIn}{Input}
+\SetKwFor{ForEach}{foreach}{}{}
+\SetKw{Or}{or}
+\SetKw{And}{and}
+\SetKwIF{If}{ElseIf}{Else}{if}{then}{else if}{else}{endif}
+\SetKw{Match}{match}
+\SetKw{MyIf}{if}
+\SetKw{MyThen}{then}
+\SetKw{MyElse}{else}
+\SetKw{Case}{case}
+\SetKwBlock{Let}{let}{in}
+\SetKw{In}{in}
+\SetKw{MapTo}{\ensuremath{\;\;\Rightarrow\;\;}}
+\SetKwBlock{Block}{}{}
+\newcommand{\assign}{\ensuremath{~\mathtt{:=}~}}
+\newcommand{\algocomment}[1]{\text{//$\,$#1}}
+
+\newcommand{\blockskip}{\smallskip}
+\newcommand{\done}{\ensuremath{\mathit{done}}}
+
+% [algorithm spacing:]
+\def\algorithmsize{small}
+\def\algorithmheadersize{\algorithmsize}
+\renewcommand\AlCapFnt{\normalfont\bfseries\small}
+\setlength{\textfloatsep}{1.0ex}
+\setlength{\floatsep}{1.0ex}
+
+% Statuses
+\newcommand{\Ok}{\ensuremath{\c{Ok}}}
+\newcommand{\Failed}{\ensuremath{\c{Failed}}}
+\newcommand{\WaitingFor}[3]{\ensuremath{\c{WaitingFor}(\c{#1},\c{#2},\c{#3})}}
+\newcommand{\Pending}{\ensuremath{\c{Pending}}}
+\newcommand{\PendingLs}{\ensuremath{\c{Pending}(ls)}}
+\newcommand{\Undefined}{\ensuremath{\c{Undefined}}}
+
+\newcommand{\Validate}{\ensuremath{\c{Validate}}}
+\newcommand{\Checked}[2]{\ensuremath{\c{Checked}(#1,#2)}}
+\newcommand{\WaitFor}[1]{\ensuremath{\c{WaitFor}(#1)}}
+\newcommand{\status}[2]{\ensuremath{#1(#2)}}
+\newcommand{\msgSent}[3]{\ensuremath{#1,#2\rightsquigarrow{}#3}}
+\newcommand{\checkLocal}[2]{\ensuremath{\c{checkLocal}(#1,#2)}}
+\newcommand{\checkLocalOpen}[2]{\ensuremath{\c{checkLocalOpen}(#1,#2)}}
+
+\newcommand{\checkNeighs}[3]{\ensuremath{\c{checkNeighs}(#1,#2,#3)}}
+\newcommand{\fracEmpty}[2]{\genfrac{}{}{0pt}{0}{#1}{#2}}
+\newcommand{\vProg}{\c{vProg}}
+\newcommand{\tripleConstraints}[1]{\c{tripleConstraints(#1)}}
+\newcommand{\rbe}[1]{\ensuremath{\c{rbe}(#1)}}
+\newcommand{\combine}[2]{\ensuremath{\c{combine}(#1,#2)}}

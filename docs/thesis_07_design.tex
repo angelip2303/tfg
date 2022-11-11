@@ -1,0 +1,65 @@
+\epigraph{\textit{The most important single aspect of sotware development is to be clear about what you are trying to build.}}{-- \textup{Bjarne Stroustrup}}
+
+\begin{algorithm}[!hbt]
+    \DontPrintSemicolon
+    \SetAlgoVlined
+    \SetArgSty{textnormal}
+    \SetKwInput{KwIn}{Input parameters}
+    \KwIn{
+        \Block{\c{g}: \c{Graph}[\VertSet, \EdgeSet] \;
+            \c{initialMsg}: \MsgSet \;
+            \c{vProg}: (\c{Id}, \VertSet, \MsgSet)$\rightarrow$\VertSet \;
+            \c{sendMsg}: \c{Triplet}$\rightarrow$[(\c{Id}, \MsgSet)] \;
+            \c{mergeMsg}: (\MsgSet, \MsgSet)$\rightarrow$\MsgSet}
+    }
+    \KwOut{\c{g}:\c{Graph}[\VertSet, \EdgeSet]}
+    \blockskip
+    \c{g} = \c{mapVertices}(\c{g}, $\lambda$(\c{id}, \c{v})$\rightarrow$\c{vProg}(\c{id}, \c{v}, \c{initialMsg}))  \;
+    \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg}) \;
+    \While{\c{size}(\c{msgs})$>0$}{
+        \c{g} = \c{joinVertices}(\c{g}, \c{msgs}, \c{vProg}) \;
+        \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg})
+    }
+    \Return\c{g}
+    \caption{Pregel algorithm pseudo-code as implemented in GraphX}
+\end{algorithm}
+
+\begin{algorithm}[!hbt]
+    \DontPrintSemicolon
+    \SetAlgoVlined
+    \SetArgSty{textnormal}
+    \SetKwInput{KwIn}{Input parameters}
+    \KwIn{
+        \Block{\c{g}: \c{Graph}[\VertSet, \EdgeSet] \;
+            \c{initialLabel}: \LabelSet \;
+            \c{checkLocal}: (\LabelSet, \VertSet) $\rightarrow$ \Ok $\mid$ \Failed\ $\mid$ \Pending(\c{Set}[\LabelSet]) \;
+            \c{checkNeighs}: (\LabelSet, \c{Bag}[(\EdgeSet, \LabelSet)], \c{Set}[(\EdgeSet, \LabelSet)]) $\rightarrow$ \Ok\ $\mid$ \Failed \;
+            \c{tripleConstraints}: \LabelSet $\rightarrow$ \c{Set}[(\EdgeSet, \LabelSet)]}
+    }
+    \KwOut{\c{g}:\c{Graph}[(\VertSet, \LabelSet\ $\mapsto$ Status), \EdgeSet]
+    }
+    \blockskip
+    \c{gs} = \c{mapVertices}( \c{g}, $\lambda$(\c{id}, \c{v})$\rightarrow$(id, (v, $\lambda$v$ \rightarrow$ \Undefined)) )  \;
+    \c{gs} = \c{pregel}( \Validate, \c{gs}, \vProg, \c{sendMsg}, \c{mergeMsg} ) \;
+    \c{gs} = \c{mapVertices}( \c{gs}, \c{checkUnsolved} ) \;
+    \Return\c{gs} \;
+    \blockskip
+    \DefInline{\c{checkUnsolved}(v,m)}{
+        (v,m') where \;
+        \ \ \ m'(\lbl) = $\begin{cases}
+                \text{\c{checkNeighs}(\lbl, $\emptyset$, $\emptyset$)}                       & \text{if}\ m(\lbl)=\Pending                 \\
+                \text{\c{checkNeighs}(\lbl, \textit{oks}, \textit{fs} $\cup{}$ \textit{ds})} & \text{if}\ m(\lbl)=\WaitingFor{ds}{oks}{fs} \\
+                m(\lbl)                                                                      & \text{otherwise}
+            \end{cases}$
+    }\\
+    \DefInline{\c{vProg}(\c{Id}, \VertSet, \MsgSet)$\rightarrow$\VertSet}{... see~\ref{}}
+    \caption{Pregel-based ShEx validation pseudo-code}
+    \label{alogorithm:PSchema}
+\end{algorithm}
+
+\begin{figure}[ht]
+    \centering
+    \includestandalone{diagrams/4-1_pregelState}
+    \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
+    \label{fig:pregelState}
+\end{figure}

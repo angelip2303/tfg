@@ -76,7 +76,7 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 \paragraph{Wikibase JSON serialization}
 
-The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
+The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
 \inputminted{json}{listings/serialization.json}
 
@@ -105,15 +105,7 @@ Resource Description Framework (RDF) is a data interchange W3C standard for the 
 
 RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. This representation can be seen in Figure \ref{fig:RDF}.
 
-We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
-
-\begin{example}[RDF knowledge graph using N-Triples notation]
-    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
-\end{example}
-
-\inputminted{turtle}{listings/serialization.nt}
-
-\subsection{ShEx (Shape Expressions)}
+We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that togetherdefinition:neighborhood
 
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
@@ -130,8 +122,6 @@ Following the previous example, another possibility is to visualize ShEx schemas
     \caption{ShEx schema visualization as UML-like diagrams}
     \label{fig:RDFshape}
 \end{figure}
-
-\subsubsection{Entity Schemas}
 
 The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. Expectations for a particular collection of Wikidata items are outlined in Wikidata Schemas in order for us to address that issue. Wikidata's subsets can be examined in this manner to see if they adhere to a particular schema. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
 
@@ -170,7 +160,7 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 \subsection{Pregel model}
 \label{section:pregel}
 
-Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring ones. We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge. This has a relevance for better understanding the architecture of this system depicted in Figure \ref{fig:architecture:pregel}. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones. Notice how a graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.
+Pregel (\textit{Parallel, Graph and Google}) is a data flow paradigm and system created by Google to handle large-scale graphs. Even though the original system remains proprietary at Google, the computational model was adopted by many graph-processing systems: including Apache Spark. For better understanding Pregel, the idea is to \textit{think like a vertex}; this way, for computing the state of a given node, we only depend on the states of its neighboring ones. We will call neighboring vertices of a certain one to those nodes connected to it by an outgoing edge (see definition \ref{definition:neighborhood}). This has a relevance for better understanding the architecture of this system depicted in Figure \ref{fig:architecture:pregel}. \textit{Thinking like a vertex} could be understood as the \textit{leitmotif} for dividing the problem into several sub-problems: instead of dealing with a huge graph, we just have to solve the problem for smaller graphs: a vertex and its neighboring ones. Notice how a graph to be processed with Pregel may potentially have millions of vertices with billions of edges. More on the size of the Wikibase graphs will be discussed later on.
 
 In comparison to the MapReduce framework, where for each iteration the state of the whole graph must be passed, at each \textit{superstep} -- the way we refer to iterations in Pregel -- each vertex can: send a message to its neighbors, process the received messages (from the previous superstep), and update its state. Summing up, instead of sending the whole state of the graph, we just send messages back and forth. The best way for understanding this is through an example. Let me show you the resulting trace after applying Pregel for computing the maximum value in a graph (see figure \ref{fig:pregel}).
 
@@ -194,23 +184,23 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
-    \includestandalone[width=0.75\textwidth]{diagrams/3-8_pregelArchitecture}
+    \includestandalone[width=0.66\textwidth]{diagrams/3-8_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
 
 \section{Knowledge graph Subsets}
 
-Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, Replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
+Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
 
 \begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
     Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
 \end{definition}
 
 \begin{example}[Example of wikibase subgraph]
-    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase sub-graph of $\Graph$.
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase subgraph of $\Graph$.
 \end{example}
 
 \begin{table}[ht]
@@ -220,4 +210,18 @@ Wikidata keeps getting bigger and better. A vast volume of data, like that found
 
 \subsection{ShEx-based Matching generated subsets}
 
-\subsection{ShEx + Pregel generated subsets}
+ShEx-based matching comprises using a WShEx schema \myfont{S} as input and include any nodes whose neighborhood matches any of the shapes from \myfont{S} in the produced subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}. For us to better understand the concept of neighborhood, a formal definition is provided.
+
+\begin{definition}[Neighborhood of a node in a Wikibase graph]
+    \label{definition:neighborhood}
+    The neighbors of an item $q\in\ItemSet$ in a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ are defined as $neighbors(q)=\{(q,p,n,d): \exists{}v\in\StmtSet \wedge v=(q,p,n,d)\}$
+\end{definition}
+
+\begin{example}[Neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)}]
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, the neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)} $\in \ItemSet$ is defined as follows:
+\end{example}
+
+\begin{table}[ht]
+    \centering
+    \input{figures/tables/3-4_neighborhood}
+\end{table}
