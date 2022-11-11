@@ -85,7 +85,7 @@ The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.
 
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
-\inputminted{turtle}{listings/serialization.rdf}
+\inputminted[highlightlines={3,6,7,9},highlightcolor=blueUniovi!15]{turtle}{listings/serialization.rdf}
 
 \section{Knowledge graph validation}
 
@@ -122,12 +122,13 @@ Shape Expressions (ShEx) were designed as a high-level, domain-specific language
     \inputminted{shex}{listings/shex.shex}
 \end{code}
 
-Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the following representation arises:
+Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the representation seen in Figure \ref{fig:RDFshape} arises.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.4\textwidth]{diagrams/3-4_ShEx.pdf}
     \caption{ShEx schema visualization as UML-like diagrams}
+    \label{fig:RDFshape}
 \end{figure}
 
 \subsubsection{Entity Schemas}
