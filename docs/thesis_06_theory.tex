@@ -201,7 +201,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
     \label{fig:architecture:pregel}
 \end{figure}
 
-\subsection{The GraphX implementation of Pregel}
+\subsection{GraphX}
 
 A graph processing framework integrated with Apache Spark was suggested as GraphX in 2014. Its API contains a Pregel variation that is used to implement several algorithms, including PageRank. GraphX exposes an API for graphs based on RDDs~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
@@ -210,14 +210,16 @@ A graph processing framework integrated with Apache Spark was suggested as Graph
 We want to process graphs in parallel, hence a distributed approach is required to store the graph itself. RDDs are necessary for us to address that issue. They are spread in memory or on different machines in a cluster, and serve as Apache Spark's primary logical data unit. This method allows a single RDD to be split into numerous logical segments that can then be stored and processed on various cluster machines. RDDs are also lazy-evaluated, which saves time and boosts efficiency. For us to have a better understanding on the characteristics of RDDs, their main features are listed below:
 
 \begin{itemize}
-    \item \textbf{Fault tolerance:}
-    \item \textbf{Partitioning:}
-    \item \textbf{Lazy-evaluation:}
-    \item \textbf{Immutability:}
-    \item \textbf{In-memory computation:}
+    \item \textbf{Fault tolerance:} RDDs keep track of data lineage information to automatically restore lost data in the case of failure. Another name for this is resilience.
+    \item \textbf{Partitioning:} Any existing RDD can be partitioned to generate mutable logical sections. This can be done by performing transformations on the current partitions.
+    \item \textbf{Lazy-evaluation:} Even if you define data, it does not load in an RDD. When you call an operation, like count or collect, or when you save the output to a file system, transformations are really computed.
+    \item \textbf{Immutability:} You cannot alter the data that is saved in an RDD since it is in read-only mode. But by applying modifications to the current RDDs, you can produce new RDDs.
+    \item \textbf{In-memory computation:} In order to allow faster access, an RDD saves any immediately created data in RAM rather than on the disk.
 \end{itemize}
 
-According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) showing that for distributed systems, either consistency or availability can be guaranteed, not both. This way, for our system, we will try to ensure Availability as only the master node will have the information of where the replicas are placed, workers won't notice.
+According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) showing that, for distributed systems, either consistency or availability can be guaranteed, not both.
+
+\subsubsection{The GraphX implementation of Pregel}
 
 \begin{algorithm}[!hbt]
     \DontPrintSemicolon
