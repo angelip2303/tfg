@@ -3,29 +3,40 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 
-\ganttset{group/.append style={blueUniovi},
-milestone/.append style={blueUniovi},
-progress label node anchor/.append style={text=blueUniovi}}
-
 \begin{document}
 \begin{ganttchart}[
         x unit = 1cm,
         y unit title=0.5cm,
         y unit chart=0.7cm,
-        vgrid,hgrid,
+        vgrid,
+        hgrid,
+        today=none,
+        today rule/.style={
+                draw=black!64,
+                dash pattern=on 3.5pt off 2.5pt,
+                line width=1.5pt
+            },
+        today label font=\small\bfseries,
         title height=1,
         title label font=\bfseries\footnotesize,
-        bar/.style={fill=blueUniovi},
+        bar/.style={fill=blueUniovi!45},
         bar height=0.7,
+        group/.append style={blueUniovi},
+        group left shift=0,
         group right shift=0,
-        group top shift=0.7,
         group height=.3,
-        group peaks width={0.2},
-        inline]{1}{11}
-
+        group peaks tip position=0,
+        group label node/.append style={
+                align=right,
+                left=0
+            },
+        group progress label font=\bfseries\small,
+        inline,
+        milestone/.append style={blueUniovi!60}
+    ]{1}{12}
     \gantttitle[]{2022}{4}
-    \gantttitle[]{2023}{7} \\
-    \gantttitlelist{"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun", "Jul"}{1} \\
+    \gantttitle[]{2023}{8} \\
+    \gantttitlelist{"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun", "Jul","Aug"}{1} \\
 
     \ganttmilestone[inline=false]{First Meeting}{1} \\
 
@@ -42,8 +53,8 @@ progress label node anchor/.append style={text=blueUniovi}}
     \ganttmilestone[inline=false]{Agreement of the Conditions}{1} \\
 
     \ganttgroup[inline=false]{Research and Results}{2}{4} \\
-    \ganttbar[progress=100,inline=false]{Proposed Solution Development}{4}{6}\\
-    \ganttbar[progress=100,inline=false]{Acquisition of Results}{4}{6}\\
+    \ganttbar[progress=0,inline=false]{Proposed Solution Development}{4}{6}\\
+    \ganttbar[progress=0,inline=false]{Acquisition of Results}{4}{6}\\
 
     \ganttgroup[inline=false]{Dissertation Document}{3}{8} \\
     \ganttbar[progress=50,inline=false]{Introduction}{3}{4} \\
