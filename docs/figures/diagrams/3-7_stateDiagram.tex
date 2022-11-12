@@ -1,16 +1,27 @@
 \documentclass{standalone}
 \usepackage{tikz}
-\usetikzlibrary{positioning}
+\usetikzlibrary{positioning,arrows}
 \begin{document}
 \begin{tikzpicture}[
-        activenode/.style={rectangle, rounded corners, draw=black!60, fill=black!5, thick, minimum size=10mm},
+        state/.style={
+                rectangle,
+                rounded corners,
+                draw=black!60,
+                fill=black!5,
+                thick,
+                minimum width=20mm,
+                minimum height=10mm
+            },
+        predicate/.style = {font=\footnotesize\ttfamily},
+        >=stealth',
+        shorten >=0.5pt
     ]
-    \node[activenode] (active)                     {Active};
-    \node[activenode] (inactive) [right=4cm of active] {Inactive};
+    \node[state] (active) {Active};
+    \node[state] (inactive) [right=2.5cm of active] {Inactive};
 
-    \path[-to,in=180-20,out=0+20] (active) edge node[above=2.36mm,pos=.49] {\small \textit{Vote to halt}} (inactive);
-    \path[to-,in=180+20,out=0-20] (active) edge node[below=2.36mm] {\small \textit{Message received}} (inactive);
-    \path[-to] (active)   edge[loop left]  node {} (active);
-    \path[-to] (inactive) edge[loop right] node {} (inactive);
+    \path[->,in=180-20,out=0+20] (active) edge node[predicate,above=1mm,pos=.49] {Vote to halt} (inactive);
+    \path[<-,in=180+20,out=0-20] (active) edge node[predicate,below=1mm] {Message received} (inactive);
+    \path[->] (active)   edge[loop left]  node {} (active);
+    \path[->] (inactive) edge[loop right] node {} (inactive);
 \end{tikzpicture}
 \end{document}

@@ -21,7 +21,7 @@
         \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg})
     }
     \Return\c{g}
-    \caption{Pregel algorithm pseudo-code as implemented in GraphX}
+    \caption{Pregel algorithm pseudo-code as implemented in GraphX~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
 \end{algorithm}
 
 \begin{algorithm}[!hbt]
@@ -44,8 +44,8 @@
     \c{gs} = \c{mapVertices}( \c{gs}, \c{checkUnsolved} ) \;
     \Return\c{gs} \;
     \blockskip
-    \DefInline{\c{checkUnsolved}(v,m)}{
-        (v,m') where \;
+    \DefInline{\c{checkUnsolved}(v, m)}{
+        (v, m') where \;
         \ \ \ m'(\lbl) = $\begin{cases}
                 \text{\c{checkNeighs}(\lbl, $\emptyset$, $\emptyset$)}                       & \text{if}\ m(\lbl)=\Pending                 \\
                 \text{\c{checkNeighs}(\lbl, \textit{oks}, \textit{fs} $\cup{}$ \textit{ds})} & \text{if}\ m(\lbl)=\WaitingFor{ds}{oks}{fs} \\
@@ -53,13 +53,13 @@
             \end{cases}$
     }\\
     \DefInline{\c{vProg}(\c{Id}, \VertSet, \MsgSet)$\rightarrow$\VertSet}{... see~\ref{}}
-    \caption{Pregel-based ShEx validation pseudo-code}
+    \caption{Pregel-based ShEx validation pseudo-code~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{alogorithm:PSchema}
 \end{algorithm}
 
 \begin{figure}[ht]
     \centering
     \includestandalone{diagrams/4-1_pregelState}
-    \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
+    \caption[State diagram representing the different states in \texttt{vProg}]{State diagram representing the different states in \texttt{vProg}~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:pregelState}
 \end{figure}

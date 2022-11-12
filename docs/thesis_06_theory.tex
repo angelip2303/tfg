@@ -105,7 +105,15 @@ Resource Description Framework (RDF) is a data interchange W3C standard for the 
 
 RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. This representation can be seen in Figure \ref{fig:RDF}.
 
-We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that togetherdefinition:neighborhood
+We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
+
+\begin{example}[RDF knowledge graph using N-Triples notation]
+    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
+\end{example}
+
+\inputminted{turtle}{listings/serialization.nt}
+
+\subsection{ShEx (Shape Expressions)}
 
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
@@ -135,7 +143,14 @@ ShEx was chosen by Wikibase in 2019 to be the language for describing entity sch
 \subsubsection{WShEx}
 \label{section:WShEx}
 
-As a solution to the problem described before, an extension of ShEx for describing the Wikibase data model was designed. WShEx is a language inspired by ShEx that provides a support for the Wikibase data model and can be used to describe and validate Wikibase entities~\cite{https://doi.org/10.48550/arxiv.2208.02697}. What's more, the main motivation for developing this language was to create subsets of Wikidata using a human-readable language. Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the Wikibase data model.
+As a solution to the problem described before, an extension of ShEx for describing the Wikibase data model was designed. WShEx is a language inspired by ShEx that provides a support for the Wikibase data model and can be used to describe and validate Wikibase entities~\cite{https://doi.org/10.48550/arxiv.2208.02697}. What's more, the main motivation for developing this language was to create subsets of Wikidata using a human-readable language.
+
+\begin{code}
+    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
+    \inputminted{shex}{listings/wshex.shex}
+\end{code}
+
+Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the Wikibase data model. This way, by validating the Wikibase data model through WShEx, we are not only validating the dumps, but the system itself.
 
 \begin{figure}[ht]
     \centering
@@ -143,11 +158,6 @@ As a solution to the problem described before, an extension of ShEx for describi
     \caption[Relationships between ShEx, WShEx and the Wikibase data model]{Relationships between ShEx, WShEx and the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:WShEx}
 \end{figure}
-
-\begin{code}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
-    \inputminted{shex}{listings/wshex.shex}
-\end{code}
 
 \section{Data-flow algorithms}
 

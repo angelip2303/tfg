@@ -3,11 +3,22 @@
 \usepackage{tikz}
 \usepackage{../mystyle}
 \input{../commands}
-\usetikzlibrary{positioning}
+\usetikzlibrary{positioning,arrows}
 \begin{document}
 \begin{tikzpicture}[
-        vertex/.style={rectangle, rounded corners, draw=black!60, minimum width=15mm, minimum height=7.5mm, text centered, font=\footnotesize},
-        predicate/.style = {fill=white, font=\footnotesize}
+        vertex/.style={
+                rectangle,
+                rounded corners,
+                draw=black!60,
+                fill=black!5,
+                minimum width=15mm,
+                minimum height=7.5mm,
+                text centered,
+                font=\footnotesize
+            },
+        predicate/.style = {font=\footnotesize\ttfamily},
+        >= stealth',
+        shorten >= 0.5pt
     ]
     \node[vertex,align=center] (alanTuring) at (-2, 0) {\alanTuring\\{\tiny \dateOfBirth  \hspace{1mm} \textit{23 June 1912}}\\{\tiny \dateOfDeath  \hspace{1mm} \textit{7 June 1954}}};
     \node[vertex] (human) at (-2, -2) {\Human};
@@ -19,16 +30,16 @@
     \node[vertex] (machine) at (1, -3.25) {\computer};
     \node[vertex] (town) at (6, 4) {\town};
 
-    \path[-to] (alanTuring.north) edge[bend left] node[predicate] {\placeOfDeath} (death.west);
-    \path[-to] (alanTuring.north) edge[bend left] node[predicate] {\placeOfBirth} (birth.west);
-    \path[-to] (alanTuring.south) edge node[predicate] {\instanceOf} (human.north);
-    \path[-to] (alanTuring.east) edge node[label={[align=left,font=\tiny]above:\employer\\- \timeStart \hspace{1mm} \textit{1938}\\- \timeEnd \hspace{1mm} \textit{1945}}] {} (employer.west);
-    \path[-to] (birth.east) edge node[predicate] {\country} (country.west);
-    \path[-to] (bombe.south) edge[bend left] node[predicate] {\instanceOf} (machine);
-    \path[-to] (bombe.north) edge node[predicate] {\manufacturer} (employer.south);
-    \path[-to] (bombe) edge[bend left] node[predicate] {\discoverer} (alanTuring);
-    \path[-to] (bombe.east) edge[bend right] node[predicate] {\country} (country);
-    \path[-to] (death.east) edge node[predicate] {\instanceOf} (town.west);
-    \path[-to] (death) edge node[predicate] {\country} (country);
+    \path[->] (alanTuring.north) edge[bend left] node[predicate,sloped,above] {\placeOfDeath} (death.west);
+    \path[->] (alanTuring.north) edge[bend left] node[predicate,sloped,above] {\placeOfBirth} (birth.west);
+    \path[->] (alanTuring.south) edge node[predicate,left] {\instanceOf} (human.north);
+    \path[->] (alanTuring.east) edge node[label={[align=left,font=\tiny]above:\employer\\- \timeStart \hspace{1mm} \textit{1938}\\- \timeEnd \hspace{1mm} \textit{1945}}] {} (employer.west);
+    \path[->] (birth.east) edge node[predicate,sloped,above] {\country} (country.west);
+    \path[->] (bombe.south) edge[bend left] node[predicate,sloped,below] {\instanceOf} (machine);
+    \path[->] (bombe.north) edge node[predicate,left] {\manufacturer} (employer.south);
+    \path[->] (bombe) edge[bend left] node[predicate,sloped,above] {\discoverer} (alanTuring);
+    \path[->] (bombe.east) edge[bend right] node[predicate,sloped,above] {\country} (country);
+    \path[->] (death.east) edge node[predicate,above] {\instanceOf} (town.west);
+    \path[->] (death) edge node[predicate,sloped,above] {\country} (country);
 \end{tikzpicture}
 \end{document}

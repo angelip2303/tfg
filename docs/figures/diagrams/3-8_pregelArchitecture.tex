@@ -1,11 +1,35 @@
 \documentclass{standalone}
 \usepackage{tikz}
-\usetikzlibrary{positioning,fit}
+\usetikzlibrary{positioning,fit,arrows}
 \begin{document}
 \begin{tikzpicture}[
-        master/.style={rectangle, rounded corners, draw=black!60, fill=black!5, text centered, minimum width=50mm, minimum height=25mm, text width=40mm},
-        worker/.style={rectangle, rounded corners, draw=black!60, fill=black!5, thick, minimum size=40mm},
-        vertex/.style={circle, draw=black!60, fill=black!5, very thick, minimum size=10mm},
+        master/.style={
+                rectangle,
+                rounded corners,
+                draw=black!60,
+                fill=black!5,
+                text centered,
+                minimum width=50mm,
+                minimum height=25mm,
+                text width=40mm
+            },
+        worker/.style={
+                rectangle,
+                rounded corners,
+                draw=black!60,
+                fill=black!5,
+                thick,
+                minimum size=40mm
+            },
+        vertex/.style={
+                circle,
+                draw=black!60,
+                fill=black!5,
+                very thick,
+                minimum size=10mm
+            },
+        >= stealth',
+        shorten >= 0.5pt
     ]
     \node[worker,label={[yshift=-4.6cm, font=\sffamily]Worker 1}] (worker1) {};
     \node[worker,label={[yshift=-4.6cm, font=\sffamily]Worker 2}] (worker2) [right=0.5cm of worker1] {};
@@ -23,20 +47,20 @@
 
     \node[fit={(worker1)(worker2)(worker3)},draw,dashed,inner xsep=5mm,inner ysep=10mm] (workers) {};
 
-    \path[-to] (V1) edge node {} (V2);
-    \path[-to] (V2) edge node {} (V3);
-    \path[-to] (V1) edge node {} (V3);
+    \path[->] (V1) edge node {} (V2);
+    \path[->] (V2) edge node {} (V3);
+    \path[->] (V1) edge node {} (V3);
 
-    \path[-to] (V2) edge node {} (V4);
-    \path[-to] (V4) edge node {} (V5);
-    \path[-to] (V5) edge node {} (V6);
+    \path[->] (V2) edge node {} (V4);
+    \path[->] (V4) edge node {} (V5);
+    \path[->] (V5) edge node {} (V6);
 
-    \path[-to] (V6) edge node {} (V7);
-    \path[-to] (V6) edge node {} (V8);
-    \path[-to] (V7) edge node {} (V8);
+    \path[->] (V6) edge node {} (V7);
+    \path[->] (V6) edge node {} (V8);
+    \path[->] (V7) edge node {} (V8);
 
-    \path[-to] (master) edge node {} (worker1);
-    \path[-to] (master) edge node {} (worker2);
-    \path[-to] (master) edge node {} (worker3);
+    \path[->] (master) edge node {} (worker1);
+    \path[->] (master) edge node {} (worker2);
+    \path[->] (master) edge node {} (worker3);
 \end{tikzpicture}
 \end{document}

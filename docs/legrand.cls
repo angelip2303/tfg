@@ -548,9 +548,9 @@ addtohook={%
 \RequirePackage{caption}
 \RequirePackage[outputdir=build,newfloat]{minted}
 \newenvironment{code}{
-    \vspace*{1em}
+    \vspace*{0.8em}
     \captionsetup{type=listing}
-    \vspace*{1em}
+    \vspace*{0.8em}
 }{}
 \SetupFloatingEnvironment{listing}{name=Listing}
 \DeclareCaptionFont{white}{\color{white}}
@@ -559,7 +559,7 @@ addtohook={%
                         labelfont=white,
                         textfont=white,
                         position=top,
-                        skip=0.15pt}
+                        skip=0.1pt}
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
 \setminted{ mathescape,
             linenos,
