@@ -2,47 +2,7 @@
 
 \section{Pregel and ShEx generated subsets}
 
-\subsection{The GraphX implementation}
 
-A graph processing framework integrated with Apache Spark was suggested as GraphX in 2014. Its API contains a Pregel variation that is used to implement several algorithms, including PageRank. GraphX exposes an API for graphs based on RDDs~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
-
-\subsubsection{RDDs (Resilient Distributed Datasets)}
-
-We want to process graphs in parallel, hence a distributed approach is required to store the graph itself. RDDs are necessary for us to address that issue. They are spread in memory or on different machines in a cluster, and serve as Apache Spark's primary logical data unit. This method allows a single RDD to be split into numerous logical segments that can then be stored and processed on various cluster machines. RDDs are also lazy-evaluated, which saves time and boosts efficiency. For us to have a better understanding on the characteristics of RDDs, their main features are listed below:
-
-\begin{itemize}
-    \item \textbf{Fault tolerance:}
-    \item \textbf{Partitioning:}
-    \item \textbf{Lazy-evaluation:}
-    \item \textbf{Immutability:}
-    \item \textbf{In-memory computation:}
-\end{itemize}
-
-According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) showing that for distributed systems, either consistency or availability can be guaranteed, not both. This way, for our system, we will try to ensure Availability as only the master node will have the information of where the replicas are placed, workers won't notice.
-
-\begin{algorithm}[!hbt]
-    \DontPrintSemicolon
-    \SetAlgoVlined
-    \SetArgSty{textnormal}
-    \SetKwInput{KwIn}{Input parameters}
-    \KwIn{
-        \Block{\c{g}: \c{Graph}[\VertSet, \EdgeSet] \;
-            \c{initialMsg}: \MsgSet \;
-            \c{vProg}: (\c{Id}, \VertSet, \MsgSet)$\rightarrow$\VertSet \;
-            \c{sendMsg}: \c{Triplet}$\rightarrow$[(\c{Id}, \MsgSet)] \;
-            \c{mergeMsg}: (\MsgSet, \MsgSet)$\rightarrow$\MsgSet}
-    }
-    \KwOut{\c{g}:\c{Graph}[\VertSet, \EdgeSet]}
-    \blockskip
-    \c{g} = \c{mapVertices}(\c{g}, $\lambda$(\c{id}, \c{v})$\rightarrow$\c{vProg}(\c{id}, \c{v}, \c{initialMsg}))  \;
-    \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg}) \;
-    \While{\c{size}(\c{msgs})$>0$}{
-        \c{g} = \c{joinVertices}(\c{g}, \c{msgs}, \c{vProg}) \;
-        \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg})
-    }
-    \Return\c{g}
-    \caption{Pregel algorithm pseudo-code as implemented in GraphX~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
-\end{algorithm}
 
 \begin{algorithm}[!hbt]
     \DontPrintSemicolon

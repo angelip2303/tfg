@@ -6,7 +6,7 @@ During the following paragraphs I am covering the motivation, contributions and 
 
 A famous mathematical problem from the past is \textbf{The Seven Bridges of Königsberg}. The foundations of \textit{graph theory} were set by Leonhard Euler's negative solution to the problem in 1736.
 
-The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both banks of the Pregel River and featured two sizable islands, Kneiphof and Lomse, which were linked to the two mainland sections of the city by seven bridges. Creating a route through the city that would cross each of those bridges just once was the challenge. What Euler proved was that this problem has no solution.
+The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both banks of the Pregel river and featured two sizable islands, Kneiphof and Lomse, which were linked to the two mainland sections of the city by seven bridges. Creating a route through the city that would cross each of those bridges just once was the challenge. What Euler proved was that this problem has no solution.
 
 \begin{figure}[ht]
     \begin{subfigure}{.3\textwidth}
@@ -30,7 +30,11 @@ The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both b
 \end{figure}
 \footnotetext{\url{https://en.wikipedia.org/wiki/Seven_Bridges_of_Konigsberg}}
 
-\subsection{Euler's analysis}
+\subsection{Eueler's analysis}
+
+In modern terms, Euler made the observation that the degree, number of vertices connected to a particular element, of the nodes, determines the possibility of a walk around a graph, traversing each edge precisely once. According to Euler's theory, a connected graph with exactly zero or two nodes with odd degrees is a requirement for the walk around the entire network. This is due to the fact that we can only cross each bridge once, therefore each traversal of a section of the city requires an even number of edges to be crossed. For each entrance on a mainland, we must enter through one bridge and exit through another. It turns out that this condition is also sufficient. We also know that if there are nodes with odd degrees, then any path will begin at one of them and end at the other. A path like this is currently known as the Eulerian path and is named after the mathematician. There can be no Eulerian path in the graph that corresponds to Königsberg since it contains four nodes of odd degree.
+
+
 
 \section{Project Scope}
 
@@ -42,16 +46,16 @@ Knowledge graphs~\cite{https://doi.org/10.48550/arxiv.2110.11709} were populariz
 
 Summing up, this project focuses on the analysis and implementation of a system to validate Wikibase graphs -- a specific flavor of the so-called knowledge graphs -- using big data techniques. To put that into perspective, as of October 1, 2022, a compressed \gls{dump} of Wikidata's database has a size of 109.04Gb~\cite{wikidata:dumps}. Not only that, but the size of these dumps has exponentially increased with each and every release of a new one (see Figure \ref{fig:dumps}).
 
-These enormous sizes have the effect of making it difficult for users to easily examine and process the content, and they also raise the possibility that these technologies will become victims of their own success. This condition is demonstrated in Scholia, an online application that uses Wikidata to describe data about academics and their works. Additionally, the app includes appealing visualizations and comparisons that are based on requests through the Wikidata endpoint. Despite the project offering a wealth of intriguing data, timeouts caused by the massive volumes of data prevent access to the most intricate visualizations.
-
-Creating subsets of the Knowledge Graphs for specific domains may be one solution to these problems. These subsets serve as snapshots of the data at certain points in time and be used to enhance the performance of the apps that use that data, making it easier to do research on the contents of Knowledge Graphs.
-
 \begin{figure}[ht]
     \centering
     \includestandalone[width=0.4\textwidth]{diagrams/1-1_dumps}
     \caption[Plot showing the size of compressed dumps between 2014-22]{Size of compressed Wikidata dumps between 2014-2022~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:dumps}
 \end{figure}
+
+These enormous sizes have the effect of making it difficult for users to easily examine and process the content, and they also raise the possibility that these technologies will become victims of their own success. This condition is demonstrated in Scholia, an online application that uses Wikidata to describe data about academics and their works. Additionally, the app includes appealing visualizations and comparisons that are based on requests through the Wikidata endpoint. Despite the project offering a wealth of intriguing data, timeouts caused by the massive volumes of data prevent access to the most intricate visualizations.
+
+Creating subsets of the Knowledge Graphs for specific domains may be one solution to these problems. These subsets serve as snapshots of the data at certain points in time and be used to enhance the performance of the apps that use that data, making it easier to do research on the contents of Knowledge Graphs.
 
 \section{Objectives}
 
