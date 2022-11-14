@@ -11,19 +11,19 @@ The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both b
 \begin{figure}[ht]
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[width=.7\linewidth]{img/Konigsberg_bridges.png}
+        \includegraphics[width=.7\linewidth]{img/1-1_konigsberg_bridges.png}
         \caption{The seven bridges' exact positioning is shown on Königsberg's map from Euler's time, highlighting the Pregel river in blue}
     \end{subfigure}%
     {\LARGE$\rightarrow$}%
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[width=.7\linewidth]{img/Konigsberg_abstract.png}
+        \includegraphics[width=.7\linewidth]{img/1-2_konigsberg_abstract.png}
         \caption{Diagram illustrating The Seven Bridges of Königsberg's puzzle. Take note of how our level of abstraction has increased}
     \end{subfigure}%
     {\LARGE$\rightarrow$}%
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[width=.7\linewidth]{img/Konigsberg_graph.png}
+        \includegraphics[width=.7\linewidth]{img/1-3_konigsberg_graph.png}
         \caption{Abstract graph corresponding to the bridges of Königsberg, where edges are de bridges and nodes are the sector of the city}
     \end{subfigure}%
     \caption[Creating the equivalent graph of the problem of The Seven Bridges of Königsberg]{Creating the equivalent graph of the problem of The Seven Bridges of Königsberg\footnotemark}
@@ -33,8 +33,6 @@ The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both b
 \subsection{Eueler's analysis}
 
 In modern terms, Euler made the observation that the degree, number of vertices connected to a particular element, of the nodes, determines the possibility of a walk around a graph, traversing each edge precisely once. According to Euler's theory, a connected graph with exactly zero or two nodes with odd degrees is a requirement for the walk around the entire network. This is due to the fact that we can only cross each bridge once, therefore each traversal of a section of the city requires an even number of edges to be crossed. For each entrance on a mainland, we must enter through one bridge and exit through another. It turns out that this condition is also sufficient. We also know that if there are nodes with odd degrees, then any path will begin at one of them and end at the other. A path like this is currently known as the Eulerian path and is named after the mathematician. There can be no Eulerian path in the graph that corresponds to Königsberg since it contains four nodes of odd degree.
-
-
 
 \section{Project Scope}
 
