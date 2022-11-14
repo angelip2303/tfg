@@ -58,8 +58,6 @@
 \newcommand{\lbl}{\mi{l}}
 
 % Algorithmic definitions
-\renewcommand{\c}[1]{\texttt{#1}}
-
 \SetKwProg{Def}{def}{$\,$:}{}
 \SetKwProg{Defn}{def}{~$=$}{}
 \SetKw{defn}{def}
@@ -94,24 +92,24 @@
 \setlength{\floatsep}{1.0ex}
 
 % Statuses
-\newcommand{\Ok}{\ensuremath{\c{Ok}}}
-\newcommand{\Failed}{\ensuremath{\c{Failed}}}
-\newcommand{\WaitingFor}[3]{\ensuremath{\c{WaitingFor}(\c{#1},\c{#2},\c{#3})}}
-\newcommand{\Pending}{\ensuremath{\c{Pending}}}
-\newcommand{\PendingLs}{\ensuremath{\c{Pending}(ls)}}
-\newcommand{\Undefined}{\ensuremath{\c{Undefined}}}
+\newcommand{\Ok}{\ensuremath{Ok}}
+\newcommand{\Failed}{\ensuremath{Failed}}
+\newcommand{\WaitingFor}[3]{\ensuremath{WaitingFor}(\c{#1},\c{#2},\c{#3})}
+\newcommand{\Pending}{\ensuremath{Pending}}
+\newcommand{\PendingLs}{\ensuremath{Pending}(ls)}
+\newcommand{\Undefined}{\ensuremath{Undefined}}
 
-\newcommand{\Validate}{\ensuremath{\c{Validate}}}
-\newcommand{\Checked}[2]{\ensuremath{\c{Checked}(#1,#2)}}
-\newcommand{\WaitFor}[1]{\ensuremath{\c{WaitFor}(#1)}}
+\newcommand{\Validate}{\ensuremath{Validate}}
+\newcommand{\Checked}[2]{\ensuremath{Checked(#1,#2)}}
+\newcommand{\WaitFor}[1]{\ensuremath{WaitFor(#1)}}
 \newcommand{\status}[2]{\ensuremath{#1(#2)}}
 \newcommand{\msgSent}[3]{\ensuremath{#1,#2\rightsquigarrow{}#3}}
-\newcommand{\checkLocal}[2]{\ensuremath{\c{checkLocal}(#1,#2)}}
-\newcommand{\checkLocalOpen}[2]{\ensuremath{\c{checkLocalOpen}(#1,#2)}}
+\newcommand{\checkLocal}[2]{\ensuremath{checkLocal(#1,#2)}}
+\newcommand{\checkLocalOpen}[2]{\ensuremath{checkLocalOpen(#1,#2)}}
 
-\newcommand{\checkNeighs}[3]{\ensuremath{\c{checkNeighs}(#1,#2,#3)}}
+\newcommand{\checkNeighs}[3]{\ensuremath{checkNeighs}(#1,#2,#3)}
 \newcommand{\fracEmpty}[2]{\genfrac{}{}{0pt}{0}{#1}{#2}}
-\newcommand{\vProg}{\c{vProg}}
-\newcommand{\tripleConstraints}[1]{\c{tripleConstraints(#1)}}
-\newcommand{\rbe}[1]{\ensuremath{\c{rbe}(#1)}}
-\newcommand{\combine}[2]{\ensuremath{\c{combine}(#1,#2)}}
+\newcommand{\vProg}{vProg}
+\newcommand{\tripleConstraints}[1]{tripleConstraints(#1)}
+\newcommand{\rbe}[1]{\ensuremath{rbe(#1)}}
+\newcommand{\combine}[2]{\ensuremath{combine(#1,#2)}}

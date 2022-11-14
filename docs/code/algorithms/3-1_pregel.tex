@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage[linesnumbered,longend]{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+\input{thesis_97_commands.tex}
+
+\begin{document}
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetAlgoVlined
+    \SetArgSty{textnormal}
+    \SetKwInput{KwIn}{Input parameters}
+    \KwIn{
+        \Block{
+            g: Graph[\VertSet,\EdgeSet] \;
+            initialMsg: \MsgSet \;
+            vProg: (Id,\VertSet,\MsgSet) $\rightarrow$ \VertSet \;
+            sendMsg: Triplet $\rightarrow$ [(Id,\MsgSet)] \;
+            mergeMsg: (\MsgSet,\MsgSet) $\rightarrow$ \MsgSet
+        }
+        \KwOut{g: Graph[\VertSet,\EdgeSet]}
+        \blockskip
+        g = mapVertices(g, $\lambda$(id, v) $\rightarrow$ vProg(id, v, initialMsg))  \;
+        msgs = mapReduceTriples(g, sendMsg, mergeMsg) \;
+    }
+    \While{size(msgs) > 0 }{
+        g = joinVertices(g, msgs, vProg) \;
+        msgs = mapReduceTriples(g, sendMsg, mergeMsg) \;
+    }
+    \Return{g} \;
+\end{algorithm}
+\end{document}

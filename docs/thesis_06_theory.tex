@@ -78,14 +78,14 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
-\inputminted{json}{listings/serialization.json}
+\inputminted{json}{code/listings/3-1_serialization.json}
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
-\inputminted[highlightlines={3,6,7,9},highlightcolor=blueUniovi!15]{turtle}{listings/serialization.rdf}
+\inputminted[highlightlines={3,6,7,9},highlightcolor=blueUniovi!15]{turtle}{code/listings/3-2_serialization.rdf}
 
 \section{Knowledge graph validation}
 
@@ -111,15 +111,14 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
     \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
-\inputminted{turtle}{listings/serialization.nt}
+\inputminted{turtle}{code/listings/3-3_serialization.nt}
 
 \subsection{ShEx (Shape Expressions)}
 
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
-\begin{code}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
-    \inputminted{shex}{listings/shex.shex}
+\begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
+    \inputminted{shex}{code/listings/3-4_shex.shex}
 \end{code}
 
 Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the representation seen in Figure \ref{fig:RDFshape} arises.
@@ -135,9 +134,8 @@ The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) 
 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
-\begin{code}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
-    \inputminted{shex}{listings/wikibase.shex}
+\begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
+    \inputminted{shex}{code/listings/3-5_wikibase.shex}
 \end{code}
 
 \subsubsection{WShEx}
@@ -145,9 +143,8 @@ ShEx was chosen by Wikibase in 2019 to be the language for describing entity sch
 
 As a solution to the problem described before, an extension of ShEx for describing the Wikibase data model was designed. WShEx is a language inspired by ShEx that provides a support for the Wikibase data model and can be used to describe and validate Wikibase entities~\cite{https://doi.org/10.48550/arxiv.2208.02697}. What's more, the main motivation for developing this language was to create subsets of Wikidata using a human-readable language.
 
-\begin{code}
-    \caption{ShExC syntax example declaring that nodes of the shape Person must fulfill a schema}
-    \inputminted{shex}{listings/wshex.shex}
+\begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
+    \inputminted{shex}{code/listings/3-6_wshex.shex}
 \end{code}
 
 Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the Wikibase data model. This way, by validating the Wikibase data model through WShEx, we are not only validating the dumps, but the system itself.
@@ -224,13 +221,15 @@ According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) Theo
 GraphX provides several built-in operators for graphs\footnote{\url{https://spark.apache.org/docs/latest/graphx-programming-guide.html\#graph-operators}}. We will use the following in the rest of the paper:
 
 \begin{itemize}
-    \item \mintinline[escapeinside=||,mathescape=true,bgcolor=white]{scala}{mapVertices(g: Graph[|\VertSet|,|\EdgeSet|], f: (Id,|\VertSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
-    \item \mintinline[escapeinside=||,mathescape=true,bgcolor=white]{scala}{mapReduceTriples(|g|: |Graph|[|\VertSet|,|\EdgeSet|], |m|: (|\VertSet|,|\EdgeSet|,|\VertSet|)|$\rightarrow$|(|Id|,|\MsgSet|)), |r|: (|\MsgSet|,|\MsgSet|)|$\rightarrow$||\MsgSet|)): |RDD|[|Id|,\MsgSet]}
-    \item \mintinline[escapeinside=||,mathescape=true,bgcolor=white]{scala}{joinVertices(|g|: |Graph|[|\VertSet|,|\EdgeSet|], |msgs|: |RDD|[|Id|,|\MsgSet|], |f|: (|Id|,|\VertSet|,|\MsgSet|)|$\rightarrow$||\VertSet|)): |Graph|[|\VertSet|,|\EdgeSet|]}
+    \item \mintinline[fontsize=\small]{scala}{mapVertices(g: Graph[|\VertSet|,|\EdgeSet|], f: (Id,|\VertSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
+          \begin{description}
+              \item[Description] maps every pair \texttt{(id, v)} in the vertices of \texttt{g} to \texttt{id, f(v)}
+          \end{description}
+    \item \mintinline[fontsize=\small]{scala}{mapReduceTriples(g: Graph[|\VertSet|,|\EdgeSet|], m: (|\VertSet|,|\EdgeSet|,|\VertSet|)|$\rightarrow$|(Id,|\MsgSet|)), r: (|\MsgSet|,|\MsgSet|)|$\rightarrow$||\MsgSet|)): RDD[Id,|\MsgSet|]}
+    \item \mintinline[fontsize=\small]{scala}{joinVertices(g: Graph[|\VertSet|,|\EdgeSet|], msgs: RDD[Id,|\MsgSet|], f: (Id,|\VertSet|,|\MsgSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
 \end{itemize}
 
-The GraphX Pregel algorithm is defined iteratively where each iteration is
-usually called a superstep, taking as input a \c{Graph}[\VertSet, \EdgeSet] and the following parameters:
+The GraphX Pregel algorithm is defined iteratively where each iteration is usually called a superstep, taking as input a \texttt{Graph}[\VertSet, \EdgeSet] and the following parameters:
 
 \begin{itemize}
     \item \texttt{initialMsg:}
@@ -239,29 +238,9 @@ usually called a superstep, taking as input a \c{Graph}[\VertSet, \EdgeSet] and 
     \item \texttt{mergeMsg:}
 \end{itemize}
 
-\begin{algorithm}[!hbt]
-    \DontPrintSemicolon
-    \SetAlgoVlined
-    \SetArgSty{textnormal}
-    \SetKwInput{KwIn}{Input parameters}
-    \KwIn{
-        \Block{\c{g}: \c{Graph}[\VertSet, \EdgeSet] \;
-            \c{initialMsg}: \MsgSet \;
-            \c{vProg}: (\c{Id}, \VertSet, \MsgSet)$\rightarrow$\VertSet \;
-            \c{sendMsg}: \c{Triplet}$\rightarrow$[(\c{Id}, \MsgSet)] \;
-            \c{mergeMsg}: (\MsgSet, \MsgSet)$\rightarrow$\MsgSet}
-    }
-    \KwOut{\c{g}:\c{Graph}[\VertSet, \EdgeSet]}
-    \blockskip
-    \c{g} = \c{mapVertices}(\c{g}, $\lambda$(\c{id}, \c{v})$\rightarrow$\c{vProg}(\c{id}, \c{v}, \c{initialMsg}))  \;
-    \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg}) \;
-    \While{\c{size}(\c{msgs})$>0$}{
-        \c{g} = \c{joinVertices}(\c{g}, \c{msgs}, \c{vProg}) \;
-        \c{msgs} = \c{mapReduceTriples}(\c{g}, \c{sendMsg}, \c{mergeMsg})
-    }
-    \Return\c{g}
-    \caption{Pseudocode of the Pregel algorithm as implemented in GraphX~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
-\end{algorithm}
+\begin{pseudocode}[Pregel algorithm as implemented in GraphX]
+    \includestandalone{code/algorithms/3-1_pregel}
+\end{pseudocode}
 
 \section{Knowledge graph Subsets}
 

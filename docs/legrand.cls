@@ -71,7 +71,7 @@
 
 %\usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
-\usepackage{notomath} % Use the Noto font for the whole document
+\usepackage[mono]{notomath} % Use the Noto font for the whole document
 
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
@@ -361,7 +361,6 @@
 %-------------------------------------------------------------------------------
 %	REMARK ENVIRONMENT
 %-------------------------------------------------------------------------------
-
 \newenvironment{remark}{\par\vspace{10pt}\small % Vertical white space above the remark and smaller font size
 \begin{list}{}{
 \leftmargin=35pt % Indentation on the left
@@ -545,33 +544,72 @@ addtohook={%
 %-------------------------------------------------------------------------------
 %	CODE LISTINGS IN THE DOCUMENTS
 %-------------------------------------------------------------------------------
-\RequirePackage{caption}
+% \RequirePackage{caption}
+% \newenvironment{codeListing}{
+%     \vspace*{0.8em}
+%     \captionsetup{type=listing}
+%     \vspace*{0.8em}
+% }{}
+% \SetupFloatingEnvironment{listing}{name=Listing}
+% \DeclareCaptionFont{white}{\color{white}}
+% \DeclareCaptionFormat{listing}{\noindent\colorbox{blueUniovi}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\normalfont\sffamily#1#2#3}}}
+% \captionsetup[listing]{ format=listing,
+%                         labelfont=white,
+%                         textfont=white,
+%                         position=top,
+%                         skip=0.1pt}
+
+% Including the required imports for the following to work !!!
 \RequirePackage[outputdir=build,newfloat]{minted}
-\newenvironment{code}{
-    \vspace*{0.8em}
-    \captionsetup{type=listing}
-    \vspace*{0.8em}
-}{}
-\SetupFloatingEnvironment{listing}{name=Listing}
-\DeclareCaptionFont{white}{\color{white}}
-\DeclareCaptionFormat{listing}{\noindent\colorbox{blueUniovi}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\normalfont\sffamily#1#2#3}}}
-\captionsetup[listing]{ format=listing,
-                        labelfont=white,
-                        textfont=white,
-                        position=top,
-                        skip=0.1pt}
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\setminted{ mathescape,
-            linenos,
-            numbersep=5pt,
-            bgcolor=bg,
-            autogobble } % formatting for the minted package :D
-\usepackage{etoolbox,xpatch}
+\RequirePackage{etoolbox,xpatch}
+\RequirePackage[linesnumbered,longend]{algorithm2e}
+\RequirePackage[most]{tcolorbox}
+
+% --> Setting up the minted package
+\setminted{ 
+    mathescape,
+    linenos,
+    numbersep=5pt,
+    formatcom=\spaceskip0.2em\relax,
+    escapeinside=||,
+    mathescape=true,
+    autogobble 
+} % formatting for the minted package :D
+
 \makeatletter
 \AtBeginEnvironment{minted}{\dontdofcolorbox}
 \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
 \xpatchcmd{\inputminted}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
-\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{} % see https://tex.stackexchange.com/a/401250/
+\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{} 
 \makeatother
 \xpretocmd{\inputminted}{\par\vspace{0em}}{}{} % spacing above and below
 \xapptocmd{\inputminted}{\par\vspace{0em}}{}{}
+
+% --> Code listing formatted as a colorbox :D
+\newtcolorbox[auto counter,number within=chapter]{code}[1][]{
+    sharp corners,
+    breakable,
+    enhanced jigsaw,
+    colframe=blueUniovi,
+    coltitle=white,
+    boxrule=0.5mm,
+    colback=blueUniovi!10,
+    coltext=black,
+    fonttitle=\sffamily,
+    title={Listing \thetcbcounter: #1}
+}
+
+% --> Algorithm formatted as a colorbox :D
+\AtBeginEnvironment{algorithm}{\let\textnormal\ttfamily}
+\newtcolorbox[auto counter,number within=chapter]{pseudocode}[1][]{
+    sharp corners,
+    breakable,
+    enhanced jigsaw,
+    colframe=blueUniovi,
+    coltitle=white,
+    boxrule=0.5mm,
+    colback=blueUniovi!10,
+    coltext=black,
+    fonttitle=\sffamily,
+    title={Algorithm \thetcbcounter: #1}
+}
