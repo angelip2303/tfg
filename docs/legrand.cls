@@ -65,6 +65,10 @@
 \setlength{\tabcolsep}{1mm}
 \renewcommand{\arraystretch}{1.25}
 
+% -- we handle the widow and orphan lines
+\clubpenalty=10000
+\widowpenalty=10000
+
 %-------------------------------------------------------------------------------
 %	FONTS
 %-------------------------------------------------------------------------------
@@ -585,7 +589,18 @@ addtohook={%
 \xpretocmd{\inputminted}{\par\vspace{0em}}{}{} % spacing above and below
 \xapptocmd{\inputminted}{\par\vspace{0em}}{}{}
 
-% --> Code listing formatted as a colorbox :D
+% --> Code listing without caption formatted as a colorbox :D
+\newtcolorbox{dumps}{
+    sharp corners,
+    breakable,
+    enhanced jigsaw,
+    colframe=blueUniovi,
+    boxrule=0.5mm,
+    colback=blueUniovi!10,
+    coltext=black
+}
+
+% --> Code listing with caption formatted as a colorbox :D
 \newtcolorbox[auto counter,number within=chapter]{code}[1][]{
     sharp corners,
     breakable,

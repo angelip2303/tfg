@@ -78,14 +78,23 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
-\inputminted{json}{code/listings/3-1_serialization.json}
+\begin{dumps}
+    \inputminted{json}{code/listings/3-1_serialization.json}
+\end{dumps}
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is providing support to semantic web technologies. See section \ref{section:RDF} for further details.
 
-\inputminted[highlightlines={3,6,7,9},highlightcolor=blueUniovi!15]{turtle}{code/listings/3-2_serialization.rdf}
+\begin{dumps}
+    \inputminted[
+        highlightlines={3,6,7,9},
+        highlightcolor=blueUniovi!15
+    ]
+    {turtle}
+    {code/listings/3-2_serialization.rdf}
+\end{dumps}
 
 \section{Knowledge graph validation}
 
@@ -111,7 +120,9 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
     \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
 \end{example}
 
-\inputminted{turtle}{code/listings/3-3_serialization.nt}
+\begin{dumps}
+    \inputminted{turtle}{code/listings/3-3_serialization.nt}
+\end{dumps}
 
 \subsection{ShEx (Shape Expressions)}
 
@@ -214,19 +225,27 @@ We want to process graphs in parallel, hence a distributed approach is required 
     \item \textbf{In-memory computation:} In order to allow faster access, an RDD saves any immediately created data in RAM rather than on the disk.
 \end{itemize}
 
-According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) Theorem, showing that, for distributed systems, either consistency or availability can be guaranteed, not both. As we are dealing with Big data, we need partitioning, thus, we must choose to have either consistency or availability.
+According to the CAP (\fb{Consistency} \fb{Availability} \fb{Partitioning}) Theorem, showing that, for distributed systems, either consistency or availability can be guaranteed, not both. As we are dealing with Big data, we need partitioning, thus, we must choose to either have consistency or availability.
 
 \subsubsection{The GraphX implementation of Pregel}
 
 GraphX provides several built-in operators for graphs\footnote{\url{https://spark.apache.org/docs/latest/graphx-programming-guide.html\#graph-operators}}. We will use the following in the rest of the paper:
 
 \begin{itemize}
+    \setlength\itemsep{1em}
     \item \mintinline[fontsize=\small]{scala}{mapVertices(g: Graph[|\VertSet|,|\EdgeSet|], f: (Id,|\VertSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
-          \begin{description}
-              \item[Description] maps every pair \texttt{(id, v)} in the vertices of \texttt{g} to \texttt{id, f(v)}
-          \end{description}
-    \item \mintinline[fontsize=\small]{scala}{mapReduceTriples(g: Graph[|\VertSet|,|\EdgeSet|], m: (|\VertSet|,|\EdgeSet|,|\VertSet|)|$\rightarrow$|(Id,|\MsgSet|)), r: (|\MsgSet|,|\MsgSet|)|$\rightarrow$||\MsgSet|)): RDD[Id,|\MsgSet|]}
+          \begin{itemize}
+              \item[$\blacksquare$] \textbf{Description:} Transforms each vertex attribute in the graph using the map function. It maps every pair \texttt{(id,v)} -- which are the vertices of \texttt{g} -- into \texttt{(id,f(v))}.
+              \item[!] \textbf{Note:} The new graph has the same structure. As a consequence the underlying index structures can be reused.
+          \end{itemize}
+    \item \mintinline[fontsize=\small]{scala}{mapReduceTriplets(g: Graph[|\VertSet|,|\EdgeSet|], m: (|\VertSet|,|\EdgeSet|,|\VertSet|)|$\rightarrow$|(Id,|\MsgSet|)), r: (|\MsgSet|,|\MsgSet|)|$\rightarrow$||\MsgSet|)): RDD[Id,|\MsgSet|]}
+          \begin{itemize}
+              \item[$\blacksquare$] \textbf{Description:} Takes a user defined map function \texttt{m} which is applied to each triplet and can yield messages which are aggregated using the reduce function \texttt{r}.
+          \end{itemize}
     \item \mintinline[fontsize=\small]{scala}{joinVertices(g: Graph[|\VertSet|,|\EdgeSet|], msgs: RDD[Id,|\MsgSet|], f: (Id,|\VertSet|,|\MsgSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
+          \begin{itemize}
+              \item[$\blacksquare$] \textbf{Description:} Joins the vertices with the input RDD and returns a new graph with the vertex properties obtained by applying the user defined map function to the result of the joined vertices. Vertices without a matching value in the RDD retain their original value.
+          \end{itemize}
 \end{itemize}
 
 The GraphX Pregel algorithm is defined iteratively where each iteration is usually called a superstep, taking as input a \texttt{Graph}[\VertSet, \EdgeSet] and the following parameters:

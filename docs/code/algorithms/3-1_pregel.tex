@@ -21,11 +21,11 @@
         \KwOut{g: Graph[\VertSet,\EdgeSet]}
         \blockskip
         g = mapVertices(g, $\lambda$(id, v) $\rightarrow$ vProg(id, v, initialMsg))  \;
-        msgs = mapReduceTriples(g, sendMsg, mergeMsg) \;
+        msgs = mapReduceTriplets(g, sendMsg, mergeMsg) \;
     }
     \While{size(msgs) > 0 }{
         g = joinVertices(g, msgs, vProg) \;
-        msgs = mapReduceTriples(g, sendMsg, mergeMsg) \;
+        msgs = mapReduceTriplets(g, sendMsg, mergeMsg) \;
     }
     \Return{g} \;
 \end{algorithm}
