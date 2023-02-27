@@ -1,4 +1,5 @@
 \documentclass[border=10pt]{standalone}
+
 \usepackage{pgfgantt}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -34,28 +35,46 @@
         inline,
         milestone/.append style={blueUniovi!60}
     ]{1}{12}
+    % -*- Timeline of the project: 2022 and 2023 (Academic year :D) -*- %
     \gantttitle[]{2022}{4}
     \gantttitle[]{2023}{8} \\
-    \gantttitlelist{"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun", "Jul","Aug"}{1} \\
+    \gantttitlelist{
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug"
+    }{1} \\
 
-    \ganttmilestone[inline=false]{First Meeting}{1} \\
-
+    % -*- First group: Proposal Preparation -*- %
     \ganttgroup[inline=false]{Proposal Preparation}{1}{2}\\
+    \ganttmilestone[inline=false]{First Meeting}{1} \\
     \ganttmilestone[inline=false]{Acceptance by the Commission}{2} \\
 
+    % -*- Second group: Literature Review -*- %
     \ganttgroup[inline=false]{Literature Review}{1}{2}\\
     \ganttbar[progress=100,inline=false]{Knowledge graphs}{1}{1}\\
     \ganttbar[progress=90,inline=false]{Wikibase graphs}{1}{2}\\
     \ganttbar[progress=100,inline=false]{MapReduce}{2}{3}\\
     \ganttbar[progress=100,inline=false]{Pregel algorithm}{2}{3}\\
 
+    % -*- Third group: Internship -*- %
     \ganttgroup[inline=false]{Internship}{2}{4} \\
     \ganttmilestone[inline=false]{Agreement of the Conditions}{1} \\
 
+    % -*- Fourth group: Research and Results -*- %
     \ganttgroup[inline=false]{Research and Results}{2}{4} \\
     \ganttbar[progress=0,inline=false]{Proposed Solution Development}{4}{6}\\
     \ganttbar[progress=0,inline=false]{Acquisition of Results}{4}{6}\\
 
+    % -*- Fifth group: Dissertation Document -*- %
     \ganttgroup[inline=false]{Dissertation Document}{3}{8} \\
     \ganttbar[progress=50,inline=false]{Introduction}{3}{4} \\
     \ganttbar[progress=50,inline=false]{Description}{3}{4} \\
@@ -65,5 +84,11 @@
     \ganttbar[progress=0,inline=false]{Results and Analysis}{6}{7} \\
     \ganttbar[progress=30,inline=false]{Planning and Budget}{2}{10} \\
     \ganttbar[progress=0,inline=false]{Conclusions}{10}{10} \\
+
+    % -*- Sixth group: Learning new technologies -*- %
+    \ganttgroup[inline=false]{Learning new technologies}{3}{8} \\
+    \ganttbar[progress=100,inline=false]{Introduction}{3}{4} \\
+    \ganttbar[progress=90,inline=false]{Description}{3}{4} \\
+    \ganttbar[progress=50,inline=false]{Theoretical Background}{1}{3} \\
 \end{ganttchart}
 \end{document}

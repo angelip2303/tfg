@@ -7,6 +7,8 @@ In the following chapter, a description of the theoretical concepts needed for a
 
 A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. These graphs can be modelled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
 
+\subsection{Property graphs}
+
 \subsection{Wikibase graphs}
 
 Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one, that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
@@ -167,11 +169,47 @@ Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the W
     \label{fig:WShEx}
 \end{figure}
 
+\section{Knowledge graph Subsets}
+
+Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
+
+\begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
+    Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
+\end{definition}
+
+\begin{example}[Example of wikibase subgraph]
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase subgraph of $\Graph$.
+\end{example}
+
+\begin{table}[ht]
+    \centering
+    \input{figures/tables/3-3_wikibaseSubgraph}
+\end{table}
+
+\subsection{ShEx-based Matching generated subsets}
+
+ShEx-based matching comprises using a WShEx schema \myfont{S} as input and include any nodes whose neighborhood matches any of the shapes from \myfont{S} in the produced subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}. For us to better understand the concept of neighborhood, a formal definition is provided.
+
+\begin{definition}[Neighborhood of a node in a Wikibase graph]
+    \label{definition:neighborhood}
+    The neighbors of an item $q\in\ItemSet$ in a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ are defined as $neighbors(q)=\{(q,p,n,d): \exists{}v\in\StmtSet \wedge v=(q,p,n,d)\}$
+\end{definition}
+
+\begin{example}[Neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)}]
+    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, the neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)} $\in \ItemSet$ is defined as follows:
+\end{example}
+
+\begin{table}[ht]
+    \centering
+    \input{figures/tables/3-4_neighborhood}
+\end{table}
+
 \section{Data-flow algorithms}
 
 The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system.
 
 \subsection{MapReduce}
+\label{section:mapReduce}
 
 Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184}.
 
@@ -208,38 +246,3 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
-
-\section{Knowledge graph Subsets}
-
-Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's own infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, fewer data enables more complicated searches.
-
-\begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
-    Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
-\end{definition}
-
-\begin{example}[Example of wikibase subgraph]
-    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ is a Wikibase subgraph of $\Graph$.
-\end{example}
-
-\begin{table}[ht]
-    \centering
-    \input{figures/tables/3-3_wikibaseSubgraph}
-\end{table}
-
-\subsection{ShEx-based Matching generated subsets}
-
-ShEx-based matching comprises using a WShEx schema \myfont{S} as input and include any nodes whose neighborhood matches any of the shapes from \myfont{S} in the produced subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}. For us to better understand the concept of neighborhood, a formal definition is provided.
-
-\begin{definition}[Neighborhood of a node in a Wikibase graph]
-    \label{definition:neighborhood}
-    The neighbors of an item $q\in\ItemSet$ in a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ are defined as $neighbors(q)=\{(q,p,n,d): \exists{}v\in\StmtSet \wedge v=(q,p,n,d)\}$
-\end{definition}
-
-\begin{example}[Neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)}]
-    Given the Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ from example \ref{example:wikibaseGraph}, the neighborhood of \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)} $\in \ItemSet$ is defined as follows:
-\end{example}
-
-\begin{table}[ht]
-    \centering
-    \input{figures/tables/3-4_neighborhood}
-\end{table}

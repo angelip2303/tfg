@@ -73,13 +73,11 @@
 %	FONTS
 %-------------------------------------------------------------------------------
 
-%\usepackage{avant} % Use the Avantgarde font for headings
-%\usepackage{times} % Use the Times font for headings
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[mono]{notomath} % Use the Noto font for the whole document
 
-\usepackage{microtype} % Slightly tweak font spacing for aesthetics
-\usepackage[utf8]{inputenc} % Required for including letters with accents
-\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 %-------------------------------------------------------------------------------
 %	BIBLIOGRAPHY AND INDEX
