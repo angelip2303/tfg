@@ -1,1 +1,19 @@
-\epigraph{\textit{The most important single aspect of sotware development is to be clear about what you are trying to build.}}{-- \textup{Bjarne Stroustrup}}
+\epigraph{\textit{The business changes. The technology changes. The team changes. The team members change. The problem isn't change, per se, because change is going to happen; the problem, rather, is the inability to cope with change when it comes.}}{-- \textup{Kent Beck}}
+
+During the early stages of the development, the first steps we followed were highly related to polishing and improving the solution described in the previous chapter. This was a challenging problem that resulted in a change in the project's direction, which will be detailed later.
+
+\section{Technology stack}
+
+As I mentioned earlier, the purpose of this second solution was to improve what was already implemented. This way, we kept most of the stack untouched. The sole change was the replacement of GraphX with its DataFrame equivalent library named GraphFrames.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.7\linewidth]{img/8-1_graphframes.png}
+    \caption[Stack of the different technologies we are using for the second solution]{Stack of the different technologies we are using for the second solution\footnotemark}
+\end{figure}
+
+\footnotetext{\url{https://adatis.co.uk/graphframes/}}
+
+\subsection{GraphFrames}
+
+As it name goes, GraphFrame is a package for Apache Spark providing support for DataFrame-based Graphs.
