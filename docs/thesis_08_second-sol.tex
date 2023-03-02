@@ -26,4 +26,8 @@ We now have a clear vision of what a DataFrame is. The problem is that even thou
 
 \subsubsection{Encoders and User-defined Types}
 
-Working with simple data-structures is a trivial task in Apache Spark. What is not so easy to handle are custom data types. If the DataFrame cannot implicitly retrieve an Encoder, the user will be informed to provide one. This is needed for Spark SQL to infer the schemas of the data we are working with. The complex the data-structure, the harder is for the programmer to write an appropriate serialization/deserialization mechanism. Other solution could be writing your own User-defined types, which can be understood as wrappers for the actual types. However, the amount of boiler-plate code and complexity of the data to be stored makes this a tedious process.
+Working with simple data-structures is a trivial task in Apache Spark. What is not so easy to handle are custom data types. If the DataFrame cannot implicitly retrieve an Encoder, the user will be informed to provide one. This is needed for Spark SQL to infer the schemas of the data we are working with. The complex the data-structure, the harder it is for the programmer to write an appropriate serialization/deserialization mechanism. Other solution could be writing your own User-defined types, which can be understood as wrappers for the actual types. However, the amount of boiler-plate code and complexity of the data to be stored makes this a tedious process. Lastly, notice how this solution is far from efficient as it is also based on serialization for data storage and retrieval.
+
+\subsubsection{The Catalyst Optimizer}
+
+\section{Implementation of the Second Pregel solution}
