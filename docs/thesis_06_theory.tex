@@ -9,6 +9,10 @@ A knowledge graph uses a graph-structured data model to represent knowledge of s
 
 \subsection{Property graphs}
 
+A property graph is a type of graph model where vertices and edges, namely nodes and relationships, are annotated with labels and properties. In this manner, property graphs excel at depicting connections between data and exposing data dependencies. When compared to other datastores, such as relational databases, property graphs focus on how the recorded things relate, although descriptions of those items might be supplied via properties and attributes. In this sense, provided a real-world domain, expressing the relationships among data is just as crucial as the data itself.
+
+With that in mind, it can be argued that there's no need for a new type of datastore as relational databases are capable of storing those relationships through constraints. However expensive operations such as \texttt{JOIN} are required to navigate across those linkings. It turns out that relational databases handle relationships between data in a not so sophisticated manner. To tackle this issue, graph databases were created. In this model, relationships are stored natively alongside the nodes in a flexible format. Several commercial graph databases like Neo4j\footnote{\url{https://neo4j.com/}}, JanusGraph\footnote{\url{https://janusgraph.org/}} or Sparksee\footnote{\url{https://www.sparsity-technologies.com/\#sparksee}}.
+
 \subsection{Wikibase graphs}
 
 Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one, that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
@@ -206,12 +210,16 @@ ShEx-based matching comprises using a WShEx schema \myfont{S} as input and inclu
 
 \section{Data-flow algorithms}
 
-The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system.
+The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system. To sum up, the goal of this project is creating a fault-tolerant system making easy to operate on graphs on a massive scale.
 
 \subsection{MapReduce}
 \label{section:mapReduce}
 
 Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184}.
+
+\subsection{Bulk Synchronous Parallel}
+
+During the 1980s, Leslie Valiant worked on ideas for a distributed programming model for parallel computing. In this framework the execution is divided into a series of \textit{supersteps}. For each superstep, a set of processes running the same piece of code are executed concurrently. As a process completes its execution, a message is generated and sent to other processes, messages have not yet been delivered. The superstep concludes when all of the procedures are completed. At this moment, a \textit{barrier synchronization} assures that all messages have been transferred. All messages are delivered at the start of the following superstep, and the next superstep is executed. This procedure will continue until all nodes vote to halt. It is worth mentioning that processes are not permitted to exchange messages with another process when executing a superstep. This requirement assures that no deadlocks occur at runtime. Apache Hama\footnote{\url{https://hama.apache.org/}} is a framework for Big data analytics using the Bulk Synchronous Parallel model.
 
 \subsection{Pregel model}
 \label{section:pregel}
