@@ -1,0 +1,91 @@
+@startuml
+abstract class Value { }
+
+abstract class Entity extends Value {
+    VertexId vertexId
+    EntityId entityId
+    List[LocalStatement] localStatements
+}
+
+class Item extends Entity {
+    ItemId itemId
+    Map[Lang, String] labels
+    Map[Lang, String] descriptions
+    Map[Lang, String] aliases
+    String siteIri
+    List[SiteLink] siteLinks
+    Set[ShapeLabel] okShapes
+}
+
+class Property extends Entity {
+    PropertyId propertyId
+    Map[Lang, String] labels
+    Map[Lang, String] descriptions
+    Map[Lang, String] aliases
+    String siteIri
+    Datatype datatype
+    Set[ShapeLabel] okShapes
+}
+
+abstract class LiteralValue extends Value {}
+
+class StringValue extends LiteralValue {
+    String str
+}
+
+class DateValue extends LiteralValue {
+    String date
+}
+
+class IRIValue extends LiteralValue {
+    IRI iri
+}
+
+abstract class Qualifier {
+    PropertyId propertyId
+    Value value
+}
+
+class EntityQualifier extends Qualifier {
+    Entity entity
+}
+
+class LocalQualifier extends Qualifier {
+    LiteralValue literal
+}
+
+class Statement {
+    PropertyRecord propertyRecord
+    List[Qualifier] qualifiers
+}
+
+class LocalStatement {
+    PropertyRecord propertyRecord
+    LiteralValue literalValue
+    List[Qualifier] qualifiers
+}
+
+class SiteLink {
+    String title
+    String siteKey
+    List[ItemId] badges
+}
+
+abstract class EntityId extends Value {
+    String id
+    IRI iri
+}
+
+class PropertyId extends EntityId { }
+
+class ItemId extends EntityId { }
+
+class Lang {
+    String code
+}
+
+class PropertyRecord {
+    PropertyId propertyId
+    VertexId vertexId
+}
+@enduml

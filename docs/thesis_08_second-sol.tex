@@ -26,7 +26,19 @@ We now have a clear vision of what a DataFrame is. The problem is that even thou
 
 \subsubsection{Encoders and User-defined Types}
 
-Working with simple data-structures is a trivial task in Apache Spark. What is not so easy to handle are custom data types. If the DataFrame cannot implicitly retrieve an Encoder, the user will be informed to provide one. This is needed for Spark SQL to infer the schemas of the data we are working with. The complex the data-structure, the harder it is for the programmer to write an appropriate serialization/deserialization mechanism. Other solution could be writing your own User-defined types, which can be understood as wrappers for the actual types. However, the amount of boiler-plate code and complexity of the data to be stored makes this a tedious process. Lastly, notice how this solution is far from efficient as it is also based on serialization for data storage and retrieval.
+Working with simple data-structures is a trivial task in Apache Spark. What is not so easy to handle are custom data types. If the DataFrame cannot implicitly retrieve an Encoder, the user will be required to provide one. This is needed for Spark SQL to infer the schemas of the data we are working with. The complex the data-structure, the harder it is for the programmer to write an appropriate serialization/deserialization mechanism. Notice how this solution is far from efficient as it is based on serialization for data storage and retrieval, something we were trying to fix from the RDD-based solution. Another possibility could be writing your own User-defined type, which can be understood as a wrapper for the actual type. However, the amount of boiler-plate code needed, and the complexity of the data to be stored prevents us from writing an appropriate solution. More into this will be discussed in the following paragraphs.
+
+As we have mentioned earlier, two main possible solutions arise for the problem of handling complex data: \textit{Custom encoders} and \textit{User-defined types}. It is a requirement for this solution not only to handle complex data, but unsupported, as we are not only trying to store complex data structures, but types that are not currently supported by the DataFrame API. This is a crucial argument against this DataFrame-based solution as we need to store URLs, which aren't supported by Spark SQL. The problem is that both of the mentioned solutions are inefficient. First, collection Encoders tend to act as bottlenecks in terms of performance. To follow up on this, storing non-standard objects in Spark is a mess\footnote{\url{https://stackoverflow.com/questions/36648128/how-to-store-custom-objects-in-dataset}}. The current situation of the Framework basically supports primitive types and not so complex case classes. What's more, objects are serialized using \texttt{kryo} encoder which stores them as flat binary objects, losing some information and preventing us from using operations like \texttt{join}. Needed for Pregel to work. Thus, a custom, complex and inefficient encoder or type is not the solution we need. See figure \ref{fig:wikibaseClassDiagram} for a more expanded description of the data model we are working with.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{diagrams/8-1_wikibaseClassDiagram.pdf}
+    \caption[Class diagram of the Wikibase data model as implemented in WShEx]{Class diagram of the Wikibase data model as implemented in WShEx\footnotemark}
+    \label{fig:wikibaseClassDiagram}
+\end{figure}
+\footnotetext{\url{https://github.com/weso/shex-s}}
+
+As a remark, it is worth noting that the code implementing the User-defined types for the data model above has a length of around 700 lines of code. While the actual algorithm takes around 100 lines of code to be written.
 
 \subsubsection{The Catalyst Optimizer}
 
