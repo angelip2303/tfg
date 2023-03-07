@@ -1,4 +1,7 @@
 @startuml
+skinparam nodesep 15
+skinparam ranksep 66
+
 abstract class Value { }
 
 abstract class Entity extends Value {
@@ -91,7 +94,7 @@ class PropertyRecord {
 
 Item *-- SiteLink
 Property *-- SiteLink
-Entity *-- LocalStatement
+LocalStatement --* Entity
 LocalStatement *-- Qualifier
 Statement *-- Qualifier
 Item *-- Lang

@@ -103,20 +103,31 @@ The GraphX Pregel algorithm is defined iteratively where each iteration is usual
     \item \texttt{mergeMsg}: the user-defined function that is applied to two incoming messages and merges them into one.
 \end{itemize}
 
-When this function is applied it returns the resulting graph after applying the following algorithm:
-
 \begin{pseudocode}[Pregel algorithm as implemented in GraphX]
     \includestandalone{code/algorithms/7-1_pregel}
 \end{pseudocode}
 
-\section{Implementation of the First Pregel solution}
+It is worth noting that the Pregel operator in GraphX is a \textit{bulk-synchronous} parallel messaging abstraction at a high level. The Pregel operator performs a sequence of supersteps in which vertices receive their inbound message set, calculate a new value for the vertex, and then send messages to their neighbors. Take a look at the first two lines of the pseudo-code above to see how the initial messages for each vertex are received and calculated for iteration 0. Messages, unlike Pregel, are calculated concurrently: note the second and fifth lines of the above snippet. Vertices that receive no messages are skipped. The Pregel operator ends iteration and returns the final graph when there are no messages left, as seen in the third line of the algorithm. The previously described constraints allow GraphX to perform some additional optimization.
+
+\section{ShEx + Pregel generated subsets}
+
+According to what we had seen in figure \ref{fig:state:pregel}, nodes may be active: in case they have received some messages, or inactive: in case they have received no message. For us to create a more accurate solution according to Knowledge graph validation, some sub-states are required. In the Pregel solution, the algorithm is in charge of annotating each node $n\in\mathcal{V}$ with a status map representing the validation status with regard to some labels.
 
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.66\textwidth]{diagrams/7-2_pregelState}
-    \caption[State diagram of the Pregel algorithm]{State diagram of the Pregel algorithm~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
+    \caption[ State diagram representing the different states in vProg
+    ]{ State diagram representing the different states in vProg
+        ~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:state:pregel}
 \end{figure}
+
+A more detailed description
+
+\begin{center}
+    \input{figures/tables/7-1_status}
+\end{center}
+
 
 \section{Technical debt}
 

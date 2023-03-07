@@ -1,0 +1,11 @@
+\begin{tabular}{ccll}
+    $Status$ & ::=    & \texttt{Undefined}                  & Default status                                                         \\
+             & $\mid$ & \texttt{Ok}                         & Node conforms to the schema                                            \\
+             & $\mid$ & \texttt{Failed}                     & Node does not conform to the schema                                    \\
+             & $\mid$ & \texttt{Pending}                    & Requested to be validated                                              \\
+             & $\mid$ & \texttt{WaitingFor($ds$,$ok$,$fs$)} & Waiting for some neighbors                                             \\
+             &        &                                     & $ds$ = list dependents neighbors                                       \\
+             &        &                                     & $ok$ = list of conformant neighbors                                    \\
+             &        &                                     & $fs$ = list of non conformant neighbors                                \\
+             &        &                                     & where $ds$, $oks$, $failed$ $\in\VertSet\times\PropSet\times\LabelSet$
+\end{tabular}
