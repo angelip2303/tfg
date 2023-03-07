@@ -116,9 +116,7 @@ According to what we had seen in figure \ref{fig:state:pregel}, nodes may be act
 \begin{figure}[H]
     \centering
     \includestandalone[width=0.66\textwidth]{diagrams/7-2_pregelState}
-    \caption[ State diagram representing the different states in vProg
-    ]{ State diagram representing the different states in vProg
-        ~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
+    \caption[State diagram representing the different states in \texttt{vProg}]{State diagram representing the different states in \texttt{vProg}~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:state:pregel}
 \end{figure}
 
@@ -128,7 +126,16 @@ A more detailed description
     \input{figures/tables/7-1_status}
 \end{center}
 
+\begin{pseudocode}[Pregel-based ShEx validation pseudocode]
+    \includestandalone{code/algorithms/7-2_pregelShEx}
+\end{pseudocode}
 
+\begin{table}
+    \centering
+    \input{figures/tables/7-2_vProg}
+    \label{vProg}
+    \caption{Definition of \texttt{vProg} for Pregel-based ShEx validation}
+\end{table}
 \section{Technical debt}
 
 As we have exposed so far, the suggested solution is perfectly valid. The memory usage, however, is far from optimal. While we must serialize and deserialize the data at each iteration of the algorithm, making the operations to be done not efficient at all. Not to mention the lack of a query execution optimizer in RDD-based systems. There's so much room for improvement. The DataFrame's API saves the day in this regard.

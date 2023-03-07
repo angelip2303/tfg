@@ -1,0 +1,63 @@
+
+\begin{tabular}{c}
+    \inference[$$]
+    {\fracEmpty{
+            \msgSent{(n,m)}{\lbl}{\Validate}
+        }{
+            \status{m}{\lbl}=s\in\{\Undefined, \Pending\}
+    }                                             & \checkLocal{\lbl}{n}=r\in\{\Ok,\Failed\}
+    }
+    {\status{m'}{\lbl}=r}
+
+    \\ \\
+
+    \inference[$$]
+    {\fracEmpty{\msgSent{(n,m)}{\lbl}{\Validate}}
+        {\status{m}{\lbl}=r\in\{\Undefined,\Pending\}
+    }                                             & \checkLocal{\lbl}{n}=\PendingLs
+    }
+    {\fracEmpty{\status{m'}{l}=\Undefined}{\status{m'}{l'}=\Pending\,\,\forall{l'}\in{}ls}}
+
+    \\ \\
+
+    \inference[$$]
+    {\fracEmpty{
+            \msgSent{(n,m)}{\lbl}{\Validate}}
+        {
+            \status{m}{\lbl}=r\in\{\Ok,\Failed\}
+        }
+    }
+    {\status{m'}{\lbl}=r}
+
+    \\ \\
+    % This is to stop the recursive case....if we request to validate a node for which we are already waiting for, we assume it is valid
+    \inference[$$]
+    {\fracEmpty{
+            \msgSent{(n,m)}{\lbl}{\Validate}
+        }{
+            \status{m}{\lbl}=\WaitingFor{ds}{oks}{fs}
+        }
+    }
+    {\status{m'}{\lbl}=\Ok}
+
+    \\ \\
+
+    \inference[$$]
+    {\fracEmpty{
+            \msgSent{(n,m)}{\lbl}{\Checked{oks}{fs}}}
+        {
+            \status{m}{\lbl}=\WaitingFor{ds}{oks'}{fs'}
+    }                                             & ds\setminus(oks\cup{}fs)\neq{}\emptyset
+    }
+    {\status{m'}{\lbl}=\WaitingFor{ds}{oks\cup{}oks'}{fs\cup{}fs'}}
+
+    \\ \\
+
+    \inference[$$]
+    {\fracEmpty{\msgSent{(n,m)}{\lbl}{\Checked{oks}{fs}}}
+    {\status{m}{\lbl}=\WaitingFor{ds}{oks'}{fs'}} &
+        ds\setminus(oks\cup{}fs)=\emptyset
+    }
+    {\status{m'}{\lbl}=\checkNeighs{\lbl}{oks\cup{}oks'}{fs\cup{}fs'}}
+\end{tabular}\\
+

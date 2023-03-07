@@ -1,12 +1,12 @@
 INFO:  latexindent.exe version 3.19, 2022-10-30, a script to indent .tex files
        latexindent.exe lives here: C:/texlive/2022/bin/win32/
-       Tue Mar  7 18:24:50 2023
-       Filename: d:/Programming/tfg/docs/code/algorithms/__latexindent_temp_7-2_pregelShEx.tex
+       Tue Mar  7 18:47:24 2023
+       Filename: d:/Programming/tfg/docs/figures/tables/__latexindent_temp_7-2_vProg.tex
 INFO:  Processing switches:
        -y|--yaml: YAML settings specified via command line
        -c|--cruft: cruft directory
-INFO:  Directory for backup files and d:/Programming/tfg/slides/figures//indent.log:
-       d:/Programming/tfg/slides/figures/
+INFO:  Directory for backup files and d:/Programming/tfg/docs//indent.log:
+       d:/Programming/tfg/docs/
 INFO:  YAML settings read: defaultSettings.yaml
        Reading defaultSettings.yaml from C:/texlive/2022/bin/win32/defaultSettings.yaml
        Reading defaultSettings.yaml (2nd attempt) from C:/texlive/2022/bin/win32/../../texmf-dist/scripts/latexindent/defaultSettings.yaml

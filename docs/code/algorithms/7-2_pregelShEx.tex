@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[linesnumbered,longend]{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+\input{thesis_97_commands.tex}
+
+\begin{document}
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetAlgoVlined
+    \SetArgSty{textnormal}
+    \SetKwInput{KwIn}{Input parameters}
+    \KwIn{
+        \Block{g: Graph[\VertSet, \EdgeSet] \;
+            initialLabel: \LabelSet \;
+            checkLocal: (\LabelSet, \VertSet) $\rightarrow$ \Ok $\mid$ \Failed $\mid$ \Pending(Set[\LabelSet]) \;
+            checkNeighs: (\LabelSet, Bag[(\EdgeSet, \LabelSet)],  Set[(\EdgeSet, \LabelSet)]) $\rightarrow$ \Ok$\mid$\Failed \;
+            tripleConstraints: \LabelSet $\rightarrow$ Set[(\EdgeSet, \LabelSet)]}
+    }
+    \KwOut{g:Graph[(\VertSet, \LabelSet $\mapsto$ Status), \EdgeSet]
+    }
+    \blockskip
+    gs = mapVertices(g, $\lambda$(id, v)$\rightarrow$(id, (v, $\lambda$v$\rightarrow$\Undefined)))  \;
+    gs = pregel(\Validate, gs, \vProg, sendMsg, mergeMsg) \;
+    gs = mapVertices(gs, checkUnsolved) \;
+    \Return{gs} \;
+    \blockskip
+    \DefInline{checkUnsolved(v,m)}{
+        (v,m') where \;
+        \ \ \ m'(\lbl) = $\begin{cases}
+                \text{checkNeighs(\lbl, $\emptyset$, $\emptyset$)} & \text{if}\ m(\lbl)=\Pending                   \\
+                \text{checkNeighs(\lbl, oks, fs $\cup{}$ ds)}      & \text{if}\ m(\lbl)=\WaitingFor{ds}{oks}{fs}\} \\
+                m(\lbl)                                            & \text{otherwise}
+            \end{cases}$
+    }\\
+    \DefInline{vProg:(Id,\VertSet,\MsgSet)$\rightarrow$\VertSet}{...see~\ref{vProg}}
+\end{algorithm}
+\end{document}
