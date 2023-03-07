@@ -88,4 +88,14 @@ class PropertyRecord {
     PropertyId propertyId
     VertexId vertexId
 }
+
+Item *-- SiteLink
+Property *-- SiteLink
+Entity *-- LocalStatement
+LocalStatement *-- Qualifier
+Statement *-- Qualifier
+Item *-- Lang
+Property *-- Lang
+PropertyRecord --* LocalStatement
+PropertyRecord --* Statement
 @enduml

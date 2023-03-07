@@ -30,14 +30,6 @@ Working with simple data-structures is a trivial task in Apache Spark. What is n
 
 As we have mentioned earlier, two main possible solutions arise for the problem of handling complex data: \textit{Custom encoders} and \textit{User-defined types}. It is a requirement for this solution not only to handle complex data, but unsupported, as we are not only trying to store complex data structures, but types that are not currently supported by the DataFrame API. This is a crucial argument against this DataFrame-based solution as we need to store URLs, which aren't supported by Spark SQL. The problem is that both of the mentioned solutions are inefficient. First, collection Encoders tend to act as bottlenecks in terms of performance. To follow up on this, storing non-standard objects in Spark is a mess\footnote{\url{https://stackoverflow.com/questions/36648128/how-to-store-custom-objects-in-dataset}}. The current situation of the Framework basically supports primitive types and not so complex case classes. What's more, objects are serialized using \texttt{kryo} encoder which stores them as flat binary objects, losing some information and preventing us from using operations like \texttt{join}. Needed for Pregel to work. Thus, a custom, complex and inefficient encoder or type is not the solution we need. See figure \ref{fig:wikibaseClassDiagram} for an expanded description of the data model we are working with.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{diagrams/8-1_wikibaseClassDiagram.pdf}
-    \caption[Class diagram of the Wikibase data model as implemented in WShEx]{Class diagram of the Wikibase data model as implemented in WShEx\footnotemark}
-    \label{fig:wikibaseClassDiagram}
-\end{figure}
-\footnotetext{\url{https://github.com/weso/shex-s}}
-
 As a remark, it is worth noting that the code implementing the User-defined types for the data model above has a length of around 700 lines of code. While the actual algorithm takes around 100 lines of code to be written. For us to understand this, we have to describe how the so-called User-defined types are implemented in Apache Spark.
 
 \begin{code}[User-defined types as implemented in Apache Spark]
@@ -53,3 +45,11 @@ As noted in the first line of the above example, the description of user-defined
 The issue here is the complexity of the data structures we use. According to the design in figure \ref{fig:wikibaseClassDiagram}, storing both \texttt{Statements} and \texttt{Entities} presents two major challenges. To begin, because the items stored require a fixed structure and we would like to polymorphically treat \texttt{Properties} and \texttt{Items} -- both -- as \texttt{Entities}, we need a mapping to convert from an object-oriented model to the relational paradigm. In this regard, we suggest \textit{Single Table Inheritance}\footnotetext{\url{https://en.wikipedia.org/wiki/Single_Table_Inheritance}}; that is, using a single table containing all the fields of all the child classes. The drawback is that we would end up with a solution in which rows contain redundant data: as many \texttt{NULL} values as different fields in child classes which are not the actual type for a certain row. Although it is a straightforward approach, it is inefficient. Second, this technique leads to a circular dependency\footnote{\url{https://en.wikipedia.org/wiki/Circular_dependency}} in which \texttt{Entities} include many \texttt{LocalStatements} that hold \texttt{Qualifiers} that may enclose \texttt{Entities}. When you define a schema for this problem, you eventually wind yourself in an infinite recursion where \texttt{Entities} have \texttt{Entities}. In conclusion, User-defined types offer a poor solution that causes several challenging issues.
 
 \section{Implementation of the Second Pregel solution}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textheight,angle=90]{diagrams/8-1_wikibaseClassDiagram.pdf}
+    \caption[Class diagram of the Wikibase data model as implemented in WShEx]{Class diagram of the Wikibase data model as implemented in WShEx\footnotemark}
+    \label{fig:wikibaseClassDiagram}
+\end{figure}
+\footnotetext{\url{https://github.com/weso/shex-s}}
