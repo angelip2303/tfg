@@ -106,10 +106,17 @@ The GraphX Pregel algorithm is defined iteratively where each iteration is usual
 When this function is applied it returns the resulting graph after applying the following algorithm:
 
 \begin{pseudocode}[Pregel algorithm as implemented in GraphX]
-    \includestandalone{code/algorithms/3-1_pregel}
+    \includestandalone{code/algorithms/7-1_pregel}
 \end{pseudocode}
 
 \section{Implementation of the First Pregel solution}
+
+\begin{figure}[H]
+    \centering
+    \includestandalone[width=0.66\textwidth]{diagrams/7-2_pregelState}
+    \caption[State diagram of the Pregel algorithm]{State diagram of the Pregel algorithm~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
+    \label{fig:state:pregel}
+\end{figure}
 
 \section{Technical debt}
 

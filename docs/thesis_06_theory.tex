@@ -19,7 +19,7 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.5\textwidth]{diagrams/3-1_architectureWikibase}
+    \includestandalone[width=0.5\textwidth]{diagrams/6-1_architectureWikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:architecture:wikibase}
 \end{figure}
@@ -37,7 +37,7 @@ Lastly, a statement is a piece of data about an item, and is recorded in the pag
 
 \begin{table}[ht]
     \centering
-    \input{figures/tables/3-1_lang}
+    \input{figures/tables/6-1_lang}
     \caption[Including information about the genre of \textit{The Hunger Games}]{Including information about the genre of \textit{The Hunger Games}\footnotemark}
     \label{tab:language}
 \end{table}
@@ -63,11 +63,11 @@ For a better understanding of this formal definition, let me explain it step-by-
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of the WWII. During that time he invented a computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
 
-\input{figures/tables/3-2_wikibaseGraph}
+\input{figures/tables/6-2_wikibaseGraph}
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.9\textwidth]{diagrams/3-2_wikibaseGraph}
+    \includestandalone[width=0.9\textwidth]{diagrams/6-2_wikibaseGraph}
     \caption[Formal description and visualization of Turing's Wikibase graph]{Formal description and visualization of Turing's Wikibase graph}
 \end{figure}
 
@@ -85,7 +85,7 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
 \begin{dumps}
-    \inputminted{json}{code/listings/3-1_serialization.json}
+    \inputminted{json}{code/listings/6-1_serialization.json}
 \end{dumps}
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
@@ -99,7 +99,7 @@ The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/W
         highlightcolor=blueUniovi!15
     ]
     {turtle}
-    {code/listings/3-2_serialization.rdf}
+    {code/listings/6-2_serialization.rdf}
 \end{dumps}
 
 \section{Knowledge graph validation}
@@ -113,7 +113,7 @@ Resource Description Framework (RDF) is a data interchange W3C standard for the 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.8\textwidth]{diagrams/3-3_RDF}
+    \includestandalone[width=0.8\textwidth]{diagrams/6-3_RDF}
     \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
     \label{fig:RDF}
 \end{figure}
@@ -127,7 +127,7 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
 \end{example}
 
 \begin{dumps}
-    \inputminted{turtle}{code/listings/3-3_serialization.nt}
+    \inputminted{turtle}{code/listings/6-3_serialization.nt}
 \end{dumps}
 
 \subsection{ShEx (Shape Expressions)}
@@ -135,14 +135,14 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
 \begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
-    \inputminted{shex}{code/listings/3-4_shex.shex}
+    \inputminted{shex}{code/listings/6-4_shex.shex}
 \end{code}
 
 Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the representation seen in Figure \ref{fig:RDFshape} arises.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\textwidth]{diagrams/3-4_ShEx.pdf}
+    \includegraphics[width=0.4\textwidth]{diagrams/6-4_ShEx.pdf}
     \caption{ShEx schema visualization as UML-like diagrams}
     \label{fig:RDFshape}
 \end{figure}
@@ -152,7 +152,7 @@ The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
 \begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
-    \inputminted{shex}{code/listings/3-5_wikibase.shex}
+    \inputminted{shex}{code/listings/6-5_wikibase.shex}
 \end{code}
 
 \subsubsection{WShEx}
@@ -161,14 +161,14 @@ ShEx was chosen by Wikibase in 2019 to be the language for describing entity sch
 As a solution to the problem described before, an extension of ShEx for describing the Wikibase data model was designed. WShEx is a language inspired by ShEx that provides a support for the Wikibase data model and can be used to describe and validate Wikibase entities~\cite{https://doi.org/10.48550/arxiv.2208.02697}. What's more, the main motivation for developing this language was to create subsets of Wikidata using a human-readable language.
 
 \begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
-    \inputminted{shex}{code/listings/3-6_wshex.shex}
+    \inputminted{shex}{code/listings/6-6_wshex.shex}
 \end{code}
 
 Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the Wikibase data model. This way, by validating the Wikibase data model through WShEx, we are not only validating the dumps, but the system itself.
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.6\textwidth]{diagrams/3-5_WShEx}
+    \includestandalone[width=0.6\textwidth]{diagrams/6-5_WShEx}
     \caption[Relationships between ShEx, WShEx and the Wikibase data model]{Relationships between ShEx, WShEx and the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:WShEx}
 \end{figure}
@@ -187,7 +187,7 @@ Wikidata keeps getting bigger and better. A vast volume of data, like that found
 
 \begin{table}[ht]
     \centering
-    \input{figures/tables/3-3_wikibaseSubgraph}
+    \input{figures/tables/6-3_wikibaseSubgraph}
 \end{table}
 
 \subsection{ShEx-based Matching generated subsets}
@@ -205,7 +205,7 @@ ShEx-based matching comprises using a WShEx schema \myfont{S} as input and inclu
 
 \begin{table}[ht]
     \centering
-    \input{figures/tables/3-4_neighborhood}
+    \input{figures/tables/6-4_neighborhood}
 \end{table}
 
 \section{Data-flow algorithms}
@@ -230,7 +230,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/3-6_pregelTrace}
+    \includestandalone{diagrams/6-6_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -239,7 +239,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/3-7_stateDiagram}
+    \includestandalone{diagrams/6-7_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -250,7 +250,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.66\textwidth]{diagrams/3-8_pregelArchitecture}
+    \includestandalone[width=0.66\textwidth]{diagrams/6-8_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
