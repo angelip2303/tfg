@@ -111,7 +111,9 @@ It is worth noting that the Pregel operator in GraphX is a \textit{bulk-synchron
 
 \section{ShEx + Pregel generated subsets}
 
-According to what we had seen in figure \ref{fig:state:pregel}, nodes may be active: in case they have received some messages, or inactive: in case they have received no message. For us to create a more accurate solution according to Knowledge graph validation, some sub-states are required. In the Pregel solution, the algorithm is in charge of annotating each node $n\in\mathcal{V}$ with a status map representing the validation status with regard to some labels.
+The next paragraphs will provide a description of the ShEx validation algorithm based on Pregel. This approach is based on the assumption that a ShEx schema $\psi \mathcal{L},\sigma \psi$ is provided,  with each label $l \in \mathcal{L}$ identifying a shape expression.
+
+According to the figure \ref{fig:state:pregel}, nodes might be active if they have received some messages, or inactive if they have not received any messages. Certain sub-states are necessary for us to produce a more accurate answer based on Knowledge graph validation. The algorithm in the Pregel approach is in charge of annotating each node $n\in\mathcal{V}$ with a status map expressing the validation status for specific labels.
 
 \begin{figure}[H]
     \centering
@@ -120,7 +122,7 @@ According to what we had seen in figure \ref{fig:state:pregel}, nodes may be act
     \label{fig:state:pregel}
 \end{figure}
 
-A more detailed description
+A more detailed description of the possible values that the \texttt{Status} can take is provided:
 
 \begin{center}
     \input{figures/tables/7-1_status}

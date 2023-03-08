@@ -132,6 +132,7 @@ We have mentioned that the most common syntax notation for RDF is Turtle; howeve
 
 \subsection{ShEx (Shape Expressions)}
 
+
 Shape Expressions (ShEx) were designed as a high-level, domain-specific language for describing RDF graph structures~\cite{https://doi.org/10.48550/arxiv.2110.11709}. The syntax of ShEx is inspired by Turtle and SPARQL, while the semantics are inspired by RelaxNG and XML Schema. In this manner, Shape Expressions specify the requirements that RDF data graphs must fulfill in order to be regarded as conformant, including which elements should appear in a given graph and with what cardinalities and data types\footnote{\url{https://shexspec.github.io/primer/}}. A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
 \begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
@@ -148,6 +149,12 @@ Following the previous example, another possibility is to visualize ShEx schemas
 \end{figure}
 
 The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. Expectations for a particular collection of Wikidata items are outlined in Wikidata Schemas in order for us to address that issue. Wikidata's subsets can be examined in this manner to see if they adhere to a particular schema. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.2\linewidth]{img/6-1_shex.png}
+    \caption{ShEx data validation language}
+\end{figure}
 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
