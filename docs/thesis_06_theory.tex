@@ -1,6 +1,6 @@
 \epigraph{\textit{It doesn't matter how beautiful your theory is, it doesn't matter how smart you are. If it doesn't agree with experiment, it's wrong.}}{-- \textup{Richard P. Feynman }}
 
-In the following chapter, a description of the theoretical concepts needed for a proper understanding of this document is done. Ranging from \textit{knowledge graphs} to \textit{data-flow algorithms}, we are providing a firm foundation for the experiment to be conducted.
+In the following chapter, a description of the theoretical concepts needed for a proper understanding of this document is done. Ranging from \textit{knowledge graphs} to \textit{data-flow paradigms}, we are providing a firm foundation for the experiment to be conducted.
 
 \section{Knowledge graphs}
 \label{section:knowledgeGraph}
@@ -82,13 +82,13 @@ The Wikibase data model supports two export formats: JSON and RDF. Being the for
 
 \paragraph{Wikibase JSON serialization}
 
-% TODO: is JSON a good big data format?
-
-The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making the algorithms validating whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
+The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}. Consisting of a sequence of items where each element is a JSON object capturing all the information about the item itself, represented in a single line. What's remarkable of this mechanism is that it records all the neighboring (see definition \ref{definition:neighborhood}) entities of every single node, making algorithms that validate whole graphs able to process them in a single pass. More on this will be discussed in paragraph \ref{section:pregel}.
 
 \begin{dumps}
     \inputminted{json}{code/listings/6-1_serialization.json}
 \end{dumps}
+
+As a human-readable format is useful for data communication, the REST API architecture is growing in popularity. Consequently, JSON format has swiftly gained acceptance since it's perfectly suited for speedy data sharing. Nevertheless, since so much boilerplate code is produced, in the Big Data world, JSON-based apps may suffer from performance issues.Take note of how information is kept in a JSON file: as key-value pairs for each item. As a result, a JSON document that stores objects of the same type will have the same number of columns as the number of items in the document. Hence, one of the major flaws of this serialization format is the lack of memory optimization, which means JSON is not even remotely compact. Putting it all together, JSON outperforms binary formats in situations where a person must go through the file; yet, for our purposes, columnar-based formats work just better than row-oriented ones.
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
@@ -218,18 +218,18 @@ ShEx-based matching comprises using a WShEx schema \myfont{S} as input and inclu
     \input{figures/tables/6-4_neighborhood}
 \end{table}
 
-\section{Data-flow algorithms} % TODO: data flow paradigm :(
+\section{Data-flow paradigms}
 
-The main focus of this document is implementing a Big data solution using the Pregel algorithm. However, for better understanding it, introducing the MapReduce model will be handful. Notice that both are meant to be executed in parallel in a distributed system. To sum up, the goal of this project is creating a fault-tolerant system making easy to operate on graphs on a massive scale.
+The main focus of this document is implementing a Big data solution using the Pregel model. However, for better understanding it, introducing the MapReduce system will be handful. Notice that both are meant to be executed in a distributed system. To sum up, the goal of this project is creating a fault-tolerant system making easy to operate on graphs on a massive scale.
 
 \subsection{MapReduce}
 \label{section:mapReduce}
 
-Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach, is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in having to pass the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184}.
+Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} program is composed of a \textit{map procedure}, where we apply a simple operation to all the elements of a sequence, followed by a \textit{reduce} method, which transforms those elements into a single result. For us to process a graph, we would need to chain MapReduce invocations. Where, for each iteration, map and reduce functions are applied. The main drawback of this approach is the functional nature of the MapReduce model. This means, expressing a graph algorithm as a chained MapReduce results in sending the entire state of the graph from one stage to another~\cite{10.1145/1807167.1807184}.
 
 \subsection{Bulk Synchronous Parallel}
 
-During the 1980s, Leslie Valiant worked on ideas for a distributed programming model for parallel computing. In this framework the execution is divided into a series of \textit{supersteps}. For each superstep, a set of processes running the same piece of code are executed concurrently. As a process completes its execution, a message is generated and sent to other processes, messages have not yet been delivered. The superstep concludes when all of the procedures are completed. At this moment, a \textit{barrier synchronization} assures that all messages have been transferred. All messages are delivered at the start of the following superstep, and the next superstep is executed. This procedure will continue until all nodes vote to halt. It is worth mentioning that processes are not permitted to exchange messages with another process when executing a superstep. This requirement assures that no deadlocks occur at runtime. Apache Hama\footnote{\url{https://hama.apache.org/}} is a framework for Big data analytics using the Bulk Synchronous Parallel model.
+During the 1980s, Leslie Valiant worked on ideas for a distributed programming model for parallel computing. In this framework the execution is divided into a series of \textit{supersteps}. For each superstep, a set of processes running the same piece of code are executed concurrently. As a process completes its execution, a message is generated and sent to other processes. The superstep concludes when all of the procedures are completed. Next, a \textit{barrier synchronization} ensures that all messages have been transferred. At the beginning of the next superstep, all messages are delivered and the aforementioned procedure is repeated. This process will continue until all nodes vote to halt; this is, no more messages are sent to neighboring nodes. It is worth mentioning that processes are not permitted to exchange messages between them when executing a superstep, just at the end. This requirement assures that no deadlocks occur at runtime. Apache Hama\footnote{\url{https://hama.apache.org/}} is a framework for Big data analytics using the Bulk Synchronous Parallel model.
 
 \subsection{Pregel model}
 \label{section:pregel}
@@ -256,7 +256,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \subsubsection{Architecture of a Pregel system}
 
-It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this algorithm is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
+It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this model is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 
 \begin{figure}[H]
     \centering
