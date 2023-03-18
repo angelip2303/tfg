@@ -28,6 +28,8 @@ We have examined two distinct Scala and Apache Spark-based solutions up to this 
 
 \subsection{Rust}
 
+Rust is a multi-purpose, high-level, and general-purpose programming language. Its primary focus is on performance, memory safety, and concurrency. In this perspective, Rust might be considered a modern language; as of March 18th, 2023, the most recent stable release is version 1.68. For achieving memory safety and concurrency, both at the same time, Rust prevents data races through a \textit{borrow checker} that tracks the object and allows each memory position to have only one owner at a time. Rust is popular for systems programming, and was included by the Linux kernel in December 2022, but it also has some high-level functional constructs like pattern-matching and the neatly implemented \texttt{Enums}.
+
 \begin{code}[Hello World written in Rust]
     \inputminted{rust}{code/listings/9-1_helloWorld.rs}
 \end{code}
