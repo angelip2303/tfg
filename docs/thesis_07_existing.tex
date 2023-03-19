@@ -138,6 +138,6 @@ A more detailed description of the possible values that the \texttt{Status} can 
     \caption{Definition of \texttt{vProg} for Pregel-based ShEx validation}
 \end{table}
 \label{vProg}
-\section{Technical debt}
+\section{Evaluation of the solution}
 
-As we have exposed so far, the suggested solution is perfectly valid. The memory usage, however, is far from optimal. While we must serialize and deserialize the data at each iteration of the algorithm, making the operations to be done not efficient at all. Not to mention the lack of a query execution optimizer in RDD-based systems. There's so much room for improvement. The DataFrame's API saves the day in this regard.
+As we have shown so far, the proposed solution is perfectly valid. Since the RDD-based API is based on the functional programming paradigm, the algorithm may be written using of higher-order functions. Takes the code readable even if you have no prior knowledge with Apache Spark. Moreover, as information is kept in the form of Java objects , the data flow is exposed in the same way that it is in any other Java application. This last argument becomes specially relevant when comparing it to DataFrame-based APIs, which are built on abstractions and a SQL engine. On the other hand, the memory usage is far from optimum in RDD-based solutions. The operations to be performed become less efficient as we must serialize and deserialize the data at each iteration of the algorithm. Not to mention the lack of a query execution optimizer, as well as the lack of data homogeneity due to RDDs' being schema-less. When everything is considered together, it is clear that there is a lot of room for improvement.
