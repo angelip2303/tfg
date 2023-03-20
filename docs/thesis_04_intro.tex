@@ -68,10 +68,12 @@ Creating subsets of the Knowledge Graphs for specific domains may be one solutio
 
 \section{Contributions}
 
-The main contributions of this project are:
+Having the main objective and motivations introduced, let me highlight the key contributions of this project. Take note that the document may be split into two parts, one for each of the contributions listed below.
 
 \begin{enumerate}
-    \item
+    \item Research and documentation of the existing method for validating Wikibase Knowledge Graphs provided a schema that the graph's entities should conform. The suggested solution is implemented in Scala and Apache Spark; yet, at the project's first meeting, several proposals for enhancing the real solution were presented. The original code was rewritten according to the aforementioned research, although the resulting solution was far from ideal. The process of exploring and refactoring the code is enumerated in the chapters to come.\\
+
+    \item Presentation of the original Rust and SQL-based Knowledge Graph subset generation architecture. The goal is to provide a solution that can run on any hardware efficiently. In this regard, programmers that are interested in building code that runs remarkably fast often turn to Rust. Also, compared to NoSQL, relational databases are on the rise. According to some early findings, the JSON dump is 10 times larger in size than the generated single-DB file. More on this will be discussed in the following sections.
 \end{enumerate}
 
 \section{Structure of the document}
@@ -79,13 +81,13 @@ The main contributions of this project are:
 The shape of this document is as follows:
 
 \begin{itemize}
-    \item \textbf{Chapter ~\ref{chapter:related}.} General description of the existing technologies related to knowledge graph validation. As well as the advantages and disadvantages of choosing some tools over others for implementing this project.
-    \item \textbf{Chapter ~\ref{chapter:theory}.} Provides a theoretical background needed for better understanding the concepts explained in the following chapters.
-    \item \textbf{Chapter ~\ref{chapter:first}.} Description of the First Pregel solution implemented by Labra, serving as the project's baseline.
-    \item \textbf{Chapter ~\ref{chapter:second}.} Description of the Second Pregel solution aiming to improve some of the issues that the initial technologies implied.
-    \item \textbf{Chapter ~\ref{chapter:third}.} Description of the Third Pregel solution. It can be seen as a rework of the whole project.
-    \item \textbf{Chapter ~\ref{chapter:experiment}.} Explanation of the process followed to analyze the concrete implementation of the algorithm that we used to validate the knowledge graphs.
-    \item \textbf{Chapter ~\ref{chapter:results}.} Analysis of the results obtained from the previously described experiment.
-    \item \textbf{Chapter ~\ref{chapter:planning}.} Summary of the process followed to create this final degree project, as well as some considerations organization and management of resources.
-    \item \textbf{Chapter ~\ref{chapter:conclusions}.} Summary of the general conclusions and future work.
+    \item[\textbf{Chapter ~\ref{chapter:related}.}] General description of the existing technologies related to knowledge graph validation. As well as the advantages and disadvantages of choosing some tools over others for implementing this project.
+    \item[\textbf{Chapter ~\ref{chapter:theory}.}] Provides a theoretical background needed for better understanding the concepts explained in the following chapters.
+    \item[\textbf{Chapter ~\ref{chapter:first}.}] Description of the First Pregel solution implemented by Labra, serving as the project's baseline.
+    \item[\textbf{Chapter ~\ref{chapter:second}.}] Description of the Second Pregel solution aiming to improve some of the issues that the initial technologies implied.
+    \item[\textbf{Chapter ~\ref{chapter:third}.}] Description of the Third Pregel solution. It can be seen as a rework of the whole project.
+    \item[\textbf{Chapter ~\ref{chapter:experiment}.}] Explanation of the process followed to analyze the concrete implementation of the algorithm that we used to validate the knowledge graphs.
+    \item[\textbf{Chapter ~\ref{chapter:results}.}] Analysis of the results obtained from the previously described experiment.
+    \item[\textbf{Chapter ~\ref{chapter:planning}.}] Summary of the process followed to create this final degree project, as well as some considerations organization and management of resources.
+    \item[\textbf{Chapter ~\ref{chapter:conclusions}.}] Summary of the general conclusions and future work.
 \end{itemize}

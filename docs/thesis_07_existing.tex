@@ -109,7 +109,7 @@ The GraphX Pregel implementation is defined iteratively where each iteration is 
 
 It is worth noting that the Pregel operator in GraphX is a \textit{bulk-synchronous} parallel messaging abstraction at a high level. The Pregel operator performs a sequence of supersteps in which vertices receive their inbound message set, calculate a new value for the vertex, and then send messages to their neighbors. Take a look at the first two lines of the pseudo-code above to see how the initial messages for each vertex are received and calculated for iteration 0. Messages, unlike Pregel, are calculated concurrently: note the second and fifth lines of the above snippet. Vertices that receive no messages are skipped. The Pregel operator ends iteration and returns the final graph when there are no messages left, as seen in the third line of the snippet above. The previously described constraints allow GraphX to perform some additional optimization.
 
-\section{PSchema: ShEx + Pregel generated subsets}
+\section{PSchema: Pregel + ShEx generated subsets}
 
 The next paragraphs will provide a description of the ShEx validation algorithm based on Pregel. This approach is based on the assumption that a ShEx schema $\psi \mathcal{L},\sigma \psi$ is provided,  with each label $l \in \mathcal{L}$ identifying a shape expression.
 
