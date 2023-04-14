@@ -1,0 +1,68 @@
+@startuml
+!theme mars
+
+' hide the spot
+hide circle
+
+skinparam nodesep 15
+skinparam ranksep 66
+
+entity "Vertex" as e01 {
+  *id : number
+  --
+  label : text
+  description : text
+}
+
+entity "Edge" as e02 {
+  *src_id : number
+  *property_id: number
+  *dst_id : number
+}
+
+entity "Coordinate" as e03 {
+  *src_id : number
+  *property_id: number
+  *dst_id : number
+  --
+  latitude: number
+  longitude: number
+  precision: number
+  globe_id: number
+}
+
+entity "Quantity" as e04 {
+  *src_id : number
+  *property_id: number
+  *dst_id : number
+  --
+  amount: number
+  lower_bound: number
+  upper_bound: number
+  unit_id: number
+}
+
+entity "String" as e05 {
+  *src_id : number
+  *property_id: number
+  *dst_id : number
+  --
+  string: text
+}
+
+entity "Time" as e06 {
+  *src_id : number
+  *property_id: number
+  *dst_id : number
+  --
+  time: date_time
+  precision: number
+}
+
+e01 ||--o{ e02
+
+e02 <|-- e03
+e02 <|-- e04
+e02 <|-- e05
+e02 <|-- e06
+@enduml
