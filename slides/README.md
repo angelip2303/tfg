@@ -4,7 +4,7 @@
 
 ## Slide 2:
 
-### What is Pregel?
+### What is it Pregel?
 
 - Pregel is a distributed graph processing framework developed by Google for
   large-scale graph computation.
