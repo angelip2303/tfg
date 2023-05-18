@@ -99,7 +99,7 @@ The GraphX Pregel implementation is defined iteratively where each iteration is 
 \begin{itemize}
     \item \texttt{initialMsg}: the message each vertex will receive at the initial iteration.
     \item \texttt{vProg}: the user-defined vertex program function which is run on each vertex and computes a new value for it. During the first iteration, the \texttt{vProg} is invoked on all vertices. On subsequent iterations it is invoked only on those active vertices; that is, those receiving messages.
-    \item \texttt{sendMsg}: the user-defined function that is applied to all the out edges of vertices receiving a message in the current iteration. That is, a function that computes the messages to be sent to the neighbors of a node for the next iteration.
+    \item \texttt{sendMsg}: the user-defined function applied to all the out edges of vertices receiving a message in the current iteration. To put it simply, a function computing the messages to be sent to the neighbors of a node for the next iteration.
     \item \texttt{mergeMsg}: the user-defined function that is applied to two incoming messages and merges them into one.
 \end{itemize}
 
