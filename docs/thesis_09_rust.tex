@@ -5,33 +5,82 @@ We have examined two distinct Scala and Apache Spark-based solutions up to this 
 \section{Technology stack}
 
 \begin{figure}[ht]
+    \centering
     \newsavebox\mybox
-    \savebox{\mybox}{\includegraphics[width=.4\linewidth]{img/9-1_rust.jpg}}
-
-    \begin{subfigure}{.45\textwidth}
+    \savebox{\mybox}{\includegraphics[width=.3\linewidth]{img/9-1_rust.jpg}}
+    \begin{subfigure}{.3\textwidth}
         \centering
         \usebox{\mybox}
         \caption{Rust programming language}
     \end{subfigure}%
-    \hspace*{0.5em}
-    \begin{subfigure}{.45\textwidth}
+    \hspace*{0.1em}
+    \begin{subfigure}{.3\textwidth}
         \centering
         \vbox to \ht\mybox{%
             \vfill
-            \includegraphics[width=.8\linewidth]{img/9-2_duckdb.png}
+            \includegraphics[width=.9\linewidth]{img/9-2_duckdb.png}
             \vfill
         }
         \caption{DuckDB}
+    \end{subfigure}%
+    \hspace*{0.1em}
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \vbox to \ht\mybox{%
+            \vfill
+            \includegraphics[width=.8\linewidth]{img/9-3_polars.eps}
+            \vfill
+        }
+        \caption{Pola-rs}
     \end{subfigure}%
     \caption{Stack of the different technologies we are using for the third solution}
 \end{figure}
 
 \subsection{Rust}
 
-Rust is a multi-purpose, high-level, and general-purpose programming language. Its primary focus is on performance, memory safety, and concurrency. In this perspective, Rust might be considered a modern language; as of March 18th, 2023, the most recent stable release is version 1.68. For achieving memory safety and concurrency, both at the same time, Rust prevents data races through a \textit{borrow checker} that tracks the object and allows each memory position to have only one owner at a time. Rust is popular for systems programming, and was included by the Linux kernel in December 2022, but it also has some high-level functional constructs like pattern-matching and the neatly implemented \texttt{Enums}.
+Rust is a multi-purpose, high-level programming language. Its primary focus is on performance, memory safety, and concurrency. In this perspective, Rust might be considered a modern language; as of March 18th, 2023, the most recent stable release is version 1.68. For achieving memory safety and concurrency, both at the same time, Rust prevents data races through a \textit{borrow checker} that tracks the object and allows each memory position to have only one owner at a time. Rust is popular for systems programming, and was included by the Linux kernel in December 2022, but it also has some high-level functional constructs like pattern-matching and the neatly implemented \texttt{Enums}.
+
+The key features of Rust are:
+
+\begin{enumerate}
+    \itemsep1em
+    \item \textbf{Performance:} It accomplishes this by employing a static memory management strategy rather than a garbage collector, using ownership instead. This means that the compiler decides when memory is allocated and released at compile time. Rust can produce incredibly effective code as a result.
+    \item \textbf{Memory safety:} Rust is designed to be memory safe. It achieves this by using a borrow checker. This means that the compiler determines at compile time when memory is accessed, allowing Rust to prevent memory issues like use-after-free and double-free.
+    \item \textbf{Concurrency:} Rust is designed to be concurrent. This means that Rust programs can be executed in partial order, or out-of-order, without affecting the outcome. This allows the parallel execution of the concurrent units, significantly increasing the performance of the program in multi-threaded systems.
+\end{enumerate}
+
+An example of a simple \textit{Hello World} program written in Rust is shown below.
 
 \begin{code}[Hello World written in Rust]
     \inputminted{rust}{code/listings/9-1_helloWorld.rs}
 \end{code}
 
 \subsection{DuckDB}
+
+Conversely, DuckDB is a C++-based in-process SQL OLAP database management system that is intended to be integrated into other applications. This means that DuckDB follows the ACID model and supports popular SQL constructs like window functions, table expressions, and JSON. Additionally, it is column-oriented and created with analytical queries in mind. The impact of this last remark on the scope of our project will be explained further below. Being a project that is only a few years old, DuckDB is still being actively developed.
+
+The key features of DuckDB are:
+
+\begin{enumerate}
+    \itemsep1em
+    \item \textbf{In-process:} DuckDB is an embedded database that runs in the same process as the application. This means that there is no separate server process that needs to be started, stopped, or configured. The application can directly interface with DuckDB through a C API.
+    \item \textbf{OLAP or On-Line Analytical Processing:} DuckDB is designed for OLAP workloads. It is optimized for analytical queries that scan large amounts of data and perform complex aggregations.
+    \item \textbf{Columnar:} DuckDB is a columnar database. This means that data is stored in columns instead of rows. This can dramatically minimize the amount of data that needs to be read from memory because DuckDB can now only read the columns needed for a query. The vectorized query execution method, which enables incredibly quick query execution, benefits from the column orientation as well. Last but not least, the compression efficiency of the columnar storage format can help to further reduce the quantity of data that needs to be read from memory.
+\end{enumerate}
+
+\subsection{Pola-rs}
+
+Pola-rs is a fast and memory-efficient DataFrame library for Rust. It is built on Apache Arrow, a cross-language development platform for in-memory data. This means that data can be shared between languages without the need for serialization or deserialization. Many well-known data science and analytics frameworks, such as Apache Parquet, Apache Spark, Dask, and Polars, employ Apache Arrow. Putting it all together, Pola-rs is a DataFrame implementation written in Rust, a data structure that is commonly used in data science and analytics.
+
+The key features of Pola-rs are:
+
+\begin{enumerate}
+    \itemsep1em
+    \item \textbf{Zero-copy:} Pola-rs is a DataFrame library that uses Apache Arrow as the memory model. This means that Polars does not copy data when performing operations on the DataFrame. Instead, it manipulates the metadata of the underlying Arrow array. This makes Polars very fast and memory efficient.
+    \item \textbf{Parallel execution:} Pola-rs is designed to be parallel. This means that Polars can execute operations on multiple threads at the same time. This allows Pola-rs to take advantage of multi-core systems, resulting in faster execution.
+    \item \textbf{Lazy evaluation:} Pola-rs is designed to be lazy. This means that Polars does not execute operations until they are needed. This allows Pola-rs to avoid unnecessary computations, resulting in faster execution.
+    \item \textbf{Query optimization:} Pola-rs' Lazy API optimizes the query plan for it to be executed faster. This means that Polars can optimize queries by reordering operations and removing unnecessary operations. This allows queries to be executed faster.
+    \item \textbf{Streaming:} Pola-rs is designed to allow streams from external files. This means that Polars can process data in batches read from an external file or database. This allows Pola-rs to process data without having to load it all into memory first, resulting in faster execution.
+\end{enumerate}
+
+\section{Extract-Transform-Load}
