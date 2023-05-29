@@ -1,1 +1,9 @@
-\epigraph{\textit{The most damaging phrase in the English language is "we have always done it this way".}}{-- \textup{Grace Hopper}}
+\epigraph{\textit{Information flow is what the Internet is about. Information sharing is power. If you don't share your ideas, smart people can't do anything about them, and you'll remain anonymous and powerless.}}{-- \textup{Vint Cerf}}
+
+We have seen thus far the two main export formats supported by Wikidata, namely, RDF and JSON. However, none of them are suitable for analytical queries. In this chapter, we will explore the possibility of exporting Wikidata in a columnar format, as we have mentioned in the previous chapter, DuckDB is the perfect candidate for this task. Putting this all together, we will create a Rust-based solution for exporting Wikidata to DuckDB.
+
+\section{The issue with JSON and other text-based formats}
+
+JSON is a text-based format, and as such, the data that is stored inside a JSON file is not compressed in any way. This means that the size of the file is directly proportional to the size of the data. This is not a problem for small datasets, but it becomes a problem when we are dealing with large datasets. As we have seen in the previous chapter, the JSON dump of Wikidata is around 1.5 TB in size. This is a problem because it is not feasible to store such a large file on a single machine. Even if we could, it would take a long time to load the file into memory. This is why we need to store information in a binary format.
+
+\section{wd2duckdb}
