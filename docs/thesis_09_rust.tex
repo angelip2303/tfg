@@ -84,3 +84,25 @@ The key features of Pola-rs are:
 \end{enumerate}
 
 \section{Extract-Transform-Load}
+
+The Extract-Transform-Load (ETL) process is a data integration method aiming at extracting data from one or more sources, transforming it, and loading the result into a target system. An ETL process is a critical component of data-intensive applications, as having properly structured and valid data has a strong impact on the quality of the results and the performance of the system. With that said, the ETL process is used in data migration projects, where data is moved from one system to another. This last remark is important because it is the case of our project, where we are willing to move data from a JSON file to a relational database.
+
+\subsection{Extract}
+
+The first step of the ETL process is the extraction of data from the source system. This step is responsible for connecting to the source system and retrieving the data. The source system can be a database, a file, or even a web service.
+
+\subsection{Transform}
+
+The second step of the ETL process is the transformation of data. This step is responsible for converting the data from its source format to the target format. This step is also responsible for cleaning the data, removing duplicates, and performing other operations to ensure that the data is valid and consistent. In our case, we want to transform the data from a JSON format to DuckDB. Not only that, but we also have to store the data in a way that is consistent with the knowledge graph model. This means that we have to extract the entities and relationships from the data and represent them in a graph format. See section \ref{section:wd2duckdb_design} for more details.
+
+\subsection{Load}
+
+The third and final step of the ETL process is the loading of data into the target system. This step is responsible for connecting to the target system and inserting the data.
+
+For us to accomplish what we have just described, we will need to use a tool that can perform the ETL process. In our case, we will implement one ourselves using Rust. This tool will be responsible for extracting data from a JSON file, transforming it into a relational format, and loading it into a DuckDB database. The tool will be called \texttt{wd2duckdb}. See chapter \ref{chapter:wd2duckdb} for more details.
+
+\section{Knowledge Graph Subsets}
+
+Having our data in a relational database is not enough. We have to implement a system for us to query the knowledge graph in a Pregel fashion. This system will be called \texttt{pregel-rs}. What's more, an algorithm for the creation of the subsets is also needed. This algorithm will be called \texttt{pschema-rs}. See chapter \ref{chapter:pschema} for more details.
+
+\section{Architectural decision record}
