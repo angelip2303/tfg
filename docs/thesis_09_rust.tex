@@ -43,7 +43,7 @@ Rust is a multi-purpose, high-level programming language. Its primary focus is o
 The key features of Rust are:
 
 \begin{enumerate}
-    \itemsep1em
+    \itemsep0.5em
     \item \textbf{Performance:} It accomplishes this by employing a static memory management strategy rather than a garbage collector, using ownership instead. This means that the compiler decides when memory is allocated and released at compile time. Rust can produce incredibly effective code as a result.
     \item \textbf{Memory safety:} Rust is designed to be memory safe. It achieves this by using a borrow checker. This means that the compiler determines at compile time when memory is accessed, allowing Rust to prevent memory issues like use-after-free and double-free.
     \item \textbf{Concurrency:} Rust is designed to be concurrent. This means that Rust programs can be executed in partial order, or out-of-order, without affecting the outcome. This allows the parallel execution of the concurrent units, significantly increasing the performance of the program in multi-threaded systems.
@@ -62,7 +62,7 @@ Conversely, DuckDB is a C++-based in-process SQL OLAP database management system
 The key features of DuckDB are:
 
 \begin{enumerate}
-    \itemsep1em
+    \itemsep0.5em
     \item \textbf{In-process:} DuckDB is an embedded database that runs in the same process as the application. This means that there is no separate server process that needs to be started, stopped, or configured. The application can directly interface with DuckDB through a C API.
     \item \textbf{OLAP or On-Line Analytical Processing:} DuckDB is designed for OLAP workloads. It is optimized for analytical queries that scan large amounts of data and perform complex aggregations.
     \item \textbf{Columnar:} DuckDB is a columnar database. This means that data is stored in columns instead of rows. This can dramatically minimize the amount of data that needs to be read from memory because DuckDB can now only read the columns needed for a query. The vectorized query execution method, which enables incredibly quick query execution, benefits from the column orientation as well. Last but not least, the compression efficiency of the columnar storage format can help to further reduce the quantity of data that needs to be read from memory.
@@ -75,7 +75,7 @@ Pola-rs is a fast and memory-efficient DataFrame library for Rust. It is built o
 The key features of Pola-rs are:
 
 \begin{enumerate}
-    \itemsep1em
+    \itemsep0.5em
     \item \textbf{Zero-copy:} Pola-rs is a DataFrame library that uses Apache Arrow as the memory model. This means that Polars does not copy data when performing operations on the DataFrame. Instead, it manipulates the metadata of the underlying Arrow array. This makes Polars very fast and memory efficient.
     \item \textbf{Parallel execution:} Pola-rs is designed to be parallel. This means that Polars can execute operations on multiple threads at the same time. This allows Pola-rs to take advantage of multi-core systems, resulting in faster execution.
     \item \textbf{Lazy evaluation:} Pola-rs is designed to be lazy. This means that Polars does not execute operations until they are needed. This allows Pola-rs to avoid unnecessary computations, resulting in faster execution.

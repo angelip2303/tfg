@@ -6,7 +6,7 @@ We have seen thus far the two main export formats supported by Wikidata, namely,
 
 JSON is a text-based format, and as such, the data that is stored inside a JSON file is not compressed in any way. This means that the size of the file is directly proportional to the size of the data. This is not a problem for small datasets, but it becomes an issue when we are dealing with larger information repositories. As we have seen in the introductory chapter a Wikidata JSON dump is around \texttt{1.5 TB} in size when uncompressed, see \ref{chapter:intro} for a more detailed explanation. The problem here is that we cannot store such a large file on a single machine. Even if we could, it would take quite a time to load the whole file into memory. As a result, a binary format is required to store the information. This is where DuckDB comes into play. Even if we are also required to load the database into memory; recall, DuckDB is an in-process or embedded database, and the size of the repository is much smaller than the one of the JSON file; orders of magnitude smaller to say the least. This is because DuckDB is a columnar database, and as such, it can compress the data much more efficiently than a text-based format. This is the main reason why we want to export Wikidata to DuckDB.
 
-It is also worth noting that Wikidata JSON dumps are structured in such a way that per each line of the file, one object is stored. This means that we can parse the file line by line, which is something cool. However, it comes with the downside that every line of the dump will contain boilerplate information referring to the schema of the JSON objects. What I mean by this, is that we will potentially have hundreds of millions of lines all of them with the same boilerplate code. Instead of having a header with the schema of the JSON object, we will have it in every line. This is one of the reasons why JSON files are not efficient memory-wise. For sharing information, JSON is great, but for storing it, it is not.
+It is also worth noting that Wikidata JSON dumps are structured in such a way that per each line of the file, one object is stored. This means that we can parse the file line by line, which is something cool. However, it comes with the downside that every line of the dump will contain boilerplate information referring to the schema of the JSON objects. What I mean by this is that we will potentially have hundreds of millions of lines all of them with the same boilerplate code. Instead of having a header with the schema of the JSON object, it will be repeated at each of the lines of the document. This is one of the reasons why JSON files are not efficient memory-wise. For sharing information, JSON is great, but for storing it, it is not.
 
 \section{wd2duckdb}
 
@@ -22,3 +22,15 @@ The tool is going to be divided into two main parts. The first part is going to 
     \includegraphics[width=.8\linewidth]{img/10-1_wd2duckdb.eps}
     \caption{Entity-relationship diagram of \texttt{wd2duckdb}'s resulting Database}
 \end{figure}%
+
+\subsection{Parsing the JSON dump}
+
+The first part of the tool is going to be in charge of parsing the Wikidata JSON dump and extracting the information that we are interested in. The idea is to parse the file line by line, and for each line, we are going to extract the information that we are interested in. Having that said, the information that we are going to extract is the following:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item \textbf{Wikidata IDs}: As we had seen in section \ref{section:wikibase_graphs}, Wikidata IDs consist of a type prefix \texttt{Q}, \texttt{P} or \texttt{L}, for identifying Entities, Properties or Lexemes, followed by a sequence of numbers. There exist other two types of IDs, namely, \texttt{F} and \texttt{S}, for identifying Forms and Senses, respectively. A more detailed discussion on this topic will be presented later on. For the time being, we are going to focus on the first three types of IDs. The idea is to store the IDs in a separate table, and then, for each line of the JSON dump, we are going to store the ID of the entity that is being parsed. This is going to be useful for the second part of the tool, where we are going to store the statements of the entities.
+    \item \textbf{Labels}: We are going to store the labels of the entities in the same table where we store the IDs.
+    \item \textbf{Descriptions}: We are going to store the descriptions of the entities in the same table where we store the IDs.
+    \item \textbf{Statements}:
+\end{itemize}
