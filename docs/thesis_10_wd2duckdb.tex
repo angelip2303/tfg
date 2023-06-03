@@ -42,9 +42,39 @@ The Wikidata JSON dump is a huge file. As we have seen in section \ref{section:i
 
 \paragraph{Compression}
 
+Dealing with large amounts of data is far from being trivial. For that, we are going to use compression techniques to reduce the size of the data that we are going to store. Those mechanisms can potentially reduce the size of the data by a factor of 10. This is not only beneficial for reducing the storage footprint, but it also helps improve the performance of tools consuming the data as fewer reads from disk or over a network connection are required. Column store formats are known for being highly compressible, and DuckDB is not an exception. This is because data within a column tends to be similar to each other, which is not the case for row-based formats, where each row is composed of heterogeneous data types, leading to lower compression rates.
 
+The best thing about compression in DuckDB is that it will automatically choose the better compression algorithm for us \cite{Raasveldt_2022}. This is because DuckDB can detect the data type of each column, and based on that, it will choose the best compression algorithm. For example, DuckDB will probably choose \texttt{RLE} for storing the statements, as it decomposes the dataset into pairs of (value, count) tuples, where the count represents how many times the value is repeated. Thus, no repeated values are stored. This is useful as entities stored will potentially have several statements claimed; hence, repeated values will appear in our repository.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/diagrams/10-2_rle.png}
+    \caption[Example of \texttt{RLE} compression]{Example of \texttt{RLE} compression \cite{Raasveldt_2022}}
+\end{figure}
 
+On the other hand, it will possibly choose \texttt{FSST} for storing \texttt{STRING} columns. This creates a dictionary of references and segments which are repeated across the dataset. This is effective when dealing with strings that are unique across the dataset, such as labels or descriptions, but that have a lot of repetitions within them. For example, words from the same domain will probably appear several times in the dataset, such as \texttt{Q2} (Earth) or \texttt{Q193} (Saturn). Thus, we can take advantage of this and compress the data using \texttt{FSST}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/diagrams/10-3_fsst.png}
+    \caption[Example of \texttt{FSST} compression]{Example of \texttt{FSST} compression \cite{Raasveldt_2022}}
+\end{figure}
+
+\paragraph{Data types}
+
+According to what we have seen in the previous paragraph, we are going to try and optimize as much as we can the data types that we are going to use for storing the information. For that, we are going to use the smallest data type that can hold the data that we are interested in. For example, we are going to use \texttt{UINTEGER} for storing the IDs of the entities, as they can be represented as numbers. What's more, we are going to use the unsigned representation as we are not interested in negative numbers. This has two main benefits: first, we are going to be able to store larger numbers. For example, the largest number that can be stored in a \texttt{UINTEGER} is \texttt{4,294,967,295}, whereas the largest number that can be stored in an \texttt{INTEGER} is \texttt{2,147,483,647}. This means that we can store twice as many numbers with the same number of bits. The same reasoning applies to the rest of the data types that we are going to use. Second, we are going to ensure that our data is consistent. For example, we are not going to be able to store negative numbers in a column that is supposed to store positive numbers.
+
+From my perspective, fine-tuning the chosen data types for storing your data makes your repositories more robust. This is because you are ensuring that the data that you are storing is consistent and that you are not wasting any space. This is especially important when dealing with large amounts of data, as the storage footprint can be reduced by a factor of 2. This is the case for this project. At the beginning of it, we were using \texttt{BIGINT} for storing the IDs of the entities. However, we realized that we were wasting half of the space, as the IDs are always positive. For that, we decided to switch to \texttt{UINTEGER}. Summing up, we moved from an 8-byte integer to a 4-byte representation, which means that we were able to store twice as many IDs with the same number of bits. This also leads to fitting more data both in memory and in the cache, which is going to be beneficial for the second part of the tool, where we are going to build the graph.
+
+Regarding the encoding of IDs, we had two main possibilities. First, we could have used the string representation, which is the one that is employed in the JSON dump. However, we decided to go for the numeric representation as it is more compact. This is because the string representation of the IDs is composed of a prefix followed by a sequence of numbers. For example, the string representation of the ID \texttt{Q92743} is \texttt{"Q92743"}, whereas the numeric representation of the same ID is \texttt{92743}. As we are using a \texttt{UINTEGER} for representing the numeric data, only 4 bytes per row are needed. However, a string takes 1 byte per character. Thus, according to the previous example, we would need 6 bytes for encoding the string representation of the ID, while only 4 are required for the numeric representation. In this example, 2 bytes are saved. Note that this scales for even larger IDs.
+
+The problem is that things are not as simple as they seem at first glance. Wikidata IDs not only are numeric identifiers, but they also annotate the type of the item they support: Entities, Properties, Lexemes, Forms and Senses. Thus, we need a way for encoding and decoding this information. For this, what we have done is diving the address space of the IDs into 5 different ranges, one for each type. The ranges have a length of 1 hundred million, except for Forms and Senses, each of them has half the size, which is more than enough for representing the different Wikidata IDs. See the code below for more information.
+
+\begin{code}[Conversion function from an ID to a numeric representation]
+    \inputminted{rust}{code/listings/10-1_ids.rs}
+\end{code}
+
+What's the most powerful about the \texttt{From} \texttt{trait} in Rust is that it allows us to not only convert from one type to another; but in the opposite direction too. This is, it automatically implements the \texttt{Into} \texttt{trait} thanks to the blanket implementation in the standard library. Hence, now we can convert from \texttt{u32} to \texttt{Id} and vice-versa.
 
 \subsection{Implementation of the \texttt{wd2duckdb} tool}
 

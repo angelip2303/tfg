@@ -8,9 +8,11 @@ The main goal of this thesis is to create a tool capable of creating subsets out
 
 \section{PSchema-rs}
 
+\subsubsection{Optimizations}
+
 \paragraph{Parallelization}
 
-The first optimization that we are going to consider is parallelization. The idea is to split the DuckDB dump into several chunks and then parse each of the chunks in parallel. This is going to be done by the first component of the tool. Then, we are going to parse each of the chunks in parallel. The idea is to use \texttt{rayon}\footnote{\url{https://github.com/rayon-rs/rayon}}. This library is a data-parallelism API for Rust that provides several parallel iterators. Hence, we are using it to create a \texttt{par\_lines} iterator for parsing the DuckDB dump in parallel. This can be done because each of the lines of the chunks of the dump is independent of each other. Thus, we can parse each of the entities in parallel without having to worry about synchronization issues. What's more, the \texttt{rayon} library is going to take care of the load balancing for us. This means that we do not have to worry about splitting the DuckDB dump into chunks of equal size. Lastly, \texttt{rayon} is also in charge of handling the thread pool for us and caring about the data-races that might arise.
+The first optimization that we are going to consider is parallelization. The idea is to split the DuckDB dump into several chunks and then parse each of the chunks in parallel. This is going to be done by the first component of the tool. For this purpose, we are using \texttt{rayon}\footnote{\url{https://github.com/rayon-rs/rayon}}. This library is a data-parallelism API for Rust that provides several parallel iterators. Hence, we are using one to traverse the database in parallel. This can be done because each of the lines of the chunks of the dump is independent of each other. Thus, we can parse each of the entities in parallel without having to worry about synchronization issues. What's more, the \texttt{rayon} library is going to take care of the load balancing for us. This means that we do not have to worry about splitting the DuckDB dump into chunks of equal size. Lastly, \texttt{rayon} is also in charge of handling the thread pool for us and caring about the data-races that might arise.
 
 What I like the most about \texttt{rayon} is the ease of transforming a sequential iterator into a parallel one. Let's have a look at an example of how this can be done:
 
@@ -33,5 +35,3 @@ Whereas the first line creates a sequential iterator, the second one transforms 
             // Processing goes here...
         });
 \end{minted}
-
-In this case, we are allowed to do so as we are using Apache Arrow under the hood. Thus, we are handling a vector of Chunks that are
