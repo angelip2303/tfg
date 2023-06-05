@@ -4,13 +4,67 @@ The main goal of this thesis is to create a tool capable of creating subsets out
 
 \section{Pregel-rs}
 
+\subsection{Design}
 
+\subsubsection{The Builder pattern}
 
 \section{PSchema-rs}
 
-\subsubsection{Optimizations}
+\subsection{The algorithm in a nutshell}
 
-\paragraph{Parallelization}
+In this section, we will describe the algorithm that we are using to validate the Knowledge graph. The idea is to transform the given set of rules, \texttt{Shape Expression}, into a tree that is going to be traversed by the Pregel algorithm implemented before, namely, the subgraph matching algorithm. This idea takes inspiration from the \textit{Distributed subgraph matching algorithm} presented in \cite{Xu2019}, but some modifications are introduced due to the requirements of our project.
+
+\subsubsection{The \texttt{Shape Expression} tree}
+
+Given a \texttt{Shape Expression} schema $\mathcal{S}$, we assume that it is a collection of labeled \texttt{Shape Expressions} that describe an RDF graph in terms of two main syntactic components\footnote{\url{https://shex.io/shex-primer/}}: \texttt{Node Constraints} and \texttt{Shapes}. Whereas the \texttt{Shape} describes the given RDF node in terms of triple constraints, a \texttt{Node Constraints} annotates the characteristics of the matching RDF nodes. Having that said, the \texttt{Shape Expression} is going to be transformed into a tree where the leaves are the terminal \texttt{Shapes}; that is, \texttt{Shapes} having one triple constraint, and literals. While the parents of those leaves are nesting \texttt{Shapes} and groups. Note that all of those are labeled with some identifier that will be used for creating the subsets. The \texttt{Shape Expression} tree is defined as follows:
+
+\begin{definition}
+    The \texttt{Shape Expression} tree $T$ is defined as follows. Having $\mathcal{S}$ a \texttt{Shape}, two cases are possible:
+
+    \begin{itemize}
+        \itemsep0.5em
+        \item If $\mathcal{S}$ is a \texttt{Triple Constraint}, then $\mathcal{T}$ is a tree with a single node labeled with the identifier of the \texttt{Shape}.
+        \item If $\mathcal{S}$ wraps a group of \texttt{Shapes}, then $\mathcal{T}$ is a tree with a single node labeled with the identifier of the $\mathcal{S}$ shape and with $n$ children,$\{\mathcal{T}_1, \mathcal{T}_2, ..., \mathcal{T}_n\}$, which are the \texttt{Shape Expression} trees of $\{\mathcal{S}_1, \mathcal{S}_2, ..., \mathcal{S}_n\}$, respectively.
+    \end{itemize}
+
+    Note that the \texttt{Shape Expression} tree is going to be built recursively. Hence, the base case is the first item of this definition, and the recursive case is the last one. In this manner, by chaining the recursive case, we can build a tree with an arbitrary depth.
+\end{definition}
+
+\begin{example}
+
+\end{example}
+
+Note that nothing is said about the order of the children of the nodes. This is because the order of the children does not matter for the validation of the Knowledge graph. This is because the \texttt{Shape Expression} is a set of rules, and the order of the rules does not matter. Hence, the order of the children of the nodes does not matter either. What's more, neither is anything said about the \texttt{Triple Constraints} as for building the tree we are only interested in the \texttt{Shape} that wraps them. However, those will be considered for the validation of the Knowledge graph. Thus, we are going to store them in their corresponding node of the tree.
+
+\subsubsection{The \texttt{Shape Expression} tree traversal}
+
+The tree is going to be traversed in a bottom-up fashion. This means that we are going to start by validating the leaves and then we are going to build the internal nodes, that is, the tree is going to be traversed in a \textit{reverse level order} fashion. The reason for this is that we want to validate the leaves first because they are the ones that are going to be used for validating their parents. This is going to be done by an \texttt{iterator} that we will describe later on.
+
+\subsubsection{The subgraph matching algorithm}
+
+The subgraph matching algorithm is going to be used for validating the Knowledge graph. The idea is to traverse the Knowledge graph in a Pregel fashion and check whether the current node matches the \texttt{Shape} that is being validated. This is going to be done by the \texttt{iterator} that we have just described.
+
+\begin{theorem}
+
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+\begin{pseudocode}[The PSchema algorithm as implemented in Rust]
+    \includestandalone{code/algorithms/11-1_pschema}
+\end{pseudocode}
+
+\subsection{Design}
+
+\subsubsection{The \texttt{Iterator}}
+
+\subsubsection{The \texttt{Validate} \texttt{trait}}
+
+\subsection{Optimizations}
+
+\subsubsection{Parallelization}
 
 The first optimization that we are going to consider is parallelization. The idea is to split the DuckDB dump into several chunks and then parse each of the chunks in parallel. This is going to be done by the first component of the tool. For this purpose, we are using \texttt{rayon}\footnote{\url{https://github.com/rayon-rs/rayon}}. This library is a data-parallelism API for Rust that provides several parallel iterators. Hence, we are using one to traverse the database in parallel. This can be done because each of the lines of the chunks of the dump is independent of each other. Thus, we can parse each of the entities in parallel without having to worry about synchronization issues. What's more, the \texttt{rayon} library is going to take care of the load balancing for us. This means that we do not have to worry about splitting the DuckDB dump into chunks of equal size. Lastly, \texttt{rayon} is also in charge of handling the thread pool for us and caring about the data-races that might arise.
 
@@ -21,17 +75,8 @@ What I like the most about \texttt{rayon} is the ease of transforming a sequenti
     let lines = lines.into_par_iter();
 \end{minted}
 
-Whereas the first line creates a sequential iterator, the second one transforms it into a parallel one. This is done by calling the \texttt{into\_par\_iter} method on the iterator. Even if we have just shown a simple example, the actual solution is not far from what we have just shown above. See the code in the repository\footnote{\url{https://github.com/angelip2303/pschema-rs/blob/e51a24c194184db5f71bacb5289b8af55caa5146/src/backends/duckdb.rs\#L64}} for a more detailed example:
+Whereas the first line creates a sequential iterator, the second one transforms it into a parallel one. This is done by calling the \texttt{into\_par\_iter} method on the iterator. Even if we have just shown a simple example, the actual solution is not far from what we have just shown above. See the code in the repository\footnote{\url{https://github.com/angelip2303/pschema-rs/blob/main/src/backends/duckdb.rs\#L64}} for a more detailed example:
 
-\begin{minted}{rust}
-    let batches: Vec<RecordBatch> = match statement.query_arrow([]) {
-        Ok(arrow) => arrow.collect(),
-        Err(_) => return Err(String::from("Error executing the Arrow query")),
-    };
-
-    batches
-        .into_par_iter()
-        .map(|batch| {
-            // Processing goes here...
-        });
-\end{minted}
+\begin{code}[Parallel iterator over the DuckDB dump]
+    \inputminted{rust}{code/listings/11-2_duckdb.rs}
+\end{code}

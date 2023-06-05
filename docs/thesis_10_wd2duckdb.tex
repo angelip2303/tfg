@@ -36,11 +36,11 @@ The first part of the tool is going to be in charge of parsing the Wikidata JSON
     \item \textbf{Statements}: We are going to store the statements of the entities in a separate table so that we can build the graph later on. The idea is to store the ID of the source entity, the ID of the property and the ID of the destination entity. In this manner, we will end up with two main tables: one for storing the entities, or vertices, and another one for storing the statements, or edges. Several other tables are going to be created for storing data relative to the information that comes with the statements, such as qualifiers, references, ranks, etc. However, for the time being, we are going to focus on the main tables.
 \end{itemize}
 
-\subsubsection{Optimizations}
+\subsection{Optimizations}
 
 The Wikidata JSON dump is a huge file. As we have seen in section \ref{section:issue}, the file is around \texttt{1.5 TB} in size. This means that we need to put an extra effort into optimizing the tool. For that, we are going to use a combination of different techniques, such as compression, and fine-tuning the chosen data types.
 
-\paragraph{Compression}
+\subsubsection{Compression}
 
 Dealing with large amounts of data is far from being trivial. For that, we are going to use compression techniques to reduce the size of the data that we are going to store. Those mechanisms can potentially reduce the size of the data by a factor of 10. This is not only beneficial for reducing the storage footprint, but it also helps improve the performance of tools consuming the data as fewer reads from disk or over a network connection are required. Column store formats are known for being highly compressible, and DuckDB is not an exception. This is because data within a column tends to be similar to each other, which is not the case for row-based formats, where each row is composed of heterogeneous data types, leading to lower compression rates.
 
@@ -60,7 +60,7 @@ On the other hand, it will possibly choose \texttt{FSST} for storing \texttt{STR
     \caption[Example of \texttt{FSST} compression]{Example of \texttt{FSST} compression \cite{Raasveldt_2022}}
 \end{figure}
 
-\paragraph{Data types}
+\subsubsection{Data types}
 
 According to what we have seen in the previous paragraph, we are going to try and optimize as much as we can the data types that we are going to use for storing the information. For that, we are going to use the smallest data type that can hold the data that we are interested in. For example, we are going to use \texttt{UINTEGER} for storing the IDs of the entities, as they can be represented as numbers. What's more, we are going to use the unsigned representation as we are not interested in negative numbers. This has two main benefits: first, we are going to be able to store larger numbers. For example, the largest number that can be stored in a \texttt{UINTEGER} is \texttt{4,294,967,295}, whereas the largest number that can be stored in an \texttt{INTEGER} is \texttt{2,147,483,647}. This means that we can store twice as many numbers with the same number of bits. The same reasoning applies to the rest of the data types that we are going to use. Second, we are going to ensure that our data is consistent. For example, we are not going to be able to store negative numbers in a column that is supposed to store positive numbers.
 
@@ -70,7 +70,7 @@ Regarding the encoding of IDs, we had two main possibilities. First, we could ha
 
 The problem is that things are not as simple as they seem at first glance. Wikidata IDs not only are numeric identifiers, but they also annotate the type of the item they support: Entities, Properties, Lexemes, Forms and Senses. Thus, we need a way for encoding and decoding this information. For this, what we have done is diving the address space of the IDs into 5 different ranges, one for each type. The ranges have a length of 1 hundred million, except for Forms and Senses, each of them has half the size, which is more than enough for representing the different Wikidata IDs. See the code below for more information.
 
-\begin{code}[Conversion function from an ID to a numeric representation]
+\begin{code}[The From trait implementation for the ID type]
     \inputminted{rust}{code/listings/10-1_ids.rs}
 \end{code}
 

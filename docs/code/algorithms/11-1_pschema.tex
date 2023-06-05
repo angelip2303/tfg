@@ -1,0 +1,63 @@
+\documentclass{standalone}
+\usepackage[linesnumbered,longend]{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+\input{thesis_97_commands.tex}
+
+\begin{document}
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetAlgoVlined
+    \SetKwInput{KwIn}{Input parameters}
+    \KwIn{\Block{
+            \g:\ Graph[\VertSet, \EdgeSet] \;
+            \lbl:\ \LabelSet \;
+        }}
+    \KwOut{\Block{\vertex: \VertSet}}
+    \blockskip
+
+    \texttt{initialMessage} = \texttt{None} \;
+    \texttt{v} = \texttt{Pregel(initialMessage,sendMsg,aggregateMsg,vProg)} \;
+    \Return{v} \;
+    \blockskip
+
+    \DefInline{sendMsg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet])}{
+        \msgs\ where\ \ForEach{\lbl\ $\in$ \LabelSet}{
+            \msgs.insert(
+            \begin{math}
+                \begin{cases}
+                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShape        \\
+                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShapeRef     \\
+                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShapeLiteral \\
+                    \texttt{None}             & \text{otherwise}                 \\
+                \end{cases}
+            \end{math}
+            )
+        }
+    }
+    \blockskip
+
+    \DefInline{aggregateMsg(\msgs:\ \MsgSet)}{
+        \msgs\ where \;
+        \ \ \ \msg\ =\
+        \begin{math}
+            \begin{cases}
+                \msg      & \text{if}\ \msg \neq \texttt{None} \\
+                \emptyset & \text{otherwise}                   \\
+            \end{cases}
+        \end{math}
+    }
+    \blockskip
+
+    \DefInline{vProg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet], \msgs:\ \MsgSet)}{
+        \msgs\ where \;
+        \ \ \ \msg\ =\
+        \begin{math}
+            \begin{cases}
+                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \WShapeComposite \\
+                \texttt{None}                    & \text{otherwise}                   \\
+            \end{cases}
+        \end{math}
+    }\\
+\end{algorithm}
+\end{document}
