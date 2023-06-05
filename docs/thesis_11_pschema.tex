@@ -8,6 +8,12 @@ The main goal of this thesis is to create a tool capable of creating subsets out
 
 \subsubsection{The Builder pattern}
 
+\subsection{Implementation}
+
+\begin{code}[The Pregel model as implemented in Rust]
+    \inputminted{rust}{code/listings/11-1_pregel.rs}
+\end{code}
+
 \section{PSchema-rs}
 
 \subsection{The algorithm in a nutshell}
@@ -40,18 +46,27 @@ Note that nothing is said about the order of the children of the nodes. This is 
 
 The tree is going to be traversed in a bottom-up fashion. This means that we are going to start by validating the leaves and then we are going to build the internal nodes, that is, the tree is going to be traversed in a \textit{reverse level order} fashion. The reason for this is that we want to validate the leaves first because they are the ones that are going to be used for validating their parents. This is going to be done by an \texttt{iterator} that we will describe later on.
 
-\subsubsection{The subgraph matching algorithm}
+\subsubsection{The sub-graph matching algorithm}
 
-The subgraph matching algorithm is going to be used for validating the Knowledge graph. The idea is to traverse the Knowledge graph in a Pregel fashion and check whether the current node matches the \texttt{Shape} that is being validated. This is going to be done by the \texttt{iterator} that we have just described.
+The sub-graph matching algorithm that is going to be used for validating the Knowledge graph will traverse the Knowledge graph in a Pregel fashion and check whether the current node matches the \texttt{Shape} that is being validated. This is going to be done by the \texttt{iterator} that we have just described. According to this, it can be seen that several procedures should be considered; that is, we must properly define the following characteristics of the Pregel algorithm:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item The maximum number of iterations we want the algorithm to perform. If possible, we should establish an upper limit for the validation algorithm to iterate. As each superstep will possibly be a resource-heavy task, the lower the number of iterations, the better.
+    \item At the beginning of the algorithm's execution an initial message is sent to all the nodes in the graph. After so, the first superstep is triggered.
+    \item Both the message, and the direction they follow are required to be defined. That is, we should establish a mechanism for nodes to know whether their neighbors conform to a certain \texttt{Shape} or not.
+    \item As nodes may have several neighbors, a function for aggregating the set of messages having the node as the destination is also required.
+    \item Having all the messages received and properly aggregated, the node should update its state according to what it has just collected.
+\end{itemize}
 
 \begin{theorem}
     Given a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$ and a Knowledge graph $\mathcal{G}$, let me denote $h$ the height of $\mathcal{T}$, then the Pregel algorithm is going to validate the Knowledge graph $\mathcal{G}$ against $\mathcal{T}$ in $h$ supersteps.
 \end{theorem}
 
 \begin{proof}
-    Let us denote $h$ the height of $\mathcal{T}$. Then, the Pregel algorithm is going to traverse the tree in $h$ supersteps. This is because the tree is going to be traversed in a \textit{reverse level order} fashion. Hence, the leaves are going to be validated in the first superstep, the children of the leaves in the second superstep, and so on. Thus, the tree is going to be traversed in $h$ supersteps.
+    Let us have $h$ the height of $\mathcal{T}$. Then, the Pregel algorithm is going to traverse the tree in $h$ supersteps. This is because the tree is going to be traversed in a \textit{reverse level order} fashion. Hence, the leaves are going to be validated in the first superstep, the children of the leaves in the second superstep, and so on. Thus, the tree is going to be traversed in $h$ supersteps.
 
-    More formally, let us denote $h$ the height of $\mathcal{T}$, and let us denote $d_i$ the depth of the node $i$ in $\mathcal{T}$. Hence, at the superstep $h - d_i + 1$, all the nodes at depth $d_i$ are going to be validated. Note that this is true, as we will traverse the tree in a \textit{reverse level order}. Hence, at the first superstep, the leaves are going to be validated, that is, at superstep 1, all the nodes at depth $h$ are going to be validated. Then, at superstep 2, all the nodes at depth $h - 1$ are going to be validated, and so on. Thus, the tree is going to be traversed in $h$ supersteps. As the root is validated at the last superstep: $h - h + 1 = 1$, the tree is going to be traversed in $h$ supersteps.
+    More formally, let us denote $h$ the height of a \texttt{Shape} \texttt{Expression} $\mathcal{T}$, and let us denote $d_i$ the depth of the node $i$ in $\mathcal{T}$. Hence, at the superstep $h - d_i$, all the nodes at depth $d_i$ are going to be validated. As we traverse the tree in a \textit{reverse level order}, the previous definition holds. Hence, at the first superstep, the leaves are going to be validated, that is, at superstep 1, all the nodes at depth $h - 1$ are going to be validated. Then, at superstep 2, all the nodes at depth $h - 2$ are going to be validated; this is, at superstep $i$ nodes at depth $h - i$ are going to be validated. Thus, the tree is going to be traversed in $h$ supersteps. As the root is validated at the superstep $h - 0 = h$; note that the depth of the root node is 0, then, it can be seen that the tree is going to be traversed in $h$ supersteps.
 \end{proof}
 
 \begin{pseudocode}[The PSchema algorithm as implemented in Rust]
