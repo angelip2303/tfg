@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Initial messages;
+repeat
+:Send messages;
+:Aggregate messages;
+:Vertex Program;
+repeat while (iteration <= max_iterations) is (yes) not (no)
+stop
+
+@enduml

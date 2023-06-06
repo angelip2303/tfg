@@ -1,5 +1,4 @@
 @startuml
-!theme mars
 
 ' hide the spot
 hide circle

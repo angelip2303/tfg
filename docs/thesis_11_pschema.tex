@@ -6,13 +6,15 @@ The main goal of this thesis is to create a tool capable of creating subsets out
 
 \subsection{Design}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.33\textwidth]{diagrams/11-1_pregel.pdf}
+    \caption{The Pregel framework as implemented in \texttt{pregel-rs}}
+\end{figure}
+
 \subsubsection{The Builder pattern}
 
 \subsection{Implementation}
-
-\begin{code}[The Pregel model as implemented in Rust]
-    \inputminted{rust}{code/listings/11-1_pregel.rs}
-\end{code}
 
 \section{PSchema-rs}
 
@@ -53,14 +55,14 @@ The sub-graph matching algorithm that is going to be used for validating the Kno
 \begin{itemize}
     \itemsep0.5em
     \item The maximum number of iterations we want the algorithm to perform. If possible, we should establish an upper limit for the validation algorithm to iterate. As each superstep will possibly be a resource-heavy task, the lower the number of iterations, the better.
-    \item At the beginning of the algorithm's execution an initial message is sent to all the nodes in the graph. After so, the first superstep is triggered.
+    \item At the beginning of the algorithm's execution an initial message is sent to all the nodes in the graph. After that, the first superstep is triggered.
     \item Both the message, and the direction they follow are required to be defined. That is, we should establish a mechanism for nodes to know whether their neighbors conform to a certain \texttt{Shape} or not.
     \item As nodes may have several neighbors, a function for aggregating the set of messages having the node as the destination is also required.
     \item Having all the messages received and properly aggregated, the node should update its state according to what it has just collected.
 \end{itemize}
 
 \begin{theorem}
-    Given a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$ and a Knowledge graph $\mathcal{G}$, let me denote $h$ the height of $\mathcal{T}$, then the Pregel algorithm is going to validate the Knowledge graph $\mathcal{G}$ against $\mathcal{T}$ in $h$ supersteps.
+    Given a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$ and a Knowledge graph $\mathcal{G}$, let me denote $h$ the height of $\mathcal{T}$, then the Pregel algorithm is going to validate the Knowledge graph $\mathcal{G}$ against $\mathcal{T}$ in $h - 1$ supersteps.
 \end{theorem}
 
 \begin{proof}
