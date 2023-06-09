@@ -145,8 +145,9 @@ Shape Expressions (ShEx) were designed as a high-level, domain-specific language
 
 A ShEx schema is used to validate an RDF graph in the ShEx model, which then identifies the portions of the graph that fail to conform to the schema. What's more, schemas allow systems to establish contracts for sharing information; this way, through a common schema, several systems may agree that a certain element should appear in some entity. This pattern behaves similarly to interfaces in the object-oriented paradigm. Lastly, the shapes can be specified using any RDF serialization language, such as JSON-LD or Turtle, or a human-friendly concise syntax called ShExC.
 
+\label{code:shex}
 \begin{code}[ShExC syntax example declaring that nodes of the shape Person must fulfill a schema]
-    \inputminted{shex}{code/listings/6-4_shex.shex}
+    \inputminted{shexc}{code/listings/6-4_shex.shex}
 \end{code}
 
 Following the previous example, another possibility is to visualize ShEx schemas using UML-like class diagrams, we are using a tool called \href{https://rdfshape.weso.es/shexInfo}{RDF Shape} for creating the schema. This way, the representation seen in Figure \ref{fig:RDFshape} arises.
