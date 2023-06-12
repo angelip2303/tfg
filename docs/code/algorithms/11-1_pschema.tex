@@ -26,10 +26,9 @@
             \msgs.insert(
             \begin{math}
                 \begin{cases}
-                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShape        \\
-                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShapeRef     \\
-                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \WShapeLiteral \\
-                    \texttt{None}             & \text{otherwise}                 \\
+                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \TripleConstraint \\
+                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \ShapeReference   \\
+                    \texttt{None}             & \text{otherwise}                    \\
                 \end{cases}
             \end{math}
             )
@@ -54,8 +53,10 @@
         \ \ \ \msg\ =\
         \begin{math}
             \begin{cases}
-                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \WShapeComposite \\
-                \texttt{None}                    & \text{otherwise}                   \\
+                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \ShapeAnd    \\
+                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \ShapeOr     \\
+                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \Cardinality \\
+                \texttt{None}                    & \text{otherwise}               \\
             \end{cases}
         \end{math}
     }\\
