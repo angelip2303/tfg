@@ -49,6 +49,30 @@ Putting this all together, \texttt{Shape} \texttt{Expressions} can be divided in
     Note that the \texttt{Shape} \texttt{Expression} tree is going to be built recursively. Hence, the base case is the first item of this definition, and the recursive cases are the other two. In this manner, by chaining recursive cases, we can build a tree with an arbitrary depth.
 \end{definition}
 
+Following into this definition, we have only implemented part of the \texttt{Shape} \texttt{Expression} model as it is out of the scope of the project; recall, we are mainly interested in the \texttt{Triple} \texttt{Constraint} component. However, it is easy to extend the implementation to support the other components. For more information, see the \texttt{Shape} \texttt{Expression} model implementation in \texttt{pschema-rs}\footnote{\url{https://github.com/angelip2303/pschema-rs/issues/1}}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|l|l|}
+        \hline
+        \rowcolor[HTML]{C0C0C0}
+        \multicolumn{1}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Feature}} & \textbf{Supported}         & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{PSchema Representation}} & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{Tree Category}} \\ \hline
+        Triple and Node Constraints                                    & {\color[HTML]{009901} Yes} & \texttt{Triple Constraint}                                                   & Unary                                                               \\ \hline
+        Grouping                                                       & {\color[HTML]{009901} Yes} & \texttt{ShapeAnd}                                                            & N-ary                                                               \\ \hline
+        Nesting Shapes                                                 & {\color[HTML]{009901} Yes} & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
+        Built-in DataTypes                                             & {\color[HTML]{009901} Yes} & \texttt{ShapeLiteral}                                                        & Unary                                                               \\ \hline
+        Shape Reference                                                & {\color[HTML]{009901} Yes} & \texttt{ShapeReference}                                                      & Unary                                                               \\ \hline
+        Literal facets                                                 & {\color[HTML]{FE0000} No}  & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
+        Node Kind                                                      & {\color[HTML]{FE0000} No}  & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
+        Value set                                                      & {\color[HTML]{FE0000} No}  & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
+        Cardinalities                                                  & {\color[HTML]{009901} Yes} & \texttt{Cardinality}                                                         & N-ary                                                               \\ \hline
+        Logical AND                                                    & {\color[HTML]{009901} Yes} & \texttt{ShapeAnd}                                                            & N-ary                                                               \\ \hline
+        Logical OR                                                     & {\color[HTML]{009901} Yes} & \texttt{ShapeOr}                                                             & N-ary                                                               \\ \hline
+        Regular Expressions                                            & {\color[HTML]{FE0000} No}  & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
+    \end{tabular}
+    \caption{Supported features of the \texttt{Shape} \texttt{Expression} model implementation in \texttt{pschema-rs}}
+\end{table}
+
 \begin{example}
     Following the definition of the \texttt{Shape} \texttt{Expression} tree, we are going to build the tree of the \texttt{Shape} \texttt{Expression} presented in example \ref{code:shex}.
     \vskip 0.5em
@@ -56,7 +80,7 @@ Putting this all together, \texttt{Shape} \texttt{Expressions} can be divided in
         \inputminted{shexc}{code/listings/6-4_shex.shex}
     \end{minipage}
     \begin{minipage}{0.45\textwidth}
-
+        \includestandalone[width=\textwidth]{diagrams/11-2_tree}
     \end{minipage}
 \end{example}
 

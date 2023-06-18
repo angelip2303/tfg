@@ -1,12 +1,12 @@
 \epigraph{\textit{We cannot solve problems with the kind of thinking we employed when we came up with them.}}{-- \textup{Albert Einstein}}
 
-In the following paragraphs, we are covering the motivation, contributions and structure of this document. This means, after reading it, you are building the big picture; a general idea of the motivations to develop this project, the results we are looking for and the shape of it.
+In the following paragraphs, we are covering the motivation, contributions and structure of this document. This means, after reading it, you are building the big picture; a general idea of the motivations to develop this project, the goal we are looking forward to achieving and the shape of the document itself.
 
 \section{Motivation}
 
 A famous mathematical problem from the past is \textbf{The Seven Bridges of Königsberg}. The foundations of \textit{graph theory} were set by Leonhard Euler's negative resolution\footnote{The \textbf{negative resolution} system consists of applying the resolution rule where one of the clauses being a negative literal.} to the problem in 1736.
 
-The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both banks of the \textit{Pregel River} and featured two sizable islands, Kneiphof and Lomse, which were linked to the two mainland sections of the city by seven bridges. Creating a route through the city that would cross each of those bridges just once was the challenge. What Euler proved was that this problem has no solution.
+The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both banks of the \textit{Pregel River} and featured two sizable islands, Kneiphof and Lomse, which were linked to the two mainland sections of the city by seven bridges. The challenge was creating a route through the city that would cross each of those bridges just once. What Euler proved was that this problem has no solution.
 
 \begin{figure}[ht]
     \begin{subfigure}{.3\textwidth}
@@ -24,7 +24,7 @@ The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both b
     \begin{subfigure}{.3\textwidth}
         \centering
         \includegraphics[width=.7\linewidth]{img/4-3_konigsberg_graph.png}
-        \caption{Abstract graph corresponding to the bridges of Königsberg, where edges are de bridges and nodes are the sector of the city}
+        \caption{Abstract graph corresponding to the bridges of Königsberg, where edges are de bridges and nodes are the sectors of the city}
     \end{subfigure}%
     \caption[Creating the equivalent graph of the problem of The Seven Bridges of Königsberg]{Creating the equivalent graph of the problem of The Seven Bridges of Königsberg\footnotemark}
 \end{figure}
@@ -32,11 +32,11 @@ The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both b
 
 \subsection{Eueler's analysis}
 
-In modern terms, Euler observed that the degree; that is, the number of vertices connected to a particular element, of the nodes, determines the possibility of a walk around a graph, traversing each edge precisely once. According to Euler's theory, a connected graph with exactly zero or two nodes with odd degrees is a requirement for the walk around the entire network. This is because we can only cross each bridge once, therefore each traversal of a section of the city requires an even number of edges to be crossed. For each entrance on a mainland, we must enter through one bridge and exit through another. It turns out that this condition is also sufficient. We also know that if there are nodes with odd degrees, then any path will begin at one of them and end at the other. A path like this is currently known as the Eulerian path and is named after the mathematician. There can be no Eulerian path in the graph that corresponds to Königsberg since it contains four nodes of odd degrees.
+In modern terms, Euler observed that the degree of the nodes; that is, the number of vertices connected to a particular element, determines the possibility of a walk around a graph, traversing each edge precisely once. According to Euler's theory, a connected graph with exactly zero or two nodes with odd degrees is a requirement for the walk around the entire network. This is because we can only cross each bridge once, therefore each traversal of a section of the city requires an even number of edges to be crossed. For each entrance on a mainland, we must enter through one bridge and exit through another. It turns out that this condition is also sufficient. We also know that if there are nodes with odd degrees, then any path will begin at one of them and end at the other. A path like this is currently known as the Eulerian path and is named after the mathematician. Summing up, we have proved that there can be no Eulerian path in the graph that corresponds to Königsberg since it contains four nodes of odd degrees.
 
 \section{Project Scope}
 
-A growing number of devices are interconnected, these days. As a result, a ton of data is being automatically stored. This way, processing that data becomes both a more challenging and important task. Simply stated, the amount of data we try to handle outruns our capacity to consume it. Big data, a new area of software development where we quickly handle large volumes of heterogeneous information, offers a remedy for this.
+A growing number of devices are interconnected, these days. As a result, tons of data is being automatically stored. This way, processing that data becomes both a more challenging and important task. Simply stated, the amount of data we try to handle outruns our capacity to consume it. Big data, a new area of software development, where we quickly handle large volumes of heterogeneous information, offers a remedy for this.
 
 Interoperability is a crucial subject we must deal with in big data applications since they not only need to scan huge volumes of inputs as quickly as possible but also because the information comes from a range of sources.
 
@@ -51,9 +51,9 @@ Summing up, this project focuses on the analysis and implementation of a system 
     \label{fig:dumps}
 \end{figure}
 
-These enormous sizes have the effect of making it difficult for users to easily examine and process the content, and they also raise the possibility that these technologies will become victims of their success. This condition is demonstrated in Scholia, an online application that uses Wikidata to describe data about academics and their works. Additionally, the app includes appealing visualizations and comparisons that are based on requests through the Wikidata endpoint. Despite the project offering a wealth of intriguing data, timeouts caused by the massive volumes of data prevent access to the most intricate visualizations.
+These enormous sizes make it difficult for users to easily examine and process the content of them, and they also raise the possibility that these technologies will become victims of their success. This condition is demonstrated in Scholia, an online application that uses Wikidata to describe data about academics and their works. The app includes appealing visualizations and comparisons that are based on requests through the Wikidata endpoint. Despite the project offering a wealth of intriguing data, timeouts caused by the massive volumes of information prevent access to the most intricate visualizations.
 
-Creating subsets of the Knowledge Graphs for specific domains may be one solution to these problems. These subsets serve as snapshots of the data at certain points in time and be used to enhance the performance of the apps that use that data, making it easier to research the contents of Knowledge Graphs.
+Creating subsets of the Knowledge Graphs for specific domains may be one solution to these problems. These subsets serve as snapshots of the data at certain points in time and can be used to enhance the performance of the apps that consume that data, making it easier to research the contents of Knowledge Graphs.
 
 \section{Objectives}
 
@@ -68,12 +68,12 @@ Creating subsets of the Knowledge Graphs for specific domains may be one solutio
 
 \section{Contributions}
 
-Having the main objective and motivations introduced, let me highlight the key contributions of this project. Take note that the document may be split into two parts, one for each of the contributions listed below.
+Having the main objective and motivations introduced, let me highlight the key contributions of this project. Take note that the document is divided into several parts, one per each of the contributions listed below.
 
 \begin{enumerate}
-    \item Research and documentation of the existing method for validating Wikibase Knowledge Graphs provided a schema that the graph's entities should conform to. The suggested solution is implemented in Scala and Apache Spark; yet, at the project's first meeting, several proposals for enhancing the real solution were presented. The original code was rewritten according to the aforementioned research, although the resulting solution was far from ideal. The process of exploring and refactoring the code is enumerated in the chapters to come.\\
-
-    \item Presentation of the original Rust and SQL-based Knowledge Graph subset generation architecture. The goal is to provide a solution that can run on any hardware efficiently. In this regard, programmers that are interested in building code that runs remarkably fast often turn to Rust. Also, compared to NoSQL, relational databases are on the rise. According to some early findings, the JSON dump is 10 times larger in size than the generated single-DB file. More on this will be discussed in the following sections.
+    \itemsep0.5em
+    \item Research and documentation of the existing method for validating Wikibase Knowledge Graphs provided a schema that the graph's entities should conform to. The suggested solution is implemented in Scala and Apache Spark; yet, at the project's first meeting, several proposals for enhancing the real solution were presented. The original code was rewritten according to the aforementioned research, although the resulting solution was far from ideal. The process of exploring and refactoring the code is enumerated in the chapters to come.
+    \item Presentation of a novel Rust and SQL-based Knowledge Graph subset generation architecture. The goal is to provide a solution that can run on any hardware efficiently. We are willing to explore the capabilities of Rust for enabling some performance gains regarding single-node computation. What's more, when comparing them to NoSQL, relational databases are on the rise. According to some early findings, the JSON dump is 10 times larger in size than the generated single database file. More on this will be discussed in the following chapters.
 \end{enumerate}
 
 \section{Structure of the document}
@@ -81,11 +81,14 @@ Having the main objective and motivations introduced, let me highlight the key c
 The shape of this document is as follows:
 
 \begin{itemize}
+    \itemsep0.25em
     \item[\textbf{Chapter ~\ref{chapter:related}.}] General description of the existing technologies related to knowledge graph validation. As well as the advantages and disadvantages of choosing some tools over others for implementing this project.
     \item[\textbf{Chapter ~\ref{chapter:theory}.}] Provides a theoretical background needed for a better understanding of the concepts explained in the following chapters.
-    \item[\textbf{Chapter ~\ref{chapter:first}.}] Description of the First Pregel solution implemented by Labra, serving as the project's baseline.
-    \item[\textbf{Chapter ~\ref{chapter:second}.}] Description of the Second Pregel solution aiming to improve some of the issues that the initial technologies implied.
-    \item[\textbf{Chapter ~\ref{chapter:third}.}] Description of the Third Pregel solution. It can be seen as a rework of the whole project.
+    \item[\textbf{Chapter ~\ref{chapter:existing}.}] Description of the initial solution implemented by Labra, serving as the project's baseline.
+    \item[\textbf{Chapter ~\ref{chapter:refactoring}.}] Description of the changes introduced to the original solution, as well as the reasons behind them.
+    \item[\textbf{Chapter ~\ref{chapter:analysis}.}] Analysis of the new perspective introduced by the final solution. As well as the advantages and disadvantages of choosing some tools over others for implementing this project.
+    \item[\textbf{Chapter ~\ref{chapter:wd2duckdb}.}] Description of the process followed to create the new solution based on Rust and DuckDB.
+    \item[\textbf{Chapter ~\ref{chapter:pschema}.}] Explanation of the process followed to create the algorithm that validates the knowledge graphs.
     \item[\textbf{Chapter ~\ref{chapter:experiment}.}] Explanation of the process followed to analyze the concrete implementation of the algorithm that we used to validate the knowledge graphs.
     \item[\textbf{Chapter ~\ref{chapter:results}.}] Analysis of the results obtained from the previously described experiment.
     \item[\textbf{Chapter ~\ref{chapter:planning}.}] Summary of the process followed to create this final degree project, as well as some considerations regarding management and organization of resources.

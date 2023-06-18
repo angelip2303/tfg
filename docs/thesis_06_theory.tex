@@ -233,6 +233,13 @@ Inspired by the map and reduce functions, a MapReduce~\cite{wiki:MapReduce} prog
 
 During the 1980s, Leslie Valiant worked on ideas for a distributed programming model for parallel computing. In this framework, the execution is divided into a series of \textit{supersteps}. For each superstep, a set of processes running the same piece of code are executed concurrently. As a process completes its execution, a message is generated and sent to other processes. The superstep concludes when all of the procedures are completed. Next, a \textit{barrier synchronization} ensures that all messages have been transferred. At the beginning of the next superstep, all messages are delivered and the aforementioned procedure is repeated. This process will continue until all nodes vote to halt; this is, no more messages are sent to neighboring nodes. It is worth mentioning that processes are not permitted to exchange messages between them when executing a superstep, just at the end. This requirement assures that no deadlocks occur at runtime. Apache Hama\footnote{\url{https://hama.apache.org/}} is a framework for Big data analytics using the Bulk Synchronous Parallel model.
 
+\begin{figure}[ht]
+    \centering
+    \includestandalone{diagrams/6-6_bsp}
+    \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
+    \label{fig:pregel}
+\end{figure}
+
 \subsection{Pregel model}
 \label{section:pregel}
 
@@ -242,7 +249,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/6-6_pregelTrace}
+    \includestandalone{diagrams/6-7_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -251,7 +258,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/6-7_stateDiagram}
+    \includestandalone{diagrams/6-8_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -262,7 +269,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.66\textwidth]{diagrams/6-8_pregelArchitecture}
+    \includestandalone[width=0.66\textwidth]{diagrams/6-9_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}

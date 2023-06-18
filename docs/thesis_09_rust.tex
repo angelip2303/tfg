@@ -106,3 +106,18 @@ For us to accomplish what we have just described, we will need to use a tool tha
 Having our data in a relational database is not enough. We have to implement a system for us to query the knowledge graph in a Pregel fashion. This system will be called \texttt{pregel-rs}. What's more, an algorithm for the creation of the subsets is also needed. This algorithm will be called \texttt{pschema-rs}. See chapter \ref{chapter:pschema} for more details.
 
 \section{Architectural decision record}
+
+This is the last architectural decision record of this thesis. It is a summary of the architectural decisions that we have made so far. It is important to note that this is not a complete list of all the architectural decisions that we have made. Instead, it is a summary of the most important ones.
+
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Decision} & \textbf{Reason}                                                                                                                                           \\ \hline
+        Columnar-based    & Columnar-based databases are more efficient than row-based databases when it comes to analytical queries.                                                 \\ \hline
+        DuckDB            & DuckDB is a C++-based in-process SQL OLAP database management system that is intended to be integrated into other applications.                           \\ \hline
+        Pola-rs           & Pola-rs is a fast and memory-efficient DataFrame library for Rust. It is built on Apache Arrow, a cross-language development platform for in-memory data. \\ \hline
+    \end{tabular}
+    \caption{Architectural decision record}
+    \label{table:adr}
+\end{table}
