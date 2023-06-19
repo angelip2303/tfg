@@ -1,0 +1,49 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{forest}
+\usetikzlibrary{arrows.meta, calc}
+\begin{document}
+\begin{forest}
+    for tree={
+    circle,
+    draw,
+    fill=white,
+    align=center,
+    edge={arrows=-latex}
+    }
+    [$a$
+    [$b$
+            [$d$
+                    [$h$]
+                        [,phantom]
+                ]
+                [$e$
+                    [$i$]
+                        [$j$]
+                ]
+        ]
+        [$c$
+            [$f$
+                    [,phantom]
+                        [$k$]
+                ]
+                [$g$]
+        ]
+    ]
+    \path [
+        ->,
+        dashed,
+        blue,
+        thick
+    ]
+    (!212) edge (!11)
+    (!122) edge (!212)
+    (!121) edge (!122)
+    (!111) edge (!121)
+    (!21) edge (!22)
+    (!12) edge (!21)
+    (!11) edge (!12)
+    (!22.130) edge (!1)
+    (!1) edge (!2)
+    (!2.north) edge (!r.east);
+\end{forest}
+\end{document}
