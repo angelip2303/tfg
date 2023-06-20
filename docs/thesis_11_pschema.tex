@@ -4,17 +4,55 @@ The main goal of this thesis is to create a tool capable of creating subsets out
 
 \section{Pregel-rs}
 
+The \texttt{pregel-rs} library is a Rust fork of the original Pregel framework that we have already discussed in chapter \ref{chapter:theory}. The library is available on GitHub\footnote{\url{https://github.com/angelip2303/pregel-rs}}.
+
 \subsection{Design}
+
+So far, we have discussed the Pregel framework. However, to implement it, we need to make certain design decisions. This section will outline the compromises we have made to successfully implement the Pregel framework using Rust.
+
+First and foremost, it should be acknowledged that when transitioning from the Scala-based solution to the Rust-based one, we were fully aware that building the solution on top of existing projects would not be feasible. This stems from the fact that Rust, being a relatively new language, is not as mature as Java. Consequently, certain features would need to be developed from scratch. Thus, we initiated the development of the Pregel library, which will be utilized to implement the subgraph matching algorithm.
+
+It is important to note that we have deliberately separated the framework from the algorithm implementation addressed in this thesis. This decision was made to maximize the framework's flexibility. By adopting this approach, not only can we utilize the framework in other projects, but we can also extend its capabilities to support additional features. To put an example, we have successfully incorporated the \textit{PageRank} algorithm into the framework as an additional feature to demonstrate its versatility. The subsequent section will provide a detailed description of this particular feature.
+
+\subsubsection{The \texttt{pregel-rs} library}
+
+Recall that Rust is heavily oriented to be executed in single machines. This means that we won't use the Pregel framework to process graphs in a distributed manner. Instead, we will use it to process graphs in a single machine. This is a reasonable approach since the main goal of this thesis is to create a tool capable of creating subsets out of a Knowledge graph. Thus, we will use the Pregel framework to implement the subgraph matching algorithm. With that being said, we will now describe the design of the \texttt{pregel-rs} library.
+
+Firstly, we are describing the series of steps that the Pregel framework follows to process a graph. This sequence is depicted in figure \ref{fig:sequence}. The execution starts by sending the initial messages to the vertices at iteration 0. Then, the first -- actual -- superstep begins. This loop will last until the current iteration is greater than the threshold set at the creation of the Pregel instance. In each iteration, the vertices will send messages to their neighbors, provided the given direction, and subsequently, they receive messages sent by their neighbors. Moving forward, an aggregation function is applied, and the vertices are updated accordingly. Finally, the iteration counter is incremented, and the next iteration starts.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.33\textwidth]{diagrams/11-1_pregel.pdf}
+    \label{fig:sequence}
     \caption{The Pregel framework as implemented in \texttt{pregel-rs}}
 \end{figure}
 
+As you can observe, this process is far from complex. We can agree that the Pregel framework is a simple abstraction for graph processing. However, this simplicity is what makes the Pregel so powerful. By abstracting the underlying model, we can focus on the problem at hand, rather than the implementation details of the framework. By doing so, we can focus on the implementation of the subgraph matching algorithm, rather than the implementation details of the Pregel model itself.
+
 \subsubsection{The Builder pattern}
 
+In Rust, there is no direct support for constructors. Instead, the convention is to use an associated function called \texttt{new} that returns an instance of the \texttt{struct}. However, this approach limits us to creating only one representation of the object since multiple functions cannot have the same identifier. To overcome this limitation and enable the creation of different representations of the same object, we can utilize the \textit{Builder pattern}.
+
+The Builder pattern is a creational design pattern that allows us to decouple the construction of a complex object from its functionality. By separating the construction process, we gain the flexibility to create diverse representations of the object. This pattern effectively resolves the issue of dealing with constructors that have an excessive number of parameters and also addresses Rust's limitation of having multiple constructors with the same name. Lastly, it also allows us to \textit{create} objects in a -- somewhat -- functional manner, which is a common practice in Rust.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.66\textwidth]{diagrams/11-2_builder.png}
+    \caption[The Builder pattern as implemented in \texttt{pregel-rs}]{The Builder pattern as implemented in \texttt{pregel-rs}\footnotemark}
+\end{figure}
+\footnotetext{\url{https://refactoring.guru/design-patterns/builder}}
+
 \subsection{Implementation}
+
+We will now discuss the implementation details of the Pregel library that we have just described. Recall that we are willing to create a tool that is implemented on top of a DataFrame API, as we want to leverage the benefits of this abstraction that we have already discussed in chapter \ref{chapter:refactoring}. Thus, we will now describe the implementation details of the Pregel library.
+
+\subsubsection{The \texttt{GraphFrame} struct}
+
+The first step is to create a representation of the graph that we are going to process. To do so, we have created the \texttt{GraphFrame} struct. This struct is a wrapper around the \texttt{pola-rs} \texttt{DataFrame} library, which is the Rust equivalent to Apache Spark, as we have seen in chapter \ref{chapter:analysis}. This struct is responsible for storing the graph's vertices and edges, as well as extending its basic functionality to support some useful operations. For instance, we have implemented the \texttt{from\_edges} function, which is responsible for creating a \texttt{GraphFrame} instance from a set of edges. This function is useful since we can create the \texttt{GraphFrame} from the edges that we have extracted from the Knowledge graph in chapter \ref{chapter:wd2duckdb}.
+
+\begin{code}[GraphFrame implementation in \texttt{pregel-rs}]
+    \inputminted{rust}{code/listings/11-1_graph.rs}
+\end{code}
 
 \section{PSchema-rs}
 
@@ -80,7 +118,7 @@ Following into this definition, we have only implemented part of the \texttt{Sha
         \inputminted{shexc}{code/listings/6-4_shex.shex}
     \end{minipage}
     \begin{minipage}{0.45\textwidth}
-        \includestandalone[width=\textwidth]{diagrams/11-2_tree}
+        \includestandalone[width=\textwidth]{diagrams/11-3_tree}
     \end{minipage}
 \end{example}
 
@@ -93,9 +131,9 @@ The tree is going to be traversed in a bottom-up fashion. This means that we are
 For us to better understand the traversal of the tree, we are going to use the following example:
 
 \begin{example}
-    \begin{figure}
+    \begin{figure}[ht]
         \centering
-        \includestandalone[width=0.5\textwidth]{diagrams/11-3_traversal}
+        \includestandalone[width=0.5\textwidth]{diagrams/11-4_traversal}
         \caption{Example of a reverse level order traversal of a tree}
         \label{fig:tree_traversal}
     \end{figure}
