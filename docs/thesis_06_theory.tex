@@ -16,9 +16,11 @@ With that in mind, it can be argued that there's no need for a new type of \text
 \begin{figure}[ht]
     \centering
     \includestandalone[width=0.8\textwidth]{diagrams/6-1_propertyGraph}
-    \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
-    \label{fig:RDF}
+    \caption{Example of a property graph}
+    \label{fig:propertyGraph}
 \end{figure}
+
+Note that figure \ref{fig:propertyGraph} is a simplified version of a property graph. This is because what we have tried here is to extend the example in figure \ref{fig:RDF} transforming the RDF graph into a property one.
 
 \label{section:wikibase_graphs}
 \subsection{Wikibase graphs}
@@ -104,12 +106,7 @@ As a human-readable format is useful for data communication, the REST API archit
 The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is to provide support to semantic web technologies. See section \ref{section:RDF} for further details.
 
 \begin{dumps}
-    \inputminted[
-        highlightlines={3,6,7,9},
-        highlightcolor=blueUniovi!15
-    ]
-    {turtle}
-    {code/listings/6-2_serialization.rdf}
+    \inputminted{turtle}{code/listings/6-2_serialization.rdf}
 \end{dumps}
 
 \section{Knowledge graph validation}
