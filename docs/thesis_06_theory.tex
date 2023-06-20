@@ -5,13 +5,43 @@ In the following chapter, a description of the theoretical concepts needed for a
 \section{Knowledge graphs}
 \label{section:knowledgeGraph}
 
-A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform to the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. These graphs can be modeled using different technologies; however, we will focus on the most representative example of attributed ones: \textit{Wikibase graphs}.
+A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform to the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. Let me write a more formal definition of a knowledge graph:
+
+\begin{definition}[Knowledge graph]
+    A knowledge graph is a graph-structured data model that captures knowledge in a specific domain, having nodes that represent entities and edges that represent relationships between their entities~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
+\end{definition}
+
+Note that the definition above is as general as it gets. In this manner, a knowledge graph can be represented using different technologies. In the following sections, we will focus on the most representative examples of knowledge graphs: \textit{RDF graphs} and \textit{property graphs}. We will also discuss the \textit{Wikibase} data model, as it is the one used in the experiment to be conducted.
+
+\subsection{RDF (Resource Description Framework) graphs}
+\label{section:RDF}
+
+Let me first introduce \textit{Resource Description Framework} (RDF) as it is the most simple and widely used technology for representing a knowledge graph model. RDF is a data interchange W3C standard for the web. It has been used as a method for the description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, providing a variety of syntax notations and formats, with \texttt{Turtle} being the most adopted one. One of the main features of RDF is that it allows the combination of different data sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
+
+RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. This representation can be seen in Figure \ref{fig:RDF}.
+
+\begin{figure}[ht]
+    \centering
+    \includestandalone[width=0.8\textwidth]{diagrams/6-4_RDF}
+    \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
+    \label{fig:RDF}
+\end{figure}
+
+We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object}, followed by a full stop, meaning the termination of the statement. All that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
+
+\begin{example}[RDF knowledge graph using N-Triples notation]
+    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
+\end{example}
+
+\begin{dumps}
+    \inputminted{turtle}{code/listings/6-3_serialization.nt}
+\end{dumps}
 
 \subsection{Property graphs}
 
 A property graph is a type of graph model where vertices and edges, namely nodes and relationships, are annotated with labels and properties. In this manner, property graphs excel at depicting connections between data and exposing data dependencies. When compared to other \textit{datastores}, such as relational databases, property graphs focus on how the recorded things relate, although descriptions of those items might be supplied via properties and attributes. In this sense, provided a real-world domain, expressing the relationships among data is just as crucial as the data itself.
 
-With that in mind, it can be argued that there's no need for a new type of \textit{datastore} as relational databases are capable of storing those relationships through constraints. However expensive operations such as \texttt{JOIN} are required to navigate across those links. It turns out that relational databases handle relationships between data in a not-so-sophisticated manner. To tackle this issue, graph databases were created. In this model, relationships are stored natively alongside the nodes in a flexible format. Several commercial graph databases like Neo4j\footnote{\url{https://neo4j.com/}}, JanusGraph\footnote{\url{https://janusgraph.org/}} or Sparksee\footnote{\url{https://www.sparsity-technologies.com/\#sparksee}}.
+With that in mind, it can be argued that there's no need for a new type of \textit{datastore} as relational databases are capable of storing those relationships through constraints. However expensive operations such as \texttt{JOIN} are required to navigate across those links. It turns out that relational databases handle relationships between data in a not-so-sophisticated manner. To tackle this issue, graph databases were created. In this model, relationships are stored natively alongside the nodes in a flexible format. Several commercial graph databases like Neo4j\footnote{\url{https://neo4j.com/}}, JanusGraph\footnote{\url{https://janusgraph.org/}} or Sparksee\footnote{\url{https://www.sparsity-technologies.com/\#sparksee}} were developed.
 
 \begin{figure}[ht]
     \centering
@@ -25,7 +55,7 @@ Note that figure \ref{fig:propertyGraph} is a simplified version of a property g
 \label{section:wikibase_graphs}
 \subsection{Wikibase graphs}
 
-Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one, that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
+Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of the biggest human knowledge bases, with remarkable organizations donating their data to it; as an example, Google migrated \textit{Freebase} -- its previous knowledge graph -- to Wikidata in 2017~\cite{10.1145/2872427.2874809}. As of October 9, 2022, Wikidata currently contains roughly 100 million items\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Statistics}}. Internally, Wikidata's content is stored in a SQL database (MariaDB); however, this system is not ideal for querying or data analysis. With that in mind, and pursuing the integration of Wikibase within the semantic web ecosystem, the Wikimedia Foundation adopted BlazeGraph: an open-source triple store and graph database\footnote{\url{https://en.wikipedia.org/wiki/Blazegraph}}. This way, two data models coexist in Wikibase: a document-centric model based on MediaWiki, and an RDF-based one that can be used to perform SPARQL queries through the Query Service~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
 \begin{figure}[ht]
     \centering
@@ -38,7 +68,28 @@ Informally speaking, the Wikibase data model is composed of \textit{entities} an
 
 For values to be associated with properties, they must belong to some specific data type\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include URLs, time, quantities, and mathematical expressions; to name a few. Notice how more complex data types are also supported; those include \textit{properties} and \textit{items}, this way, relationships among entities are allowed.
 
-Lastly, a statement is a piece of data about an item and is recorded on the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through a statement, we add information to a certain item using some property and its value.
+Lastly, a statement is a piece of data about an item and is recorded on the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through a statement, we add information to a certain item using some property and its value. This can be seen in figure \ref{fig:wikibaseGraph}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/diagrams/6-11_statement.png}
+    \caption[Formal definition of a statement in Wikibase]{Formal definition of a statement in Wikibase\footnotemark}
+    \label{fig:wikibaseGraph}
+\end{figure}
+\footnotetext{\url{https://www.mediawiki.org/wiki/Wikibase/DataModel\#Statements}}
+
+The different components that appear in figure \ref{fig:wikibaseGraph} are as follows:
+
+\begin{itemize}
+    \itemsep0.25em
+    \item \textbf{Subject}: the item to which the statement refers.
+    \item \textbf{mainSnak}: the main \textit{property-value} pair for a certain entity.
+    \item \textbf{Rank}: to tell if a certain \texttt{Statement} is \texttt{deprecated} or not.
+    \item \textbf{referenceRecords}: a list of references that support the statement.
+    \item \textbf{qualifierSnaks}: a list of qualifiers that modify the meaning of the statement.
+\end{itemize}
+
+This may seem to be a complex data model, but it is not. It is quite simple indeed. To illustrate this, we will use an example.
 
 \begin{example}[Adding information to an entity in Wikidata\footnote{\url{https://www.wikidata.org/wiki/Help:Statements}}]
     \label{example:wikibaseGraph}
@@ -56,22 +107,26 @@ Lastly, a statement is a piece of data about an item and is recorded on the page
 \subsubsection{Opaque URIs}
 \label{section:opaqueURIs}
 
-As noted above, the main purpose of Wikidata is to store data about things that are described by pages in Wikipedia (in any language)\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/DataModel}}. This means, \textit{things} should be represented in such a way that they don't depend on the natural language used; that is, language independence is required. In Wikidata, this is achieved through a linked data pattern called \textit{opaque URIs}. In general, a URI is defined as a unique sequence of characters that identifies the resources of the system\footnote{\url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}}. Designing good URIs is the first step in linked data development.
+Recall that the main purpose of Wikidata is to store data about things that are described by pages in Wikipedia (in any language)\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/DataModel}}. This means, \textit{things} should be represented in such a way that they don't depend on the natural language used; that is, language independence is required. In Wikidata, this is achieved through a linked data pattern called \textit{opaque URIs}. In general, a URI is defined as a unique sequence of characters that identifies the resources of the system\footnote{\url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}}. Designing good URIs is the first step in linked data development.
 
-The characters that appear in a URI tend to be related to the concept they represent, improving human readability. As an example, \texttt{https://example.com/España} could -- potentially -- be an identifier for the Spanish country. However, for those non-Spanish speakers, that identifier is meaningless. What's more, the use of non-ASCII characters may lead to problems in an internationalized system. Opposed to \textit{descriptive URIs}, \textit{opaque} ones are not intended to represent terms in a natural language~\cite{LabraGayo2015MultilingualLD}. An example of that is \url{https://www.wikidata.org/wiki/Q11679}, where item \texttt{Q11679} represents \textit{The Hunger Games} in Wikidata. However -- in some situations -- it is helpful for users to interact with human-readable names. In Wikidata, this is solved through \textit{labels}, which are language-dependent. Following the previous example, the label tagged to the entity \texttt{Q11679} is the actual title of the book: \textit{The Hunger Games}. Translations for several languages can also be provided. Notice Table~\ref{tab:language} for an example of possible \textit{labels} for some \textit{opaque URIs}.
+The characters that appear in a URI tend to be related to the concept they represent, improving human readability. As an example, \texttt{https://example.com/España} could -- potentially -- be an identifier for the Spanish country. However, for those non-Spanish speakers, that identifier is meaningless. What's more, the use of non-ASCII characters may lead to problems in an internationalized system. Opposed to \textit{descriptive URIs}, \textit{opaque} ones are not intended to represent terms in a natural language~\cite{LabraGayo2015MultilingualLD}. An example of that is \url{https://www.wikidata.org/wiki/Q11679}, where item \texttt{Q11679} represents \textit{The Hunger Games} in Wikidata. However -- in some situations -- it is helpful for users to interact with human-readable names. In Wikidata, this is solved through \textit{labels}, which are language-dependent. Following the previous example, the label tagged to the entity \texttt{Q11679} is the actual title of the book: \textit{The Hunger Games}. Translations for several languages can also be provided. Notice table~\ref{tab:language} for an example of possible \textit{labels} for some \textit{opaque URIs}.
 
 What we have seen so far is an overview of the Wikibase \textit{data model}; including: \textit{statements}, \textit{properties}, \textit{values} and the appropriate mechanism for identifying them (in a multilingual approach). The next step is to formally define what a Wikibase graph is.
 
-\begin{definition}[Wikibase graph~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
-    Given a mutually disjoint set of items \ItemSet{}, a set of properties \PropSet{} and a set of data values \DataValueSet{}, a \emph{Wikibase graph} is a tuple $\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$ such that $\StmtSet\subseteq\EntitySet\times\PropSet\times\ValueSet\times\FinSet{\PropSet\times\ValueSet}$ where $\EntitySet=\ItemSet\cup\PropSet$ is the set of entities which can be subjects of a statement and $\ValueSet=\EntitySet\cup\DataValueSet$ is the set of possible values of a property.
+\begin{definition}[Wikibase graphs]
+    Given a mutually disjoint set of items $\mathcal{Q}$, a mutually disjoint set of properties $\mathcal{P}$, and a mutually disjoint set of values $\mathcal{V}$, a Wikibase graph is a quadruple $(\mathcal{Q}, \mathcal{P}, \mathcal{V}, \rho)$. Where $\rho \subseteq \mathcal{Q} \times \mathcal{P} \times \mathcal{V}$ is a set of statements.
 \end{definition}
 
-For a better understanding of this formal definition, let me explain it step-by-step. Any \textit{item} in $\mathcal{Q}$ can have information added to it using $\mathcal{Q}$ \textit{entities}, $\mathcal{P}$ \textit{properties}, or $\mathcal{D}$ \textit{data values}. This means we can add a statement about a particular entity in $mathcal{Q}$ using the aforementioned set of values. For us to provide extra information to a certain relationship, we may include it in the set $\mathcal{V}$. As an example, to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937} {Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarification, let us model the Wikibase graph of a certain scenario.
+For a better understanding of this formal definition, let me explain it step-by-step. Any \textit{item} in $\mathcal{Q}$ can have information added to it using $\mathcal{Q}$ \textit{entities}, $\mathcal{P}$ \textit{properties}, or $\mathcal{V}$ \textit{data values}. Meaning that we can add a statement about a particular entity in $\mathcal{Q}$ using the aforementioned set of values. For us to provide extra information to a certain relationship, we may include it in the fourth entry of the quadruples in the $\rho$ set, see example \ref{example:knowledgeGraph} for more details. As an example, to establish the \href{https://www.wikidata.org/wiki/Property:P585}{point in time} at which \href{https://www.wikidata.org/wiki/Q937} {Albert Einstein} received the \href{https://www.wikidata.org/wiki/Q38104}{Nobel Prize in Physics}, we may annotate the \href{https://www.wikidata.org/wiki/Property:P166}{award received} property with the value 1921\footnote{\url{https://www.nobelprize.org/prizes/physics/1921/summary/}}. Those are called \textit{qualifiers}. For further clarification, let us model the Wikibase graph of a certain scenario.
 
-\begin{example}
+\vspace*{-0.5em}
+
+\begin{example}[Wikibase Knowledge Graph]
     \label{example:knowledgeGraph}
     We are willing to qualify that Alan Turing (23 June 1912 -- 7 June 1954) was employed by the government of the United Kingdom in the course of WWII. During that time he invented the computer for deciphering Enigma-machine-encrypted secret messages\footnote{\url{https://en.wikipedia.org/wiki/Bombe}}. Additional information about relevant places where he lived is also annotated.
 \end{example}
+
+\vspace*{-1.25em}
 
 \input{figures/tables/6-2_wikibaseGraph}
 
@@ -84,7 +139,7 @@ For a better understanding of this formal definition, let me explain it step-by-
 \subsubsection{Wikibase data serialization}
 \label{section:wikibase:serialization}
 
-The Wikibase data model supports two export formats: JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles. A fragment of both formats is shown below.
+The Wikibase data model supports two export formats, namely, JSON and RDF. Being the former the one employed by the JSON dumps and the latter follows semantic web and linked data principles. A fragment of both formats is shown below. According to the following example:
 
 \begin{example}[Seralization of a node using JSON and RDF]
     \href{https://www.wikidata.org/wiki/Q7251}{Alan Turing (Q7251)} was \href{https://www.wikidata.org/wiki/Property:P108}{employed (P108)} by the \href{https://www.wikidata.org/wiki/Q220798}{Government Communications Headquarters (Q220798)} of the United Kingdom, during the World War II (1938-1945).
@@ -98,12 +153,12 @@ The JSON serialization follows the Wikibase data model~\cite{https://doi.org/10.
     \inputminted{json}{code/listings/6-1_serialization.json}
 \end{dumps}
 
-As a human-readable format is useful for data communication, the REST API architecture is growing in popularity. Consequently, JSON format has swiftly gained acceptance since it's perfectly suited for speedy data sharing. Nevertheless, since so much boilerplate code is produced, in the Big Data world, JSON-based apps may suffer from performance issues. Take note of how information is kept in a JSON file: as key-value pairs for each item. As a result, a JSON document that stores objects of the same type will have the same number of columns as the number of items in the document. Hence, one of the major flaws of this serialization format is the lack of memory optimization, which means JSON is not even remotely compact. Putting it all together, JSON outperforms binary formats in situations where a person must go through the file; yet, for our purposes, columnar-based formats work just better than row-oriented ones.
+As a human-readable format is useful for data communication, the REST API architecture is growing in popularity. Consequently, JSON format has swiftly gained acceptance since it's perfectly suited for speedy data sharing. Nevertheless, since so much boilerplate code is produced, in the Big data world, JSON-based apps may suffer from performance issues. Take note of how information is kept in a JSON file: as key-value pairs for each item. As a result, a JSON document that stores objects of the same type will have the same number of columns as the number of items in the document. Hence, one of the major flaws of this serialization format is the lack of memory optimization, which means JSON is not even remotely compact. Putting it all together, JSON outperforms binary formats in situations where a person must go through the file; yet, for our purposes, columnar-based formats work just better than row-oriented ones.
 
 \paragraph[Wikibase RDF serialization]{Wikibase RDF serialization\footnotemark}
 \footnotetext{\url{https://www.wikidata.org/wiki/Special:EntityData/Q7251.ttl}}
 
-The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this formatting is to provide support to semantic web technologies. See section \ref{section:RDF} for further details.
+The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format}} is mainly used by the Wikidata's Query Service described in Figure \ref{fig:architecture:wikibase}. The main goal of this format is to provide support for semantic web technologies. See section \ref{section:RDF} for further details.
 
 \begin{dumps}
     \inputminted{turtle}{code/listings/6-2_serialization.rdf}
@@ -112,30 +167,6 @@ The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/W
 \section{Knowledge graph validation}
 
 As a brief introduction to this section, let's first describe what validation -- in the context of Knowledge graphs -- is. Wikibase is a collection of data that anyone can edit. This can lead to some concerns regarding the integrity of what is posted on Wikibase, as there is no single point of truth for any given piece of information. According to this, for some piece of data to be considered valid, its description needs to be both syntactically correct and adhere to some type-definition. As we have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata include RDF as one of those. Putting it all together, we require a mechanism for ensuring the \textit{validity} of the RDF documents stored in Wikibase.
-
-\subsection{RDF (Resource Description Framework)}
-\label{section:RDF}
-
-Resource Description Framework (RDF) is a data interchange W3C standard for the web. It has been used as a method for the description and exchange of graph data\footnote{\url{https://en.wikipedia.org/wiki/Resource_Description_Framework}}, providing a variety of syntax notations and formats, with Turtle being the most used one. One of the main features of RDF is that it allows the combination of different data sources, even if the schemas differ from one another. What's more, it supports the evolution of schemas without requiring the data consumers to adapt to those changes.
-
-\begin{figure}[ht]
-    \centering
-    \includestandalone[width=0.8\textwidth]{diagrams/6-4_RDF}
-    \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
-    \label{fig:RDF}
-\end{figure}
-
-RDF is a directed graph composed of triple statements; called \textit{semantic triples}, in the way of \textit{subject-predicate-object}. Where each element is identified by a URI. The \textit{subject} denotes the resource you want to make statements about, the \textit{predicate} denotes attributes of the resource and models relationships among the \textit{subject} and the \textit{object}, and the \textit{object} is the value of the attribute. As an example, we can represent that \textit{the genre of The Hunger Games is dystopian fiction} in RDF as the triple: a \textbf{subject} denoting \textit{The Hunger Games}, a \textbf{predicate} denoting \textit{is of genre}, and an \textbf{object} denoting \textit{dystopian fiction}. This representation can be seen in Figure \ref{fig:RDF}.
-
-We have mentioned that the most common syntax notation for RDF is Turtle; however, one of the simplest is N-Triples. Each line of a \texttt{.nt} document is a single triple \textit{subject-predicate-object} that together form a directed knowledge graph. Let's see an example of an RDF graph represented using N-Triples notation.
-
-\begin{example}[RDF knowledge graph using N-Triples notation]
-    \href{https://www.wikidata.org/entity/Q7251}{Alan Turing (Q7251)} \href{https://www.wikidata.org/entity/P19}{was born (P19)} in \href{https://www.wikidata.org/entity/Q20895942}{Warrington Lodge (Q20895942)} and \href{https://www.wikidataWShEx.org/entity/P108}{was employed (P108)} by the \href{https://www.wikidata.org/entity/Q220798}{Government of the United Kingdom (Q220798)} where he \href{https://www.wikidata.org/entity/P61}{discovered (P61)} the Enigma-deciphering machine \href{https://www.wikidata.org/entity/Q480476}{bombe (Q480476)}.
-\end{example}
-
-\begin{dumps}
-    \inputminted{turtle}{code/listings/6-3_serialization.nt}
-\end{dumps}
 
 \subsection{ShEx (Shape Expressions)}
 
@@ -163,7 +194,7 @@ Following the previous example, another possibility is to visualize ShEx schemas
     \label{fig:RDFshape}
 \end{figure}
 
-The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. Expectations for a particular collection of Wikidata items are outlined in Wikidata Schemas for us to address that issue. Wikidata's subsets can be examined in this manner to see if they adhere to a particular schema. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
+The FAIR (\fb{Findable}, \fb{Accessible}, \fb{Interoperable} and \fb{Reusable}) Guiding principles for data management state that as data's amount, complexity, and rate of creation rise, humans will increasingly need computational assistance to manage it\footnote{\url{https://www.go-fair.org/fair-principles/}}. This is where Wikidata Schemas, or WShEx, could help us address that issue. Wikidata's dumps can be examined in this manner to see if they adhere to a particular schema, obtaining a subset of valid entities as a result. Thus, the community can exchange and reuse data from Wikidata by using schemas, which also serve to improve the quality and usefulness of the data.
 
 ShEx was chosen by Wikibase in 2019 to be the language for describing entity schemas\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/EntitySchema_directory}}. As ShEx cannot be used for JSON validation, instead of the Wikibase data model itself, Shape Expressions describe the RDF serialization of Wikibase entities. This implies that the ShEx-based approach is far from the Wikibase data model itself. This issue will be fixed through the solution described in section \ref{section:WShEx}. Observe how the opaque URIs we discussed in section \ref{section:opaqueURIs} are used as the identifiers for specifying Wikidata items.
 
@@ -191,7 +222,7 @@ Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the W
 
 \section{Knowledge graph Subsets}
 
-Wikidata keeps getting bigger and better. A vast volume of data, like that found in a scopeless Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, handling fewer data enables more complicated searches.
+Wikidata keeps getting bigger and better. A vast volume of data, like that found in Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, handling fewer data enables more complex searches and operations over it.
 
 \begin{definition}[Wikibase subset~\cite{https://doi.org/10.48550/arxiv.2110.11709}]
     Given a Wikibase graph $\Graph=\langle\ItemSet,\PropSet,\DataValueSet,\StmtSet\rangle$, a Wikibase sub-graph is defined as  $\Graph'=\langle\ItemSet',\PropSet',\DataValueSet',\StmtSet'\rangle$ such that: $\ItemSet'\subseteq\ItemSet$, $\PropSet'\subseteq\PropSet$, $\DataValueSet'\subseteq\DataValueSet$ and $\StmtSet'\subseteq\StmtSet$.
@@ -223,6 +254,8 @@ ShEx-based matching comprises using a WShEx schema \myfont{S} as input and inclu
     \centering
     \input{figures/tables/6-4_neighborhood}
 \end{table}
+
+To put things simply, a neighborhood of a node in a Knowledge graph is the set of all the vertices in the graph that are connected to that node. In other words, it is the set of all the nodes that are \textit{directly} connected to the node in question.
 
 \section{Data-flow paradigms}
 
@@ -271,7 +304,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 It's quite simple to describe the architecture of a Pregel system. As we have seen, one of the main goals of this model is achieving a parallel execution. This way, a \textit{master} node will divide the graph into several partitions and assign one (or more) of them to each \textit{worker} node. For the \textit{master} to create the partitions it selects a bunch of vertices and all those vertices' outgoing edges; remember: \textit{think like a vertex}.
 
-\begin{figure}[H]
+\begin{figure}[p]
     \centering
     \includestandalone[width=0.66\textwidth]{diagrams/6-10_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}

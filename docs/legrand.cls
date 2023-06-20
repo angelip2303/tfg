@@ -573,7 +573,7 @@ addtohook={%
     linenos,
     numbersep=5pt,
     formatcom=\spaceskip0.2em\relax,
-    mathescape=true,
+    escapeinside=··,
     autogobble 
 } % formatting for the minted package :D
 

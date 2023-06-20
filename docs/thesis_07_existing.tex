@@ -80,16 +80,16 @@ GraphX provides several built-in operators for graphs\footnote{\url{https://spar
 
 \begin{itemize}
     \setlength\itemsep{1em}
-    \item \mintinline[fontsize=\small]{scala}{mapVertices(g: Graph[|\VertSet|,|\EdgeSet|], f: (Id,|\VertSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
+    \item \mintinline[fontsize=\small]{scala}{mapVertices(g: Graph[·\VertSet·,·\EdgeSet·], f: (Id,·\VertSet·)·$\rightarrow$··\VertSet·)): Graph[·\VertSet·,·\EdgeSet·]}
           \begin{itemize}
               \item[$\blacksquare$] \textbf{Description:} Transforms each vertex attribute in the graph using the map function. It maps every pair \texttt{(id,v)} -- which are the vertices of \texttt{g} -- into \texttt{(id,f(v))}.
               \item[!] \textbf{Note:} The new graph has the same structure. As a consequence, the underlying index structures can be reused.
           \end{itemize}
-    \item \mintinline[fontsize=\small]{scala}{mapReduceTriplets(g: Graph[|\VertSet|,|\EdgeSet|], m: (|\VertSet|,|\EdgeSet|,|\VertSet|)|$\rightarrow$|(Id,|\MsgSet|)), r: (|\MsgSet|,|\MsgSet|)|$\rightarrow$||\MsgSet|)): RDD[Id,|\MsgSet|]}
+    \item \mintinline[fontsize=\small]{scala}{mapReduceTriplets(g: Graph[·\VertSet·,·\EdgeSet·], m: (·\VertSet·,·\EdgeSet·,·\VertSet·)·$\rightarrow$·(Id,·\MsgSet·)), r: (·\MsgSet·,·\MsgSet·)·$\rightarrow$··\MsgSet·)): RDD[Id,·\MsgSet·]}
           \begin{itemize}
               \item[$\blacksquare$] \textbf{Description:} Takes a user-defined map function \texttt{m} which is applied to each triplet and can yield messages which are aggregated using the reduce function \texttt{r}.
           \end{itemize}
-    \item \mintinline[fontsize=\small]{scala}{joinVertices(g: Graph[|\VertSet|,|\EdgeSet|], msgs: RDD[Id,|\MsgSet|], f: (Id,|\VertSet|,|\MsgSet|)|$\rightarrow$||\VertSet|)): Graph[|\VertSet|,|\EdgeSet|]}
+    \item \mintinline[fontsize=\small]{scala}{joinVertices(g: Graph[·\VertSet·,·\EdgeSet·], msgs: RDD[Id,·\MsgSet·], f: (Id,·\VertSet·,·\MsgSet·)·$\rightarrow$··\VertSet·)): Graph[·\VertSet·,·\EdgeSet·]}
           \begin{itemize}
               \item[$\blacksquare$] \textbf{Description:} Joins the vertices with the input RDD and returns a new graph with the vertex properties obtained by applying the user-defined map function to the result of the joined vertices. Vertices without a matching value in the RDD retain their original value.
           \end{itemize}

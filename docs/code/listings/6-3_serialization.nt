@@ -1,4 +1,4 @@
-# Notice how http://wikidata.org/wiki/ID is written as ID for short
+# Notice how http://wikidata.org/wiki/{ID} is written as {} for short
 <Q7251> <P19>  <Q20895942> .
 <Q7251> <P108> <Q220798> .
 <Q220798> <P176> <Q480476> .
