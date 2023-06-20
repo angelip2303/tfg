@@ -13,6 +13,13 @@ A property graph is a type of graph model where vertices and edges, namely nodes
 
 With that in mind, it can be argued that there's no need for a new type of \textit{datastore} as relational databases are capable of storing those relationships through constraints. However expensive operations such as \texttt{JOIN} are required to navigate across those links. It turns out that relational databases handle relationships between data in a not-so-sophisticated manner. To tackle this issue, graph databases were created. In this model, relationships are stored natively alongside the nodes in a flexible format. Several commercial graph databases like Neo4j\footnote{\url{https://neo4j.com/}}, JanusGraph\footnote{\url{https://janusgraph.org/}} or Sparksee\footnote{\url{https://www.sparsity-technologies.com/\#sparksee}}.
 
+\begin{figure}[ht]
+    \centering
+    \includestandalone[width=0.8\textwidth]{diagrams/6-1_propertyGraph}
+    \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
+    \label{fig:RDF}
+\end{figure}
+
 \label{section:wikibase_graphs}
 \subsection{Wikibase graphs}
 
@@ -20,7 +27,7 @@ Wikidata started back in 2012 as a support to Wikipedia. Rapidly becoming one of
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.5\textwidth]{diagrams/6-1_architectureWikibase}
+    \includestandalone[width=0.5\textwidth]{diagrams/6-2_architectureWikibase}
     \caption[Simplified architecture of Wikibase]{Simplified architecture of Wikibase~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:architecture:wikibase}
 \end{figure}
@@ -68,7 +75,7 @@ For a better understanding of this formal definition, let me explain it step-by-
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.9\textwidth]{diagrams/6-2_wikibaseGraph}
+    \includestandalone[width=0.9\textwidth]{diagrams/6-3_wikibaseGraph}
     \caption[Formal description and visualization of Turing's Wikibase graph]{Formal description and visualization of Turing's Wikibase graph}
 \end{figure}
 
@@ -116,7 +123,7 @@ Resource Description Framework (RDF) is a data interchange W3C standard for the 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.8\textwidth]{diagrams/6-3_RDF}
+    \includestandalone[width=0.8\textwidth]{diagrams/6-4_RDF}
     \caption{Directed knowledge graph generated out of a triple \textit{subject-predicate-object}}
     \label{fig:RDF}
 \end{figure}
@@ -154,7 +161,7 @@ Following the previous example, another possibility is to visualize ShEx schemas
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\textwidth]{diagrams/6-4_ShEx.pdf}
+    \includegraphics[width=0.4\textwidth]{diagrams/6-5_ShEx.pdf}
     \caption{ShEx schema visualization as UML-like diagrams}
     \label{fig:RDFshape}
 \end{figure}
@@ -180,7 +187,7 @@ Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the W
 
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=0.6\textwidth]{diagrams/6-5_WShEx}
+    \includestandalone[width=0.6\textwidth]{diagrams/6-6_WShEx}
     \caption[Relationships between ShEx, WShEx and the Wikibase data model]{Relationships between ShEx, WShEx and the Wikibase data model~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:WShEx}
 \end{figure}
@@ -235,7 +242,7 @@ During the 1980s, Leslie Valiant worked on ideas for a distributed programming m
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/6-6_bsp}
+    \includestandalone{diagrams/6-7_bsp}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -249,7 +256,7 @@ In comparison to the MapReduce framework, where for each iteration the state of 
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/6-7_pregelTrace}
+    \includestandalone{diagrams/6-8_pregelTrace}
     \caption[Trace of the execution of Pregel for computing the maximum value]{Trace of the execution of Pregel for computing the maximum value~\cite{10.1145/1807167.1807184}}
     \label{fig:pregel}
 \end{figure}
@@ -258,7 +265,7 @@ Notice that at the beginning of the execution, the state of all the nodes will b
 
 \begin{figure}[ht]
     \centering
-    \includestandalone{diagrams/6-8_stateDiagram}
+    \includestandalone{diagrams/6-9_stateDiagram}
     \caption[Simplified state diagram of a vertex]{Simplified state diagram of a vertex~\cite{10.1145/1807167.1807184}}
     \label{fig:state}
 \end{figure}
@@ -269,7 +276,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.66\textwidth]{diagrams/6-9_pregelArchitecture}
+    \includestandalone[width=0.66\textwidth]{diagrams/6-10_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}
