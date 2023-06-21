@@ -38,15 +38,15 @@ We have examined two distinct Scala and Apache Spark-based solutions up to this 
 
 \subsection{Rust}
 
-Rust is a multi-purpose, high-level programming language. Its primary focus is on performance, memory safety, and concurrency. In this perspective, Rust might be considered a modern language; as of March 18th, 2023, the most recent stable release is version 1.68. For achieving memory safety and concurrency, both at the same time, Rust prevents data races through a \textit{borrow checker} that tracks the object and allows each memory position to have only one owner at a time. Rust is popular for systems programming, and was included by the Linux kernel in December 2022, but it also has some high-level functional constructs like pattern-matching and the neatly implemented \texttt{Enums}.
+Rust is a multi-purpose and high-level programming language. Its primary focus is on performance, memory safety, and concurrency. In this perspective, Rust might be considered a modern language, and as of March 18th, 2023, the most recent stable release is version 1.68. For achieving memory safety and concurrency, both at the same time, Rust prevents data races through a \textit{borrow checker} that tracks the object and allows each memory position to have only one owner at a time. Rust is popular for systems programming, and was included by the Linux kernel in December 2022, but it also has some high-level functional constructs like pattern-matching and the neatly implemented \texttt{Enums}.
 
 The key features of Rust are:
 
 \begin{enumerate}
     \itemsep0.5em
-    \item \textbf{Performance:} It accomplishes this by employing a static memory management strategy rather than a garbage collector, using ownership instead. This means that the compiler decides when memory is allocated and released at compile time. Rust can produce incredibly effective code as a result.
-    \item \textbf{Memory safety:} Rust is designed to be memory safe. It achieves this by using a borrow checker. This means that the compiler determines at compile time when memory is accessed, allowing Rust to prevent memory issues like use-after-free and double-free.
-    \item \textbf{Concurrency:} Rust is designed to be concurrent. This means that Rust programs can be executed in partial order, or out-of-order, without affecting the outcome. This allows the parallel execution of the concurrent units, significantly increasing the performance of the program in multi-threaded systems.
+    \item \textbf{Performance:} It accomplishes this by employing a static memory management strategy rather than a garbage collector, using \textit{ownership} instead. This means that the compiler decides when memory is allocated and released at compile time. Rust can produce incredibly effective code as a result.
+    \item \textbf{Memory safety:} Rust is designed to be memory safe. It achieves this by using a \textit{borrow checker}. This means that the compiler determines at compile time when memory is accessed, allowing Rust to prevent memory issues like use-after-free and double-free.
+    \item \textbf{Concurrency:} Rust is designed to be \textit{concurrent}. This means that Rust programs can be executed in partial order, or out-of-order, without affecting the outcome. This allows the parallel execution of the concurrent units, significantly increasing the performance of the program in multi-threaded systems.
 \end{enumerate}
 
 An example of a simple \textit{Hello World} program written in Rust is shown below.
@@ -55,52 +55,64 @@ An example of a simple \textit{Hello World} program written in Rust is shown bel
     \inputminted{rust}{code/listings/9-1_helloWorld.rs}
 \end{code}
 
+Having that said, let me make a brief remark on some of the features that I loved the most when working with Rust. Regarding the compiler, first of all, it is very strict and will not allow you to compile your code if it is not safe. This is a great feature because it will prevent you from having to deal with runtime errors. Secondly, the compiler is very helpful and will give you a lot of information about the error that you are facing. This is, it will help you to understand what is going on and how to fix it. Lastly, the compiler is very smart and will optimize your code for you. This is a great feature because it makes you write code that is fast and efficient, without even realizing it.
+
+Regarding the language itself, first of all, Rust is heavily inspired by functional programming languages. Hence, many of the features that you will find in Rust are also present in Scala. Recall that one of the features that I loved the most about the latter was \textit{pattern matching} and Rust has it too. Secondly, Rust has a very powerful type system. What I enjoy about this feature is the way Rust handles errors. This is, by returning either a \texttt{Result} or an \texttt{Option} type, Rust forces you to handle errors and nullable functions safely. When combined with the \texttt{?} operator, error handling becomes very easy and concise. What's more, you can manage both through the \texttt{match} statement, a really clean approach. Lastly, concurrency is implemented following the same design principles as in Go, that is, it adheres to the \textit{share memory by communicating} principle: \textit{Do not communicate by sharing memory; instead, share memory by communicating}. This means that Rust uses \textit{channels} to communicate between threads, which is a very safe and efficient way of doing it. Rust's concurrency system reminds me of the idea behind the Pregel model, where the data is partitioned and sent to the different workers, which are the threads in this case. Then, workers can communicate with each other through the channels, which is the same as sending messages between workers in the Pregel model.
+
 \subsection{DuckDB}
 
-Conversely, DuckDB is a C++-based in-process SQL OLAP database management system that is intended to be integrated into other applications. This means that DuckDB follows the ACID model and supports popular SQL constructs like window functions, table expressions, and JSON. Additionally, it is column-oriented and created with analytical queries in mind. The impact of this last remark on the scope of our project will be explained further below. Being a project that is only a few years old, DuckDB is still being actively developed.
+Conversely, DuckDB is an in-process SQL OLAP database management system written in C++ that is intended to be integrated into other applications. This means that DuckDB follows the ACID model and supports popular SQL constructs like window functions, table expressions, and JSON. Additionally, it is column-oriented storage and was created with analytical queries in mind. The impact of this last remark on the scope of our project will be explained further below. Being a project that is only a few years old, DuckDB is still being actively developed.
 
 The key features of DuckDB are:
 
 \begin{enumerate}
     \itemsep0.5em
-    \item \textbf{In-process:} DuckDB is an embedded database that runs in the same process as the application. This means that there is no separate server process that needs to be started, stopped, or configured. The application can directly interface with DuckDB through a C API.
-    \item \textbf{OLAP or On-Line Analytical Processing:} DuckDB is designed for OLAP workloads. It is optimized for analytical queries that scan large amounts of data and perform complex aggregations.
+    \item \textbf{In-process:} DuckDB is an embedded database that runs in the same process as the application. This means that there is no separate server process that needs to be started, stopped, or configured. The application can directly interact with DuckDB via a C API. Notably, this API is designed to be identical to the one utilized by SQLite. As a result, DuckDB can seamlessly substitute SQLite as a plug-and-play alternative.
+    \item \textbf{OLAP or On-Line Analytical Processing:} DuckDB is designed for OLAP workloads. It is optimized for analytical queries that scan large amounts of data and perform complex aggregations. This is in contrast to OLTP, or On-Line Transaction Processing, which is optimized for transactional workloads with a high number of small transactions. DuckDB is not a suitable replacement for a traditional OLTP database like PostgreSQL or MySQL.
     \item \textbf{Columnar:} DuckDB is a columnar database. This means that data is stored in columns instead of rows. This can dramatically minimize the amount of data that needs to be read from memory because DuckDB can now only read the columns needed for a query. The vectorized query execution method, which enables incredibly quick query execution, benefits from the column orientation as well. Last but not least, the compression efficiency of the columnar storage format can help to further reduce the quantity of data that needs to be read from memory.
 \end{enumerate}
 
 \subsection{Pola-rs}
 
-Pola-rs is a fast and memory-efficient DataFrame library for Rust. It is built on Apache Arrow, a cross-language development platform for in-memory data. This means that data can be shared between languages without the need for serialization or deserialization. Many well-known data science and analytics frameworks, such as Apache Parquet, Apache Spark, Dask, and Polars, employ Apache Arrow. Putting it all together, Pola-rs is a DataFrame implementation written in Rust, a data structure that is commonly used in data science and analytics.
+Pola-rs is a fast and memory-efficient DataFrame library for Rust. It is built on top of Apache Arrow, a cross-language development platform for in-memory data. This means that data can be shared between languages without the need for serialization or deserialization. Many well-known data science and analytics frameworks, such as Apache Parquet, Apache Spark, Dask, and Pola-rs, employ Apache Arrow. Putting it all together, Pola-rs is a DataFrame implementation written in Rust, a data structure that is commonly used in data science and analytics.
 
 The key features of Pola-rs are:
 
 \begin{enumerate}
     \itemsep0.5em
-    \item \textbf{Zero-copy:} Pola-rs is a DataFrame library that uses Apache Arrow as the memory model. This means that Polars does not copy data when performing operations on the DataFrame. Instead, it manipulates the metadata of the underlying Arrow array. This makes Polars very fast and memory efficient.
-    \item \textbf{Parallel execution:} Pola-rs is designed to be parallel. This means that Polars can execute operations on multiple threads at the same time. This allows Pola-rs to take advantage of multi-core systems, resulting in faster execution.
-    \item \textbf{Lazy evaluation:} Pola-rs is designed to be lazy. This means that Polars does not execute operations until they are needed. This allows Pola-rs to avoid unnecessary computations, resulting in faster execution.
-    \item \textbf{Query optimization:} Pola-rs' Lazy API optimizes the query plan for it to be executed faster. This means that Polars can optimize queries by reordering operations and removing unnecessary operations. This allows queries to be executed faster.
-    \item \textbf{Streaming:} Pola-rs is designed to allow streams from external files. This means that Polars can process data in batches read from an external file or database. This allows Pola-rs to process data without having to load it all into memory first, resulting in faster execution.
+    \item \textbf{Zero-copy:} Pola-rs is a DataFrame library that uses Apache Arrow as the memory model. This means that Pola-rs does not copy data when performing operations on the DataFrame. Instead, it manipulates the metadata of the underlying Arrow array. This makes Pola-rs very fast and memory efficient.
+    \item \textbf{Parallel execution:} Pola-rs is designed to be parallel. This means that Pola-rs can execute operations on several threads at the same time. This allows Pola-rs to take advantage of multi-core systems, resulting in faster execution.
+    \item \textbf{Lazy evaluation:} Pola-rs is designed to be lazy. This means that Pola-rs does not execute operations until they are needed. This allows Pola-rs to avoid unnecessary computations, resulting in faster execution.
+    \item \textbf{Query optimization:} Pola-rs' Lazy API optimizes the query plan for it to be executed faster. This means that Pola-rs can optimize queries by reordering operations and removing unnecessary ones. This allows queries to be executed faster.
+    \item \textbf{Streaming:} Pola-rs is designed to allow streams from external files. This means that Pola-rs can process data in batches read from an external file or database. This allows Pola-rs to process data without having to load it all into memory first, resulting in the possibility of processing larger datasets, even if they do not fit in memory.
 \end{enumerate}
 
 \section{Extract-Transform-Load}
 
+As discussed in the preceding chapter, we have encountered challenges related to the data model we are currently handling. The primary issue arises from the data's lack of a convenient structure for manipulation. Circular dependencies and recursive structures have proven to be problematic in our case. Consequently, we have decided to migrate the data to a relational database, which would provide a more organized and valid data model. The initial step involves extracting the data from the JSON file and transforming it into a format that facilitates seamless processing. This is where the Extract-Transform-Load (ETL) process becomes crucial.
+
 The Extract-Transform-Load (ETL) process is a data integration method aiming at extracting data from one or more sources, transforming it, and loading the result into a target system. An ETL process is a critical component of data-intensive applications, as having properly structured and valid data has a strong impact on the quality of the results and the performance of the system. With that said, the ETL process is used in data migration projects, where data is moved from one system to another. This last remark is important because it is the case of our project, where we are willing to move data from a JSON file to a relational database.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/9-1_etl.pdf}
+    \caption{Extract-Transform-Load (ETL) process description}
+\end{figure}
 
 \subsection{Extract}
 
-The first step of the ETL process is the extraction of data from the source system. This step is responsible for connecting to the source system and retrieving the data. The source system can be a database, a file, or even a web service.
+The first step of the ETL process is the extraction of data from the source system. This step is responsible for connecting to the source system and retrieving the data. The source system can be a database, a file, or even a web service. In our case, we want to extract the data from a JSON dump, so we will need to connect to the file system and read the data from the file. See section \ref{section:json_dump} for more details.
 
 \subsection{Transform}
 
-The second step of the ETL process is the transformation of data. This step is responsible for converting the data from its source format to the target format. This step is also responsible for cleaning the data, removing duplicates, and performing other operations to ensure that the data is valid and consistent. In our case, we want to transform the data from a JSON format to DuckDB. Not only that, but we also have to store the data in a way that is consistent with the knowledge graph model. This means that we have to extract the entities and relationships from the data and represent them in a graph format. See section \ref{section:wd2duckdb_design} for more details.
+The second step of the ETL process is the transformation of data. This step is responsible for converting the data from its source format to the target format. It is also responsible for cleaning the data, removing duplicates, and performing other operations to ensure that the data is valid and consistent. In our case, we want to transform the data from a JSON format to DuckDB. Not only that, but we also have to store the data in a way that is consistent with the knowledge graph model. This means that we have to extract the entities and relationships from the data and represent them in a graph format. See section \ref{section:wd2duckdb_design} for more details.
 
 \subsection{Load}
 
-The third and final step of the ETL process is the loading of data into the target system. This step is responsible for connecting to the target system and inserting the data.
+The third and final step of the ETL process is the loading of data into the target system. It is responsible for connecting to the target system and inserting the data. In our case, we want to load the data into a DuckDB database. See section \ref{section:duckdb_load} for more details.
 
 For us to accomplish what we have just described, we will need to use a tool that can perform the ETL process. In our case, we will implement one ourselves using Rust. This tool will be responsible for extracting data from a JSON file, transforming it into a relational format, and loading it into a DuckDB database. The tool will be called \texttt{wd2duckdb}. See chapter \ref{chapter:wd2duckdb} for more details.
 
 \section{Knowledge Graph Subsets}
 
-Having our data in a relational database is not enough. We have to implement a system for us to query the knowledge graph in a Pregel fashion. This system will be called \texttt{pregel-rs}. What's more, an algorithm for the creation of the subsets is also needed. This algorithm will be called \texttt{pschema-rs}. See chapter \ref{chapter:pschema} for more details.
+Moreover, merely having our data stored in a relational database is insufficient. It is crucial to remember that our objective is to develop an algorithm capable of validating Knowledge graphs. As a result, we must establish a system that allows us to query the graph in a Pregel-like manner. Currently, there is no existing implementation written in Rust and based on DataFrames that aligns with our requirements. Hence, we will introduce a new system called \texttt{pregel-rs} to fulfill this need. Additionally, we will also require an algorithm for generating subsets, which will be named \texttt{pschema-rs}. Further information can be found in Chapter \ref{chapter:pschema}.

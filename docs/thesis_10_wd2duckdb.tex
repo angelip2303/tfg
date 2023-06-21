@@ -24,6 +24,7 @@ The tool is going to be divided into two main parts. The first part is going to 
     \caption{Entity-relationship diagram of \texttt{wd2duckdb}'s resulting Database}
 \end{figure}%
 
+\label{section:json_dump}
 \subsubsection{Parsing the JSON dump}
 
 The first part of the tool is going to be in charge of parsing the Wikidata JSON dump and extracting the information that we are interested in. The idea is to parse the file line by line, and for each line, we are going to extract the information that we are interested in. Having that said, the information that we are going to extract is the following:
@@ -35,6 +36,9 @@ The first part of the tool is going to be in charge of parsing the Wikidata JSON
     \item \textbf{Descriptions}: We are going to store the descriptions of the entities in the same table where we store the IDs.
     \item \textbf{Statements}: We are going to store the statements of the entities in a separate table so that we can build the graph later on. The idea is to store the ID of the source entity, the ID of the property and the ID of the destination entity. In this manner, we will end up with two main tables: one for storing the entities, or vertices, and another one for storing the statements, or edges. Several other tables are going to be created for storing data relative to the information that comes with the statements, such as qualifiers, references, ranks, etc. However, for the time being, we are going to focus on the main tables.
 \end{itemize}
+
+\label{section:duckdb_load}
+\subsubsection{Storing the information in DuckDB}
 
 \subsection{Optimizations}
 
