@@ -1,6 +1,6 @@
 \epigraph{\textit{The most important single aspect of software development is to be clear about what you are trying to build.}}{-- \textup{Bjarne Stroustrup}}
 
-In this chapter, we will describe the first implementation of the Pregel solution, exposing the decisions that led to it, as well as the technical debt. This first version is part of Labra's publication \cite{https://doi.org/10.48550/arxiv.2110.11709}.
+In this chapter, we will describe the first implementation of the Pregel solution, exposing the decisions that led to it, as well as the technical debt that we have identified. This first version is part of Labra's publication~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
 \section{Technology stack}
 
@@ -32,7 +32,7 @@ For us to describe the technologies used, we have to summarize the needs of the 
 \footnotetext{\url{https://www.scala-lang.org/}}
 \footnotetext{\url{https://en.wikipedia.org/wiki/Criticism_of_Java}}
 
-Scala\footnotemark is a high-level programming language combining object-oriented and functional paradigms. Intended to be concise and to answer the majority of Java's complaints.\footnotemark. Allowing operator overloading, better functional support, lazy evaluation and requiring less boilerplate code. One of the features that I enjoy the most is pattern matching, which is not supported in Java. What's interesting is that Scala source code can be compiled into Java bytecode, the instruction set of the Java Virtual Machine. This way, a vast ecosystem of Java libraries is available when writing Scala programs. One of the main disadvantages of Scala is that major updates are not backward compatible; this way, programs written in Scala 2.12 are not supported in 2.13. Not to mention that nowadays there exist two major branches of Scala development, namely Scala 2 and 3. Putting this all together, we can conclude that Scala is a bit unstable. This ends up being a hell of a maintenance making loads of open-source projects and libraries get abandoned; we will discuss this later on.
+Scala\footnotemark is a high-level programming language combining object-oriented and functional paradigms. Intended to be concise and to answer the majority of Java's complaints.\footnotemark. Allowing operator overloading, better functional support, lazy evaluation and requiring less boilerplate code in general. One of the features that I enjoy the most is pattern matching, which is not supported in Java. What's interesting is that Scala source code can be compiled into Java bytecode, the instruction set of the Java Virtual Machine. This way, a vast ecosystem of Java libraries is available when writing Scala programs. One of the main disadvantages of Scala is that major updates are not backward compatible; this way, programs written in Scala 2.12 are not supported in 2.13. Not to mention that nowadays there exist two major branches of Scala development, namely Scala 2 and 3. Putting this all together, we can conclude that Scala is a bit unstable. This ends up being a hell of a maintenance making loads of open-source projects and libraries get abandoned; we will discuss this later on.
 
 \begin{code}[Hello World written in Scala]
     \inputminted{scala}{code/listings/7-1_helloWorld.scala}
@@ -40,22 +40,22 @@ Scala\footnotemark is a high-level programming language combining object-oriente
 
 \subsection{Apache Spark}
 
-Apache Spark is a Big data engine with support for several programming languages, including Scala and Python. Aiming to be simple, fast and scalable, it is the most widely-used engine in the industry. The idea behind Spark is to create a Framework that makes parallel jobs over high volumes of data easy to write. It also bundles an engine supporting query optimization which will be discussed later on. For us to understand how Spark works, let's describe its architecture first. It follows the master-slave architecture, the same idea behind the Pregel model, built on top of two abstractions, namely Resilient Distributed Dataset (RDD) and Directed Acyclic Graph (DAG).
+Apache Spark is a Big data engine with support for several programming languages, including Scala and Python. Aiming to be simple, fast and scalable, it is the most widely-used engine in the industry. The idea behind Spark is to create a Framework that makes parallel jobs over high volumes of data easy to write. It also bundles an engine supporting query optimization which will be discussed later on. For us to understand how Spark works, let's describe its architecture first. It follows the master-slave architecture, the same idea behind the Pregel model, built on top of two abstractions, namely \texttt{Resilient Distributed Dataset (RDD)} and \texttt{Directed Acyclic Graph (DAG)}.
 
 \subsubsection{RDDs (Resilient Distributed Datasets)}
 
-We want to process graphs in parallel, hence a distributed approach is required to store the graph itself. RDDs are necessary for us to address that issue. They are spread in memory or across several machines in a cluster and serve as Apache Spark's primary logical data unit. This method allows a single RDD to be split into numerous logical segments that can then be stored and processed on various cluster machines. RDDs are also lazy-evaluated, which saves time and boosts efficiency. For us to have a better understanding of RDDs, their main features are listed below:
+We want to process graphs in parallel; hence, a distributed approach is required to store the graph itself as it is so large to fit in the memory of a single machine. RDDs are necessary for us to address that issue. They are spread in memory or across several machines in a cluster and serve as Apache Spark's primary logical data unit. This method allows a single RDD to be split into numerous logical segments that can then be stored and processed on various cluster machines. RDDs are also lazy-evaluated, which saves time and boosts efficiency. For us to have a better understanding of RDDs, their main features are listed below:
 
 \begin{itemize}
     \itemsep0.25em
     \item \textbf{Resilience or Fault tolerance:} RDDs keep track of data lineage information to automatically restore lost data in the case of failure.
     \item \textbf{Partitioning:} Any existing RDD can be partitioned to generate mutable logical sections. This can be done by performing transformations on the current partitions.
-    \item \textbf{Lazy-evaluation:} Even if you define data, it does not load in an RDD. When you call an operation, like count or collect, or when you save the output to a file system, transformations are computed.
+    \item \textbf{Lazy-evaluation:} Even if you define data, it does not load in an RDD. When you call an operation, like count, collect or when you save the output to a file system, transformations are computed.
     \item \textbf{Immutability:} You cannot alter the data that is saved in an RDD since it is in read-only mode. But by applying modifications to the current RDDs, you can produce new RDDs.
     \item \textbf{In-memory computation:} To allow faster access, RDD stores every immediately created data in the main memory.
 \end{itemize}
 
-After reviewing the key aspects of RDDs, let us try to improve our understanding by describing the environment that supports this abstraction. As stated in the introduction, Spark is constructed on top of RDDs; this includes abstractions such as DataFrames and Datasets which are developed on top of them.  Every computation in Spark is carried out by RDDs under the hood. In other words, these are Spark's most basic building blocks. Some advantages of RDDs are their simplicity, capacity to import data from heterogeneous sources, ease of caching, and the ability to apply transformations to the data stored in a functional manner. However, as we are essentially storing Java objects (or Scala ones), they consume rather large amounts of memory, garbage collection is necessary, and serialization is required for data storage and retrieval. This issue is especially critical for larger datasets since the time to serialize/deserialize grows in proportion to the amount of data stored. More into this will be discussed later on.
+After reviewing the key aspects of RDDs, let us try to improve our understanding by describing the environment that supports this abstraction. As stated in the introduction, Spark is constructed on top of RDDs; this includes abstractions such as DataFrames and Datasets which are developed using them.  Every computation in Spark is carried out by RDDs under the hood. In other words, they are Spark's most basic building blocks. Some advantages of RDDs are their simplicity, capacity to import data from heterogeneous sources, ease of caching, and the ability to apply transformations to the data stored functionally. However, as we are essentially storing Java objects (or Scala ones), they consume rather large amounts of memory, garbage collection is necessary, and serialization is required for data storage and retrieval. This issue is especially critical for larger datasets since the time to serialize/deserialize grows in proportion to the amount of data stored. More into this will be discussed later on.
 
 \subsubsection{DAG (Directed Acyclic Graph)}
 
@@ -72,7 +72,7 @@ The main difference between Spark and Hadoop MapReduce, whose limitations lead t
 
 \subsection{GraphX}
 
-A graph processing framework integrated with Apache Spark was suggested as GraphX in 2014. Its API contains a Pregel variation that is used to implement several algorithms, including PageRank. GraphX exposes an API for graphs based on RDDs~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
+A graph processing framework integrated with Apache Spark was suggested as GraphX in 2014. Its API contains a Pregel fork that is used to implement several algorithms, including PageRank. GraphX exposes an API for graphs based on RDDs~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 
 \subsubsection{The GraphX implementation of Pregel}
 
@@ -105,6 +105,8 @@ The GraphX Pregel implementation is defined iteratively where each iteration is 
     \item \texttt{mergeMsg}: the user-defined function that is applied to two incoming messages and merges them into one.
 \end{itemize}
 
+Below is the pseudo-code of the Pregel operator as implemented in GraphX:
+
 \begin{pseudocode}[The Pregel model as implemented in GraphX]
     \includestandalone{code/algorithms/7-1_pregel}
 \end{pseudocode}
@@ -113,22 +115,31 @@ It is worth noting that the Pregel operator in GraphX is a \textit{bulk-synchron
 
 \section{PSchema: Pregel + ShEx generated subsets}
 
-The next paragraphs will describe the ShEx validation algorithm based on Pregel. This approach is based on the assumption that a ShEx schema $\psi \mathcal{L},\sigma \psi$ is provided,  with each label $l \in \mathcal{L}$ identifying a shape expression.
-
-According to figure \ref{fig:state:pregel}, nodes might be active if they have received some messages, or inactive if they have not received any messages. Certain sub-states are necessary for us to produce a more accurate answer based on Knowledge graph validation. The algorithm in the Pregel approach is in charge of annotating each node $n\in\mathcal{V}$ with a status map expressing the validation status for specific labels.
+The next paragraphs will describe the ShEx validation algorithm based on Pregel. This approach is based on the assumption that a ShEx schema $\langle  \mathcal{L},\sigma \rangle$ is provided,  with each label $l \in \mathcal{L}$ identifying a \texttt{Shape Expression}.
 
 \begin{figure}[H]
     \centering
-    \includestandalone[width=0.66\textwidth]{diagrams/7-2_pregelState}
+    \includestandalone[width=0.6\textwidth]{diagrams/7-2_pregelState}
     \caption[State diagram representing the different states in \texttt{vProg}]{State diagram representing the different states in \texttt{vProg}~\cite{https://doi.org/10.48550/arxiv.2110.11709}}
     \label{fig:state:pregel}
 \end{figure}
 
-A more detailed description of the possible values that the \texttt{Status} can take is provided:
+According to figure \ref{fig:state:pregel}, nodes might be active if they have received some messages, or inactive if they have not received any messages. Certain sub-states are necessary for us to produce a more accurate answer based on Knowledge graph validation. The algorithm in the Pregel approach is in charge of annotating each node $n\in\mathcal{V}$ with a status map expressing the validation progress for specific labels. A more detailed description of the possible values that the \texttt{Status} can take is provided:
 
 \begin{center}
     \input{figures/tables/7-1_status}
 \end{center}
+
+Putting this all together, the algorithm starts by mapping every node to the status which associates any label $l \in \mathcal{L}$ to \texttt{Undefined}, this is the \textit{initial message.} Then, it runs the iterative Pregel algorithm using the following functions:
+
+\begin{enumerate}
+    \itemsep0.5em
+    \item \texttt{sendMsg}: this function is in charge of sending messages to the neighbors of a node. It is responsible for asking the neighbors to validate the node against a specific label. The message is a tuple containing the label $l$ and the status of the node $n$ for that label $l$.
+    \item \texttt{mergeMsg}: this function is in charge of merging the messages received by a node. It is responsible for merging the status of the node $n$ for a specific label $l$ with the status of the node $n$ for that label $l$ received from a neighbor.
+    \item \texttt{vProg}: see table \ref{vProg} for a more detailed reference.
+\end{enumerate}
+
+Once the algorithm has finished, it replaces the status of any node that is \texttt{Pending} with \texttt{WaitingFor} by looking at the status of its neighbors. This is the last step to ensure that the algorithm has finished. The algorithm returns the graph with the status of each node for each label.
 
 \begin{pseudocode}[Pregel-based ShEx validation pseudocode]
     \includestandalone{code/algorithms/7-2_pregelShEx}
@@ -147,8 +158,34 @@ In this section, we will discuss the architectural decision record for this proj
 
 \subsection{DataFrames vs RDDs}
 
-The first decision we had to make was whether to use DataFrames or RDDs. As we have seen in the previous section, both solutions have their pros and cons. The main advantage of RDDs is that they are a more mature API, and therefore, they are more stable and better documented. However, DataFrames are a higher-level abstraction that allows us to write more concise code. In the end, we decided to use DataFrames because they are the future of Spark. RDDs are a lower-level API that is not going to be developed further. In the next paragraph, we will discuss the reasons behind this decision in more detail.
+\subsubsection{Status}
 
-As we have shown so far, the proposed solution is perfectly valid. Since the RDD-based API is based on the functional programming paradigm, the algorithm is written using higher-order functions. This is, the code of the RDD-based solution is readable even if you have no prior knowledge of Apache Spark. Moreover, as the information is kept in the form of Java objects, the data flow is exposed in the same way that it is in any other Java application. This last argument becomes especially relevant when comparing it to DataFrame-based APIs, which are built on abstractions and a SQL engine. What's more, the memory usage in RDD-based solutions is far from optimum. The operations to be performed become less efficient as we must serialize and deserialize the data at each iteration of the algorithm. Not to mention the lack of a query execution optimizer, as well as the lack of data homogeneity due to RDDs' being schema-less. When everything is considered together, it is clear that there is a lot of room for improvement.
+\texttt{Superseded}
 
-In the next chapter, we will discuss the DataFrames-based solution in more detail.
+\subsubsection{Context}
+
+The first decision we have to make was whether to use DataFrames or RDDs. As we have seen in the previous section, both solutions have their pros and cons. The main advantage of RDDs is that they are a more mature API, and therefore, they are more stable and better documented. However, DataFrames are a higher-level abstraction that allows us to write more concise code. In the end, we decided to use DataFrames because they are the future of Spark. RDDs are a lower-level API that is not going to be developed further. In the next paragraph, we will discuss the reasons behind this decision in more detail.
+
+The pros and cons of RDDs and DataFrames are summarized in the following enumeration:
+
+\begin{enumerate}
+    \itemsep0.5em
+    \item \textbf{For RDDs}: the RDD-based API is based on the functional programming paradigm, and the algorithm is written using higher-order functions. This is, the code of the RDD-based solution is readable even if you have no prior knowledge of Apache Spark. Moreover, as the information is kept in the form of Java objects, the data flow is exposed in the same way that it is in any other Java application.
+    \item \textbf{Against RDDs}: the memory usage in RDD-based solutions is far from optimum. The operations to be performed become less efficient as we must serialize and deserialize the data at each iteration of the algorithm. Not to mention the lack of a query execution optimizer, as well as the lack of data homogeneity due to RDDs' being schema-less.
+\end{enumerate}
+
+\subsubsection{Rationale}
+
+We have chosen the DataFrame-based solution because:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item \textbf{DataFrames are the future of Spark}: as we have mentioned before, RDDs are a lower-level API that is not going to be developed further. DataFrames are a higher-level abstraction that allows us to write more concise code.
+    \item \textbf{DataFrames are more efficient}: DataFrames are more efficient than RDDs because they are based on a logical plan, and therefore, they can be optimized by the query execution optimizer. Moreover, DataFrames are stored in a columnar format, which allows us to perform operations on a single column without having to load the entire dataset into memory.
+\end{itemize}
+
+\subsubsection{Consequences}
+
+By choosing the DataFrame-based solution we will need to invest more time in learning and understanding the API. Additionally, we will need to fine-tune our application's data model to use the DataFrame-based API efficiently.
+
+However, we believe that by choosing the DataFrame-based solution we will be able to write more concise code and achieve better performance.

@@ -165,6 +165,12 @@ In this section, we will discuss the architectural decision record for this proj
 
 \subsection{Scala as the programming language}
 
+\subsubsection{Status}
+
+\texttt{Accepted}
+
+\subsubsection{Context}
+
 The first decision we made was to use Scala as the programming language for this project. This decision was made based on the following reasons:
 
 \begin{enumerate}
@@ -174,7 +180,7 @@ The first decision we made was to use Scala as the programming language for this
     \item \textbf{Existing knowledge and solution}: We have previous experience with Scala, and we have already implemented a solution for this problem in Scala. This allows us to reuse the code we have already written and the knowledge we have already acquired.
 \end{enumerate}
 
-However, Scala has some drawbacks that we need to take into account:
+However, Scala has some drawbacks that we need to take into account, and that we started to notice during the development process:
 
 \begin{enumerate}
     \itemsep0.5em
@@ -183,8 +189,47 @@ However, Scala has some drawbacks that we need to take into account:
     \item \textbf{Documentation}: from our experience, the documentation for Scala is not as good as it is for other languages. Meaning that maintaining a large-scale application is not as easy as it is for other languages.
 \end{enumerate}
 
+On the opposite, we have chosen Rust as the programming language for the implementation of the solution. The reasons behind this decision are enumerated in the following section.
+
+\subsubsection{Rationale}
+
+We have chosen Rust because:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item \textbf{Performance}: Rust is a performant language. It is as fast as C++. This means that it is a good choice for high-performance applications that are meant to run on single-node machines.
+    \item \textbf{Memory-safety}: Rust is a memory-safe language.
+    \item \textbf{Parallelization}: provided that we are no longer using Spark, and, our solution is not based on the master-worker architecture, we need to parallelize the solution ourselves. Rust is a good choice for this, as it is a functional programming language.
+\end{itemize}
+
+\subsubsection{Consequences}
+
+We will have to rewrite the solution in Rust if we want to use it in a production environment. This is because the performance of the current solution is not good enough for production. We will also have to rewrite the solution in Rust if we want to use it in a large-scale environment.
+
 \subsection{Spark as the distributed computing framework}
+
+\subsubsection{Status}
+
+\texttt{Accepted}
+
+\subsubsection{Context}
 
 The second decision we made was to use Spark as the distributed computing framework for this project. As we have already mentioned, we are trying to build a solution on top of the DataFrame API. The thing is that this API relies on the Scala reflection system, which is not as performant as it should be. We have already described this issue in section \ref{sec:encoders}. Hence, we need to find an alternative distributed computing framework that allows us to work with DataFrames. Note that the problem with the DataFrames API is related to the Scala reflection system, not to the columnar orientation.
 
-In the following chapter, we will describe the novel approach we have taken to solve this problem. We will describe the architecture of the solution and the implementation details. We will also describe the experiments we have conducted to evaluate the performance of the solution.
+Note that we are not interested in leaving the idea of using DataFrames behind. What we are trying to do is to find an alternative to Spark's DataFrame API.
+
+\subsubsection{Rationale}
+
+We have chosen \texttt{pola-rs} because:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item \textbf{Written in Rust}: \texttt{pola-rs} is written in Rust, meaning that it is a good choice for high-performance applications that are meant to run on single-node machines.
+    \item \textbf{Rust API}: \texttt{pola-rs} has a Rust API, meaning that we can use it in our Rust-based solution.
+\end{itemize}
+
+\subsubsection{Consequences}
+
+We will have to rewrite the whole solution. This is because we are no longer using Spark.
+
+More into this in chapter \ref{chapter:analysis}.

@@ -12,17 +12,20 @@
     \SetKwInput{KwIn}{Input parameters}
     \KwIn{
         \Block{
-            g: Graph[\VertSet,\EdgeSet] \;
-            initialMsg: \MsgSet \;
-            vProg: (Id,\VertSet,\MsgSet) $\rightarrow$ \VertSet \;
-            sendMsg: Triplet $\rightarrow$ [(Id,\MsgSet)] \;
-            mergeMsg: (\MsgSet,\MsgSet) $\rightarrow$ \MsgSet
+            g:\ Graph[\VertSet,\EdgeSet] \;
+            initialMsg:\ \MsgSet \;
+            vProg:\ (Id,\VertSet,\MsgSet) $\rightarrow$ \VertSet \;
+            sendMsg:\ Triplet $\rightarrow$ [(Id,\MsgSet)] \;
+            mergeMsg:\ (\MsgSet,\MsgSet) $\rightarrow$ \MsgSet
         }
-        \KwOut{g: Graph[\VertSet,\EdgeSet]}
-        \blockskip
-        g = mapVertices(g, $\lambda$(id, v) $\rightarrow$ vProg(id, v, initialMsg))  \;
-        msgs = mapReduceTriplets(g, sendMsg, mergeMsg) \;
+        \KwOut{g:\ Graph[\VertSet,\EdgeSet]}
     }
+    \blockskip
+
+    \texttt{g} = \texttt{mapVertices(g, $\lambda$(id, v) $\rightarrow$ vProg(id, v, initialMsg))}  \;
+    \texttt{msgs} = \texttt{mapReduceTriplets(g, sendMsg, mergeMsg)} \;
+
+    \blockskip
     \While{size(msgs) > 0 }{
         g = joinVertices(g, msgs, vProg) \;
         msgs = mapReduceTriplets(g, sendMsg, mergeMsg) \;
