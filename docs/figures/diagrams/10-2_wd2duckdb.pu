@@ -1,0 +1,30 @@
+@startuml
+
+start
+:Parse command line arguments;
+if (Path to database exists?) then (yes)
+    :Create connection to the database;
+    switch (Where does JSON dump come from?)
+        case (Standard input)
+            :Read from the standard input;
+        case (JSON file)
+            if (File exists?) then (yes)
+                :Read from the file;
+            else (no)
+                stop
+            endif
+        endswitch
+        :Create the Tables of the database;
+        :Create the Indexes of the database;
+        :Create a new transaction;
+        repeat :Read a new line of the JSON dump;
+            :Process the line;
+            :Parse it into a Wikidata entity;
+            :Insert the data into the database;
+        repeat while (Is there another line to be processed?) is (yes) not (no)
+        stop
+else (no)
+    stop
+endif
+
+@enduml

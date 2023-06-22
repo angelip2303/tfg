@@ -68,17 +68,17 @@ Informally speaking, the Wikibase data model is composed of \textit{entities} an
 
 For values to be associated with properties, they must belong to some specific data type\footnote{\url{https://www.wikidata.org/wiki/Help:Data_type}}. Supported data types include URLs, time, quantities, and mathematical expressions; to name a few. Notice how more complex data types are also supported; those include \textit{properties} and \textit{items}, this way, relationships among entities are allowed.
 
-Lastly, a statement is a piece of data about an item and is recorded on the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through a statement, we add information to a certain item using some property and its value. This can be seen in figure \ref{fig:wikibaseGraph}.
+Lastly, a statement is a piece of data about an item and is recorded on the page of the item itself. Putting it all together, the way Wikibase manages information is as follows: through a statement, we add information to a certain item using some property and its value. This can be seen in figure \ref{fig:wikibaseStatement}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.8\linewidth]{figures/diagrams/6-11_statement.png}
     \caption[Formal definition of a statement in Wikibase]{Formal definition of a statement in Wikibase\footnotemark}
-    \label{fig:wikibaseGraph}
+    \label{fig:wikibaseStatement}
 \end{figure}
 \footnotetext{\url{https://www.mediawiki.org/wiki/Wikibase/DataModel\#Statements}}
 
-The different components that appear in figure \ref{fig:wikibaseGraph} are as follows:
+The different components that appear in figure \ref{fig:wikibaseStatement} are as follows:
 
 \begin{itemize}
     \itemsep0.25em

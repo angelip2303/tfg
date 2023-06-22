@@ -23,8 +23,8 @@ Firstly, we are describing the series of steps that the Pregel framework follows
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.33\textwidth]{diagrams/11-1_pregel.pdf}
-    \label{fig:sequence}
     \caption{The Pregel framework as implemented in \texttt{pregel-rs}}
+    \label{fig:sequence}
 \end{figure}
 
 As you can observe, this process is far from complex. We can agree that the Pregel framework is a simple abstraction for graph processing. However, this simplicity is what makes the Pregel so powerful. By abstracting the underlying model, we can focus on the problem at hand, rather than the implementation details of the framework. By doing so, we can focus on the implementation of the subgraph matching algorithm, rather than the implementation details of the Pregel model itself.
@@ -93,8 +93,8 @@ Following into this definition, we have only implemented part of the \texttt{Sha
     \centering
     \begin{tabular}{|l|c|l|c|}
         \hline
-        \rowcolor[HTML]{C0C0C0}
-        \multicolumn{1}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Feature}} & \textbf{Supported}         & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{PSchema Representation}} & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{Tree Category}} \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Feature}} & \textbf{Supported}         & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{PSchema Representation}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textbf{Tree Category}} \\ \hline
         Triple and Node Constraints                                    & {\color[HTML]{009901} Yes} & \texttt{Triple Constraint}                                                   & Unary                                                               \\ \hline
         Grouping                                                       & {\color[HTML]{009901} Yes} & \texttt{ShapeAnd}                                                            & N-ary                                                               \\ \hline
         Nesting Shapes                                                 & {\color[HTML]{009901} Yes} & \multicolumn{1}{c|}{$\cdots$}                                                & \multicolumn{1}{c|}{$\cdots$}                                       \\ \hline
@@ -179,10 +179,6 @@ The sub-graph matching algorithm that is going to be used for validating the Kno
 \subsubsection{The \texttt{Validate} \texttt{trait}}
 
 \subsubsection{Designing the \texttt{Shape} \texttt{Expressions}}
-
-\paragraph{The \texttt{Shape} \texttt{Expression} \texttt{Composite}}
-
-\paragraph{The \texttt{Shape} \texttt{Expression} \texttt{Adapter}}
 
 \subsection{Optimizations}
 
