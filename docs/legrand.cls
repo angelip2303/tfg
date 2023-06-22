@@ -76,7 +76,9 @@
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[mono]{notomath} % Use the Noto font for the whole document
+\usepackage[varq,varl]{inconsolata} % inconsolata sans mono
+\usepackage[vvarbb,uprightscript]{notomath}
+
 
 
 %-------------------------------------------------------------------------------

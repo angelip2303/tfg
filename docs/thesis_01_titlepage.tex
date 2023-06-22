@@ -5,10 +5,10 @@
     \node at (current page.north west)
     {\begin{tikzpicture}[remember picture,overlay]
             \node[anchor=north west,inner sep=0pt] at (0,0) {\includegraphics[width=\paperwidth]{img/misc/cover_bg}}; % Background image
-            \draw[anchor=north] (midpoint) node [fill=blueUniovi!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm, text width=21cm, minimum width=\paperwidth]
-            {\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}
+            \draw[anchor=north] (midpoint) node [fill=blueUniovi!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm, text width=0.8\paperwidth, minimum width=\paperwidth]
+            {\Huge\centering\bfseries\sffamily\parbox[c][][t]{0.8\paperwidth}
             {\centering\mytitle\\[15pt] % Book title
-            {\Large\subtitle}\\[20pt] % Subtitle
+            {\Large\textit{\subtitle}}\\[20pt] % Subtitle
             {\huge\author}\\[1pt] % Author's name
             {\large Supervised by \textit{\reviewer}} % Reviewer's name
             }};
