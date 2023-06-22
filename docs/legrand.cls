@@ -74,11 +74,10 @@
 %-------------------------------------------------------------------------------
 
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage{inconsolata} % inconsolata sans mono
+\usepackage[vvarbb,uprightscript]{notomath}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[varq,varl]{inconsolata} % inconsolata sans mono
-\usepackage[vvarbb,uprightscript]{notomath}
-
 
 
 %-------------------------------------------------------------------------------
