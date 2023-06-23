@@ -24,27 +24,28 @@
 
     \DefInline{sendMsg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet])}{
         \msgs\ where\ \ForEach{\lbl\ $\in$ \LabelSet}{
-            \msgs.insert(
             \begin{math}
+                \msgs.insert\left(
                 \begin{cases}
                     \text{validate(\lbl, \g)} & \text{if}\ \lbl = \TripleConstraint \\
                     \text{validate(\lbl, \g)} & \text{if}\ \lbl = \ShapeReference   \\
                     \texttt{None}             & \text{otherwise}                    \\
                 \end{cases}
+                \right)
             \end{math}
-            )
         }
     }
     \blockskip
 
     \DefInline{aggregateMsg(\msgs:\ \MsgSet)}{
         \msgs\ where \;
-        \ \ \ \msg\ =\
         \begin{math}
+            \ \ \ \msgs.insert\left(
             \begin{cases}
                 \msg      & \text{if}\ \msg \neq \texttt{None} \\
                 \emptyset & \text{otherwise}                   \\
             \end{cases}
+            \right)
         \end{math}
     }
     \blockskip
