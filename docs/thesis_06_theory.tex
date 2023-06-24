@@ -7,7 +7,7 @@ In the following chapter, a description of the theoretical concepts needed for a
 
 A knowledge graph uses a graph-structured data model to represent knowledge of some real-world domain. Where each node represents an entity -- a \textit{thing} from the actual world -- and the edges are the relationships between them. This type of graph is often assembled from a wide variety of sources, and as a result, can be highly diverse in terms of structure and granularity~\cite{DBLP:journals/corr/abs-2003-02320}. To address this issue, representations of \textit{schema}, \textit{identity} and \textit{context} are needed. While the former defines the high-level structure of the graph, \textit{identity} relates nodes that conform to the same real-world entity; finally, \textit{context} provides the environment for specific knowledge to be understood. Let me write a more formal definition of a knowledge graph:
 
-\begin{definition}[Knowledge graph]
+\begin{definition}[Knowledge Graph]
     A knowledge graph is a graph-structured data model that captures knowledge in a specific domain, having nodes that represent entities and edges that represent relationships between their entities~\cite{https://doi.org/10.48550/arxiv.2110.11709}.
 \end{definition}
 
@@ -164,7 +164,7 @@ The RDF serialization of Wikidata\footnote{\url{https://www.mediawiki.org/wiki/W
     \inputminted{turtle}{code/listings/6-2_serialization.rdf}
 \end{dumps}
 
-\section{Knowledge graph validation}
+\section{Knowledge Graph validation}
 
 As a brief introduction to this section, let's first describe what validation -- in the context of Knowledge graphs -- is. Wikibase is a collection of data that anyone can edit. This can lead to some concerns regarding the integrity of what is posted on Wikibase, as there is no single point of truth for any given piece of information. According to this, for some piece of data to be considered valid, its description needs to be both syntactically correct and adhere to some type-definition. As we have seen in section \ref{section:wikibase:serialization}, the different serialization formats supported by Wikidata include RDF as one of those. Putting it all together, we require a mechanism for ensuring the \textit{validity} of the RDF documents stored in Wikibase.
 
@@ -220,7 +220,7 @@ Figure \ref{fig:WShEx} represents the relationship between ShEx, WShEx and the W
     \label{fig:WShEx}
 \end{figure}
 
-\section{Knowledge graph Subsets}
+\section{Knowledge Graph Subsets}
 
 Wikidata keeps getting bigger and better. A vast volume of data, like that found in Wikidata, has several benefits but also some drawbacks, including performance. One approach that also provides a snapshot of the contents of Wikidata at a specific point in time is to replicate Wikidata on one's infrastructure~\cite{10.37044/osf.io/wu9et}. However, replicating Wikidata in its entirety is not necessary; instead, subsets might be used to focus on, say, a specific domain. As a substitute for reducing the volume and range of data given by Wikidata, those subsets have become more popular. While maintaining compatibility with the entire Wikidata as the model is retained, handling fewer data enables more complex searches and operations over it.
 
@@ -255,7 +255,7 @@ ShEx-based matching comprises using a WShEx schema \myfont{S} as input and inclu
     \input{figures/tables/6-4_neighborhood}
 \end{table}
 
-To put things simply, a neighborhood of a node in a Knowledge graph is the set of all the vertices in the graph that are connected to that node. In other words, it is the set of all the nodes that are \textit{directly} connected to the node in question.
+To put things simply, a neighborhood of a node in a Knowledge Graph is the set of all the vertices in the graph that are connected to that node. In other words, it is the set of all the nodes that are \textit{directly} connected to the node in question.
 
 \section{Data-flow paradigms}
 
@@ -306,7 +306,7 @@ It's quite simple to describe the architecture of a Pregel system. As we have se
 
 \begin{figure}[p]
     \centering
-    \includestandalone[width=0.66\textwidth]{diagrams/6-10_pregelArchitecture}
+    \includestandalone[width=\textwidth]{diagrams/6-10_pregelArchitecture}
     \caption[Architecture of a Pregel system]{Architecture of a Pregel system~\cite{10.1145/3349265}}
     \label{fig:architecture:pregel}
 \end{figure}

@@ -1,6 +1,6 @@
 \epigraph{\textit{Logic is the foundation of the certainty of all the Knowledge we acquire.}}{-- \textup{Leonhard Euler}}
 
-As we have seen thus far, this thesis' main goal is to create a tool capable of generating subsets out of a Knowledge graph. In this chapter, we will explore the possibility of implementing the Pregel framework in Rust, as well as following a novel approach for solving the problem of validating a Knowledge graph.
+As we have seen thus far, this thesis' main goal is to create a tool capable of generating subsets out of a Knowledge Graph. In this chapter, we will explore the possibility of implementing the Pregel framework in Rust, as well as following a novel approach for solving the problem of validating a Knowledge Graph.
 
 \section{Pregel-rs}
 
@@ -99,7 +99,7 @@ For more information on how the Pregel model works, take a look at the appendix 
 
 \subsection{The algorithm in a nutshell}
 
-In this section, we will describe the algorithm that we are using to validate the Knowledge graph. The idea is to transform the given set of rules, \texttt{Shape} \texttt{Expression}, into a tree that is going to be traversed by the Pregel model that we have just described, namely, the subgraph matching algorithm. This idea takes inspiration from the \textit{Distributed subgraph matching algorithm} presented in \cite{Xu2019}; however, several modifications are introduced due to the requirements of our project.
+In this section, we will describe the algorithm that we are using to validate the Knowledge Graph. The idea is to transform the given set of rules, \texttt{Shape} \texttt{Expression}, into a tree that is going to be traversed by the Pregel model that we have just described, namely, the subgraph matching algorithm. This idea takes inspiration from the \textit{Distributed subgraph matching algorithm} presented in \cite{Xu2019}; however, several modifications are introduced due to the requirements of our project.
 
 \subsubsection{The \texttt{Shape} \texttt{Expression} tree}
 
@@ -163,8 +163,9 @@ Following into this definition, we have only implemented part of the \texttt{Sha
     \end{minipage}
 \end{example}
 
-Note that nothing is said about the order of the children of the nodes. This is because the order of those won't matter for the validation of the Knowledge graph, as the \texttt{Shape} \texttt{Expression} is a set of rules, and the order of the rules is not relevant. Hence, the order of the children of the nodes does not matter either. Do not confuse this with the order in which the different depth levels of the tree are traversed. This is going to be discussed later on.
+Note that nothing is said about the order of the children of the nodes. This is because the order of those won't matter for the validation of the Knowledge Graph, as the \texttt{Shape} \texttt{Expression} is a set of rules, and the order of the rules is not relevant. Hence, the order of the children of the nodes does not matter either. Do not confuse this with the order in which the different depth levels of the tree are traversed. This is going to be discussed later on.
 
+\label{section:shape_expression_tree_traversal}
 \subsubsection{The \texttt{Shape} \texttt{Expression} tree traversal}
 
 The tree is going to be traversed in a bottom-up fashion. This means that we are going to start by validating the leaves and then we are going to build the upper nodes, that is, the tree is going to be traversed in a \textit{reverse level order} manner. The reason for this is that we want to validate the leaves first because they are the ones that are going to be used for validating their parents. This is going to be done by an \texttt{iterator} that we will describe later on.
@@ -183,25 +184,29 @@ For us to better understand the traversal of the tree, we are going to use the f
 
 \subsubsection{The sub-graph matching algorithm}
 
-The sub-graph matching algorithm that is going to be used for validating the Knowledge graph will traverse the Knowledge graph in a Pregel fashion and check whether the current node matches the \texttt{Shape} that is being validated. This is going to be done by the \texttt{iterator} that we have just described. According to this, it can be seen that several procedures should be considered; that is, we must properly define the following characteristics of the Pregel algorithm:
+The sub-graph matching algorithm that is going to be used for validating the Knowledge Graph will traverse it in a Pregel fashion and check whether a node matches the \texttt{Shape} that is being validated. This is going to be done by the \texttt{iterator} that we have just described. According to this, it can be seen that several procedures should be considered; that is, we must properly define the following characteristics of the Pregel algorithm:
 
 \begin{itemize}
     \itemsep0.5em
-    \item The maximum number of iterations we want the algorithm to perform. If possible, we should establish an upper limit for the validation algorithm to iterate. As each superstep will possibly be a resource-heavy task, the lower the number of iterations, the better.
-    \item At the beginning of the algorithm's execution an initial message is sent to all the nodes in the graph. After that, the first superstep is triggered.
-    \item Both the message and the direction they follow are required to be defined. That is, we should establish a mechanism for nodes to know whether their neighbors conform to a certain \texttt{Shape} or not.
-    \item As nodes may have several neighbors, a function for aggregating the set of messages having the node as the destination is also required.
-    \item Having all the messages received and properly aggregated, the node should update its state according to what it has just collected.
+    \item The maximum number of iterations we want the algorithm to perform. If possible, we should establish an upper limit for the validation algorithm to iterate. As each \textit{superstep} will possibly be a resource-heavy task, the lower the number of iterations, the better. The problem is that the number of iterations should be high enough for the algorithm to converge. This is going to be described in Theorem \ref{theorem:convergence}.
+    \item At the beginning of the algorithm's execution an initial message is sent to all the nodes in the graph. In our case, this message should be \texttt{NULL} as no \texttt{Shape} has been validated yet. After that, the first \textit{superstep} is triggered. See line \ref{lst:line:initialMessage} of algorithm \ref{alg:pregel}.
+    \item Both the message and the direction they follow are required to be defined. That is, we should establish a mechanism for nodes to know whether their neighbors conform to a certain \texttt{Shape} or not. In this step \textit{unary} \texttt{Shape} \texttt{Expressions} are going to be validated. See line \ref{lst:line:sendMsg} of algorithm \ref{alg:pregel}.
+    \item As nodes may have several neighbors, a function for aggregating the set of messages having the node as the destination is also required. The idea is to combine all the messages received into a single list of messages. What's more, a mechanism for discarding the non-conformant \texttt{Shapes} is also required. See line \ref{lst:line:aggMsg} of algorithm \ref{alg:pregel}.
+    \item Having all the messages received and properly aggregated, the node should update its state according to what it has just collected. In this step \textit{n-ary} \texttt{Shape} \texttt{Expressions} are going to be validated, as those require the validation of all their children, which were validated in the \textit{send messages} stage. See line \ref{lst:line:vProg} of algorithm \ref{alg:pregel}.
 \end{itemize}
 
-What we have just described is the basic structure of the \texttt{pschema-rs} algorithm. This can be seen in the following pseudocode:
+What we have just described is the basic structure of the \texttt{pschema-rs} algorithm. For more information on the validation of the particular \texttt{Shapes} refer to section \ref{section:validate_trait}.
 
+\label{alg:pregel}
 \begin{pseudocode}[The PSchema algorithm as implemented in Rust]
     \includestandalone{code/algorithms/11-1_pschema}
 \end{pseudocode}
 
-\begin{theorem}
-    Given a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$ and a Knowledge graph $\mathcal{G}$, let $h$ denote the height of $\mathcal{T}$; then if $h = 1$ the Pregel algorithm, denoted as $\mathcal{P}$, is going to validate the Knowledge graph $\mathcal{G}$ against $\mathcal{T}$ in $1$ superstep. If $h > 1$, then $\mathcal{P}$ is going to validate $\mathcal{G}$ against $\mathcal{T}$ in $h - 1$ supersteps. Formally, we can define the number of supersteps as follows:
+As we have just seen, the algorithm is going to be executed in a Pregel fashion. This means that the algorithm is run in several \textit{supersteps}. In our case, we are going to define a \textit{superstep} as the iteration of the algorithm in which a level of the \texttt{Shape} \texttt{Expression} tree is traversed. This means that the number of \textit{supersteps} is going to be strongly related to the height of the \texttt{Shape} \texttt{Expression} tree. This can be seen in the following theorem:
+
+\begin{theorem}[Convergence of the PSchema algorithm]
+    \label{theorem:convergence}
+    Given a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$ and a Knowledge Graph $\mathcal{G}$, let $h$ denote the height of $\mathcal{T}$; then if $h = 1$ the Pregel algorithm, denoted as $\mathcal{P}$, is going to validate the Knowledge Graph $\mathcal{G}$ against $\mathcal{T}$ in $1$ superstep. If $h > 1$, then $\mathcal{P}$ is going to validate $\mathcal{G}$ against $\mathcal{T}$ in $h$ supersteps if none the \texttt{Shapes} is \textit{n-anary}; otherwise, $\mathcal{P}$ is going to validate $\mathcal{G}$ against $\mathcal{T}$ in $h - 1$ supersteps. Formally, we can define the number of \textit{supersteps} as follows:
 
     \begin{equation}
         \texttt{supersteps}(\mathcal{T}, \mathcal{G}) =
@@ -212,15 +217,89 @@ What we have just described is the basic structure of the \texttt{pschema-rs} al
     \end{equation}
 \end{theorem}
 
+\vspace*{-1em}
+
 \begin{proof}
-    Let us have $h$ the height of a \texttt{Shape} \texttt{Expression} tree $\mathcal{T}$, and let us denote $d_i$ the depth of the node $i$ in $\mathcal{T}$. Hence, at the superstep $h - d_i$, all the nodes at depth $d_i$ are going to be validated. As we traverse the tree in a \textit{reverse level order}, the previous definition holds. Hence, at the first superstep, the leaves are going to be validated, that is, at superstep 1, all the nodes at depth $h - 1$ are going to be validated. Then, at superstep 2, all the nodes at depth $h - 2$ are going to be validated; this is, at superstep $i$ nodes at depth $h - i$ are going to be validated. Thus, the tree is going to be traversed in $h$ supersteps. As the root is validated at the superstep $h - 0 = h$; note that the depth of the root node is 0, then, it can be seen that the tree is going to be traversed in $h$ supersteps.
+    The proof of this theorem is going to be done by induction on the definition of the \texttt{Shape} \texttt{Expression} tree. Let $h$ denote the height of the tree. If $h = 1$, then the \texttt{Shape} \texttt{Expression} tree will be just a leaf. This means that the \texttt{Shape} \texttt{Expression} is going to be a \textit{unary} one. In this case, the algorithm is going to validate the Knowledge Graph in a single \textit{superstep}, as the traversal of the \texttt{Shape} \texttt{Expression} tree is going to be performed in just one step: note that the root is validated at the first \textit{superstep}, and the last \texttt{Shape} to be validated is always the root node. With that said, let's study the two recursive cases of the \texttt{Shape} \texttt{Expression} tree definition. Let $\mathcal{T}$ be a \texttt{Shape} \texttt{Expression} tree of height $h > 1$. Let $\{\mathcal{T}_1, \mathcal{T}_2, ..., \mathcal{T}_n\}$ be the subtrees of $\mathcal{T}$, respectively. Let $\{h_1, h_2, ..., h_n\}$ denote the heights of $\{\mathcal{T}_1, \mathcal{T}_2, ..., \mathcal{T}_n\}$. Thus, we have that $h = max(h_1, h_2, ..., h_n) + 1$. For the sake of simplicity, let me assume the height of the $\mathcal{T}_1$ subtree is the greatest among all. As so, let's first assume that the tree has no \textit{n-ary} operations; hence, the algorithm $\mathcal{P}$ is going to validate the Knowledge Graph against $\mathcal{T}$ in $h$ \textit{supersteps}. We know that the algorithm is validating $\mathcal{T}_1$ in $h_1$ \textit{supersteps} as the algorithm validates one level at a time. As the root is a \textit{unary} operation, we need it to be validated at the \textit{send messages} stage; this is, at the next \textit{superstep}. Then, the algorithm is going to converge in $h = h_1 + 1$ \textit{iterations}. Now, let's assume that the root of $\mathcal{T}$ is an \textit{n-ary} operation. In this case, the algorithm is going to validate the Knowledge Graph in $h - 1$ \textit{supersteps}. This is because the algorithm is going to validate $\mathcal{T}_1$ in $h_1$ \textit{supersteps}. As the root is an \textit{n-ary} operation, we will validate it at the \textit{vertex pogram} stage; this is, at the current \textit{superstep}: after all the \textit{unary} \texttt{Shapes} were validated. Thus, the algorithm is going to converge in $h = h_1$ \textit{supersteps}. Now, let's define $\mathcal{T'}$ a tree with a single child $\mathcal{T}$, according to this, we have that $h' = h + 1$. Then, we know that the algorithm is going to require one extra \textit{superstep} to validate the root of $\mathcal{T'}$. Note that it doesn't matter whether the root is an \textit{n-ary} operation or not, as the algorithm requires one extra \textit{superstep} when compared to $\mathcal{T}$, for the root to be validated. Recall, when the root of $\mathcal{T}$ was validated, the algorithm converged. Thus, for $\mathcal{T'}$ to converge, the algorithm will require $iterations(\mathcal{T'}) = iterations(\mathcal{T}) + 1$. Hence, by recursion, we have that the algorithm is going to converge in $h'$ \textit{supersteps} if the root of $\mathcal{T}$ is a \textit{unary} operation; otherwise, it is going to converge in $h' - 1$ \textit{supersteps}.
 \end{proof}
+
+This Theorem is going to be of great importance in the implementation of the algorithm, as the number of \textit{supersteps} is going to be used to determine when the algorithm has finished. This is, once the algorithm has converged. The way this is implemented in \texttt{pschema-rs} is as follows:
+
+\begin{code}[The Theorem implementation in Rust]
+    \inputminted{rust}{code/listings/11-8_iterations.rs}
+\end{code}
+
+Note that for us to tell if the \texttt{Shape} \texttt{Expression} tree contains an \textit{n-ary} operation, we have to traverse the whole tree checking whether any of the \texttt{Shapes} is an \textit{n-ary} one. This can be done as follows:
+
+\begin{code}[The Theorem implementation in Rust]
+    \inputminted{rust}{code/listings/11-8_nary.rs}
+\end{code}
 
 \subsection{Implementation}
 
+\subsubsection{Data import and export}
+
+For us to be able to validate a Knowledge Graph, we need to be able to import it into the \texttt{pschema-rs} tool. This is, we have to convert from any of the supported Knowledge Graph formats to a \texttt{GrapFrame}. For a \textit{backend} to be supported, it must implement the \texttt{Backend} trait, which will provide the \textit{backends} with two methods, namely, \texttt{import} and \texttt{export}. The former will be used to convert from a dump to a \texttt{GraphFrame}, and the latter will be used to convert from a \texttt{GraphFrame} to a dump. The supported \textit{backends} are the following:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \rowcolor[HTML]{EFEFEF}
+        \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Backend}} & \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Import}} & \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Export}} \\ \hline
+        \texttt{DuckDB}                                                & {\color[HTML]{009901} Supported}                              & {\color[HTML]{FF4500} Planned}                                \\ \hline
+        \texttt{Parquet}                                               & {\color[HTML]{FE0000} Not Supported}                          & {\color[HTML]{009901} Supported}                              \\ \hline
+        \texttt{NTriples}                                              & {\color[HTML]{009901} Supported}                              & {\color[HTML]{FE0000} Not Supported}                          \\ \hline
+    \end{tabular}
+    \caption{Supported backends in \texttt{pschema-rs}}
+\end{table}
+
+Note that we have not devoted an enormous effort to the implementation of several \textit{backends} as we have done with the \texttt{Shape} \texttt{Expressions}. This is because they are not the most important part of the tool; however, they are going to be implemented in the future. Something that would be interesting is implementing both the \texttt{import} and \texttt{export} methods of a certain format so we can chain \textit{subsetting} calls. This is, creating a subset of a dump, which can be processed again to create a subset of the subset, and so on.
+
 \subsubsection{The \texttt{Iterator}}
 
+Recall what we have seen in section \ref{section:shape_expression_tree_traversal}, where we explained the \textit{reverse level order} tree traversal. According to this, we have to somewhat build a tree out of the \texttt{Shape} \texttt{Expression} we are willing to validate. This is going to be done by the \texttt{Iterator} component. This component is going to be in charge of creating and traversing the \texttt{Shape} \texttt{Expression} tree in a \textit{reverse level order} manner. This is implemented through a \textit{queue} data structure. This is, \textit{First In, First out}. The root is going to be the starting \texttt{Shape} that we pass as a parameter. Then, if the root is one of the base cases in the \texttt{Shape} \texttt{Expression} tree, we are done. Otherwise, we add the children of the root to the \texttt{Queue}. Then, we take the next element in the \texttt{Queue} and repeat the process. This is, we check if it is a base-case, and if it is not, we add its children to the \texttt{Queue}. We repeat this process until the \texttt{Queue} is empty. This is, once we have traversed the whole tree. The implementation of this component is as follows:
+
+\begin{code}[The \texttt{Iterator} component as implemented in \texttt{pschema-rs}]
+    \inputminted{rust}{code/listings/11-9_tree.rs}
+\end{code}
+
+Note that for this to be considered a \textit{reverse level order} traversal, we have to \textit{reverse} the result. This is, we have to start with the \texttt{Shape} \texttt{Expression} that is the furthest away from the root. Apart from that, it is worth noting that for us to traverse the tree level-by-level, what we are doing is -- at each iteration -- expanding only those nodes that were in the \textit{queue} at the beginning of it. Hence, we are only expanding the nodes that are at the current level.
+
 \subsubsection{The \texttt{Validate} \texttt{trait}}
+\label{section:validate_trait}
+
+The \texttt{Validate} trait is responsible for implementing the \texttt{validate} method. This method is going to be called by the \texttt{pschema-rs} tool to validate each of the \texttt{Shapes} in the tree. Note that we pass the previous \texttt{Shape} as a parameter, allowing us to concatenate the results of the validation of the current \texttt{Shape} with the results of the previous one during the \textit{n-ary} validation stage. To follow up on this, we are going to see how the \texttt{Validate} trait is implemented for each of the \texttt{Shape} \texttt{Expressions} that we have seen in algorithm \ref{alg:pregel}.
+
+First, the most basic representation is the \texttt{Triple} \texttt{Constraint}, which is the base-case of the \texttt{Shape} \texttt{Expression} tree. Through this type of \texttt{Shape} we identify a predicate and its corresponding object. The \texttt{validate} method for this \texttt{Shape} will look for the equality on the predicate and the object of the \texttt{Triple} \texttt{Constraint} in the \texttt{RDF Graph} that we are validating. If it is found, we return the \textit{label} of the \texttt{Shape}; this is, the identifier of it.
+
+\begin{code}[The \texttt{Validate} \texttt{trait} as implemented in \texttt{pschema-rs} for the \texttt{Triple} \texttt{Constraint}]
+    \inputminted{rust}{code/listings/11-10_triple.rs}
+\end{code}
+
+Second, we have the \texttt{Reference} \texttt{Shape}. This \texttt{Shape} is going to be used to reference another \texttt{Shape} in the \texttt{Shape} \texttt{Expression} tree. This is, we are going to use this \texttt{Shape} to point to another \texttt{Shape} that we have already validated. This is going to be done by using the \textit{label} of the \texttt{Shape} that we are referencing. What we will do is try to find in the list of already validated \texttt{Shapes}, that is, the \texttt{labels} column, if it contains the \textit{label} of the \texttt{Shape} that we are referencing. If it does, we return the \textit{label} of this \texttt{Shape}.
+
+\begin{code}[The \texttt{Validate} \texttt{trait} as implemented in \texttt{pschema-rs} for the \texttt{Reference} \texttt{Shape}]
+    \inputminted{rust}{code/listings/11-11_reference.rs}
+\end{code}
+
+Third, we have the first \textit{n-ary} \texttt{Shape}, which is the \texttt{Cardinality} one. This \texttt{Shape} is going to be used to check whether a certain \texttt{Shape} is valid at least \textit{n} times, and at most \textit{m}. This is, we are going to validate the \texttt{Shape} that is wrapped by the \texttt{Cardinality} component and we will check if the number of compliant \textit{labels} is in the range from \textit{n} to \textit{m}. What's more, we can specify whether the bounds are \textit{inclusive} or \textit{exclusive}. This is accomplished through the \textit{cumulative sum} of the \textit{labels} that are equal to the \textit{label} of the \texttt{Shape} that we are wrapping. If the result of the \textit{cumulative sum} is in the range from \textit{n} to \textit{m}, we concatenate the \textit{label} of the \texttt{Cardinality} \texttt{Shape} to the \textit{labels} column.
+
+\begin{code}[The \texttt{Validate} \texttt{trait} as implemented in \texttt{pschema-rs} for the \texttt{Cardinality} \texttt{Shape}]
+    \inputminted{rust}{code/listings/11-14_cardinality.rs}
+\end{code}
+
+Fourth, we have the \texttt{ShapeAnd}. This is going to be used to check whether \textit{all} the children of a certain \texttt{Shape} are valid. This is, we are going to validate each of the children of the \texttt{Shape} and then check if \textit{all} of them are valid. If they are, we return the \textit{label} of the \texttt{Shape}, and we concatenate it to the \textit{labels} column. This is accomplished through the \texttt{fold} function, which iterates over all the shapes within the \texttt{ShapeAnd} \texttt{Shape}, applying a \textit{logical and} operation between the \textit{accumulator} and whether the current \texttt{Shape} is included in the \textit{labels} column. Note that this also allows us to validate \textit{groupings} of \texttt{Shapes}, not just the implementation of the \texttt{AND} operator. This last functionality will be the most used in the examples\footnote{\url{https://github.com/angelip2303/pschema-rs/tree/main/examples}} that we have implemented.
+
+\begin{code}[The \texttt{Validate} \texttt{trait} as implemented in \texttt{pschema-rs} for the \texttt{ShapeAnd}]
+    \inputminted{rust}{code/listings/11-12_and.rs}
+\end{code}
+
+Lastly, we have the \texttt{ShapeOr}. This \texttt{Shape} will check if \textit{any} of the children of a certain \texttt{Shape} are valid. Note that this component will behave similarly to the \texttt{ShapeAnd}, but instead of applying a \textit{logical and}, we will apply a \textit{logical or} function.
+
+\begin{code}[The \texttt{Validate} \texttt{trait} as implemented in \texttt{pschema-rs} for the \texttt{ShapeOr}]
+    \inputminted{rust}{code/listings/11-13_or.rs}
+\end{code}
 
 \subsection{Optimizations}
 

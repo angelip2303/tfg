@@ -1,0 +1,27 @@
+\epigraph{\textit{No amount of experimentation can ever prove me right; a single experiment can prove me wrong.}}{-- \textup{Albert Einstein}}
+
+\section{Methodology}
+
+For us to evaluate the performance of our proposed method, we need to compare it with the state-of-the-art tools we showed in Chapter \ref{chapter:related}. For us to do so, we need to have a set of experiments that we can run on the same software environment. We also need to have a bunch of datasets that we can use to run the experiments. In this chapter, we will describe the methodology we used to conduct the experiments and the datasets we used to run them. For us to achieve this, we will answer the questions posed in Chapter \ref{chapter:intro}, namely, the project goals (see section \ref{section:objectives}).
+
+\begin{enumerate}
+    \itemsep0.5em
+    \item To evaluate how the \textit{subsetting} tool has been improved, we need to run the \textit{subsetting} tool on the same software environment as the one used in the original paper. We will use the \textit{ETL} tool to compress the Wikidata JSON dump to a size that is manageable for the \textit{Pregel} algorithm. This is, we will try to tell if the tool has been improved in terms of the hardware needed to run it. Recall that for Labra's \cite{https://doi.org/10.48550/arxiv.2110.11709} solution to work, a costly machine with 4TB of RAM is required. We will verify if our solution can run on commodity hardware.
+    \item To evaluate how the \textit{subsetting} tool has been improved, we need to measure the time it takes to subset the Wikidata JSON dump. We will compare the time it takes to subset the Wikidata JSON dump with the time it takes to subset the Wikidata JSON dump using the original tool.
+    \item To evaluate how the \textit{subsetting} tool has been improved, we will try to subset other RDF datasets, apart from the Wikidata JSON dump. This is, we will try to tell if the tool is generic enough to subset other RDF Knowledge graphs.
+\end{enumerate}
+
+\section{Hardware}
+
+For us to run the experiments, we need to have a machine with enough resources to run them. Hence, we will use a machine proprietary of the \textit{Web Semantic Research Group} (WESO) of the \textit{University of Oviedo}. The machine has the following specifications:
+
+\begin{itemize}
+    \itemsep0.5em
+    \item \textbf{CPU}: Intel(R) Xeon(R) Silver 4214 CPU @ 2.20GHz (12 cores and 24 threads)
+    \item \textbf{RAM}: 40GB
+    \item \textbf{OS}: Ubuntu 20.04.3 LTS
+\end{itemize}
+
+\section{Datasets}
+
+To test the above questions, we will use two types of datasets, namely, Wikidata JSON dumps and RDF datasets. We will use the Wikidata JSON dumps from 2017-08-21 to test the \textit{ETL} tool, and we will use both for the \textit{subsetting} tool. For us to compare our solution with the original one, we will use the same Wikidata JSON dump used in the original paper.

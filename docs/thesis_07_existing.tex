@@ -124,7 +124,7 @@ The next paragraphs will describe the ShEx validation algorithm based on Pregel.
     \label{fig:state:pregel}
 \end{figure}
 
-According to figure \ref{fig:state:pregel}, nodes might be active if they have received some messages, or inactive if they have not received any messages. Certain sub-states are necessary for us to produce a more accurate answer based on Knowledge graph validation. The algorithm in the Pregel approach is in charge of annotating each node $n\in\mathcal{V}$ with a status map expressing the validation progress for specific labels. A more detailed description of the possible values that the \texttt{Status} can take is provided:
+According to figure \ref{fig:state:pregel}, nodes might be active if they have received some messages, or inactive if they have not received any messages. Certain sub-states are necessary for us to produce a more accurate answer based on Knowledge Graph validation. The algorithm in the Pregel approach is in charge of annotating each node $n\in\mathcal{V}$ with a status map expressing the validation progress for specific labels. A more detailed description of the possible values that the \texttt{Status} can take is provided:
 
 \begin{center}
     \input{figures/tables/7-1_status}
