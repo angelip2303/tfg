@@ -2,18 +2,45 @@
 
 \section{Planning}
 
+This project's planning was divided into four main phases: the first one was the \textbf{research phase}, where the state of the art was studied and the main concepts were understood; the second one was the \textbf{development phase}, where the main focus was to develop the project's solution; to continue, the \textbf{writing phase} was the period at which the thesis was written. Lastly, the last part of this project is the \textbf{defense of the work phase}, where the thesis is presented and defended. Thus, we can see the project's timeline in \ref{fig:summary_timeline}, for a more detailed description, see Figure \ref{fig:timeline} and Table \ref{tab:timeline}.
+
 \begin{figure}[ht]
     \centering
-    \includestandalone[width=1\textwidth]{diagrams/14-1_timeline}
+    \includestandalone[width=1\textwidth]{diagrams/14-2_summary}
     \caption{Project timeline highlighting the most important reached milestones}
+    \label{fig:summary_timeline}
+\end{figure}
+
+\subsection{Research phase}
+
+The research phase was divided into two main parts: the first one was the \textbf{research of the state of the art}, where the main concepts were studied and understood; the second one was the \textbf{research of the technologies}, where the technologies that were going to be used in the project were analyzed. To be fair, part of this phase was done during the development phase, as we changed the technologies that were going to be used in the project. However, the main concepts were already understood, so the research on the technologies was not that hard. Hence, we can say that the research phase ended when the development phase started.
+
+\subsection{Development phase}
+
+The development phase was divided into three main parts: the first one was the \textbf{development of DataFrame-based solution}, where we tried to develop a solution based on DataFrames. As have already discussed, the outcome of this part was not as expected, so we had to change the approach; the second one was the \textbf{development of the ETL pipeline}, where we developed the \texttt{wd2duckdb} tool; the third one was the \textbf{development of the Pregel algorithm}, where we developed the \texttt{pschema-rs} tool.
+
+\subsection{Writing phase}
+
+The writing phase was divided into two main parts: the first one was the \textbf{literature review}, where the state of the art was studied and written; the second one was the \textbf{thesis}, where the thesis was written. The first part was done during the research phase; for the sake of simplicity, we will consider that the \textit{literature review} stage is part of the \textit{research phase}. Hence, the writing phase is only composed of the \textit{thesis} stage, where I wrote the part of the thesis that is created entirely by me.
+
+\subsection{Defense of the work phase}
+
+The defense of the work phase was divided into two main parts: the first one was the \textbf{presentation of the thesis}, where the slides and the presentation were created; the second one was the \textbf{defense of the thesis}, where the thesis is going to be presented and defended. This part has not been done yet; however, it is already planned.
+
+\section{Budget}
+
+Note that part of this project was done during an internship at \textit{WESO}. Hence, the budget for this project is going to be calculated based on the rate that the \textit{University of Oviedo} pays to its interns\footnote{\url{https://www.funiovi.org/estudiantes/practicas}}. Provided a 20 hours per week internship, the maximum wage is 400€ per month. Hence, given that a work month has 4.33 weeks, the hourly rate is 4.61€. This rate is going to be used to calculate the budget of this project.
+
+\begin{figure}[p]
+    \centering
+    \includestandalone[width=1\textwidth]{diagrams/14-1_timeline}
+    \caption{Project timeline highlighting all the reached milestones}
     \label{fig:timeline}
 \end{figure}
 
-\begin{table}[ht]
+\begin{table}[p]
     \centering
     \input{figures/tables/14-1_timeline}
     \caption{Tasks planning of the project}
     \label{tab:timeline}
 \end{table}
-
-\section{Budget}
