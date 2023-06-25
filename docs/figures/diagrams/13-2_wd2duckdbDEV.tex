@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}[
+            title={},
+            xlabel={Number of Wikidata entities},
+            ylabel={Time to create the database (s)},
+            ymin=0, ymax=4000,
+            xmode=log,
+            xtick=data,
+            xticklabel=\empty,
+            extra x ticks={10000,90000,810000,7290000},
+            extra x tick labels={$10^4$, $9\cdot10^5$, $8.1\cdot10^6$, $7.29\cdot10^6$},
+            height=8cm,
+            width=\textwidth,
+            legend pos=north west,
+            ymajorgrids=true,
+            grid style=dashed,
+            tick align=inside,
+            every tick label/.append style={font=\small}
+        ]
+        \addplot[
+            color=red,
+            mark=square,
+        ]
+        coordinates {
+                (10000,40.18)
+                (30000,99.52)
+                (90000,243.64)
+                (270000,514.68)
+                (810000,1081.64)
+                (2430000,2566.25)
+                (7290000,1349.10)
+                (21870000,3730.33)
+            };
+    \end{axis}
+\end{tikzpicture}
+\end{document}

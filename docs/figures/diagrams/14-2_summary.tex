@@ -39,56 +39,55 @@ outer sep=1pt
     \small
 
     %% Coordinates
-    \coordinate (O) at (-1,0); % Origin
-    \coordinate (P1) at (2.5,0);
-    \coordinate (P2) at (8,0);
-    \coordinate (P3) at (10,0);
-    \coordinate (P4) at (12,0);
+    \coordinate (O) at (0,0); % Origin
+    \coordinate (P1) at (3.5,0);
+    \coordinate (P2) at (11,0);
+    \coordinate (P3) at (12,0);
     \coordinate (F) at (13,0); %End
     \coordinate (E1) at (5,0); %Event
-    \coordinate (E2) at (2,0); %Event
+    \coordinate (E2) at (3,0); %Event
+    \coordinate (E3) at (12.6,0); %Event
 
     %% Filled regions
     \shade[left color=blueUniovi!40, right color=white] rectangle (O) -- (P1) -- ($(P1)+(0,1)$) -- ($(O)+(0,1)$); % Studies
-    \path [pattern color=blueUniovi, pattern=north east lines, line width = 1pt, very thick] rectangle ($(O)+(2,0)$) -- ($(O)+(5,0)$) -- ($(O)+(5,1)$) -- ($(O)+(2,1)$); % Something else
+    \path [pattern color=blueUniovi, pattern=north east lines, line width = 1pt, very thick] rectangle ($(O)+(1.5,0)$) -- ($(O)+(5.5,0)$) -- ($(O)+(5.5,1)$) -- ($(O)+(1.5,1)$); % Something else
     \shade[left color=blueUniovi!30, right color=white] rectangle (P1) -- (P2) -- ($(P2)+(0,1)$) -- ($(P1)+(0,1)$); % Work
     \shade[left color=blueUniovi, right color=white] rectangle (P2) -- (P3) -- ($(P3)+(0,1)$) -- ($(P2)+(0,1)$); % Current work
-    \shade[left color=blueUniovi, right color=white] rectangle (P3) -- (P4) -- ($(P4)+(0,1)$) -- ($(P3)+(0,1)$); % Defense
 
     %% Text inside filled regions
-    \draw ($(P1)+(-2.5,0.5)$) node[activity,blueUniovi] {Research};
-    \draw ($(P2)+(-2,0.5)$) node[activity,blueUniovi] {Development};
-    \draw ($(P3)+(-1,0.5)$)  node[activity, blueUniovi] {Writing};
-    \draw ($(P4)+(0,0.5)$)  node[activity, blueUniovi] {Defense of the work};
+    \draw ($(P1)+(-2.75,0.5)$) node[activity,blueUniovi] {Research};
+    \draw ($(P2)+(-3.5,0.5)$) node[activity,blueUniovi] {Development};
+    \draw ($(P3)+(-0.25,0.5)$)  node[activity, blueUniovi] {Writing};
 
     %% Description
-    \node[descript, fill=blueUniovi!15, text=blueUniovi](D2) at ($(P2)+(-4,-2.5)$) {%
+    \node[descript, fill=blueUniovi!15, text=blueUniovi](D2) at ($(P2)+(-3,-2.5)$) {%
         \textbf{wd2duckdb}\\
         Implementation\\
         finished
     };
 
-    \node[descript, fill=blueUniovi!15, text=blueUniovi](D3) at ($(P3)+(-3,-2.5)$) {%
+    \node[descript, fill=blueUniovi!15, text=blueUniovi](D3) at ($(P3)+(-1,-2.5)$) {%
         \textbf{pschema-rs}\\
         Implementation\\
         finished
     };
 
     %% Events
-    \draw[<-,thick, color=black] ($(E1)+(0,0.1)$) -- ($(E1)+(0,1.5)$) node [above=0pt,align=center,black] {Changing\\to Rust};
-    \draw [decorate, decoration={brace, amplitude=6pt}]($(E2)+(-1,1.2)$) -- ($(E2)+(0.5,1.2)$) node [black,midway,above=6pt] {Internship};
+    \draw[<-,thick, color=black] ($(E1)+(1.5,0.1)$) -- ($(E1)+(1.5,1.5)$) node [above=0pt,align=center,black] {Changing\\to Rust};
+    \draw[<-,thick, color=black] ($(E3)+(0,0.1)$) -- ($(E3)+(0,1.5)$) node [above=0pt,align=center,black] {Defense\\of the thesis};
+    \draw [decorate, decoration={brace, amplitude=6pt}]($(O)+(1.5,1.2)$) -- ($(O)+(3.5,1.2)$) node [black,midway,above=6pt] {Internship};
 
     %% Arrows
-    \path[->, color=blueUniovi] ($(P2)+(-2.5,-0.1)$) edge [out=-90, in=130]  ($(D2)+(0,1)$);
-    \path[->, color=blueUniovi]($(P2)+(-0.5,-0.1)$)  edge [out=-70, in=90]  ($(D3)+(0,1)$);
+    \path[->, color=blueUniovi] ($(P2)+(-1.5,-0.1)$) edge [out=-90, in=130]  ($(D2)+(0,1)$);
+    \path[->, color=blueUniovi]($(P3)+(-0.5,-0.1)$)  edge [out=-70, in=90]  ($(D3)+(0,1)$);
 
     %% Arrow
-    \draw[->] (O) -- (F);
+    \draw[->] ($(O)+(-1,0)$) -- (F);
     %% Ticks
-    \foreach \x in {0,2,...,10}
-    \draw(\x cm,3pt) -- (\x cm,-3pt);
+    \foreach \x in {0,2.5,...,12.5}
+    \draw(\x cm,4pt) -- (\x cm,-4pt);
     %% Labels
-    \foreach \i \j in {0/September,2/November,4/January,6/March,8/May,10/July}{
+    \foreach \i \j in {0/September,2.5/November,5/January,7.5/March,10/May,12.5/July}{
             \draw (\i,0) node[below=3pt] {\j} ;
         }
 \end{tikzpicture}
