@@ -27,3 +27,24 @@ As we have seen in the previous chapter, the \texttt{wd2duckdb} tool is analyzed
 
 
 \section{\texttt{pschema-rs}}
+
+\begin{figure}[p]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includestandalone[width=\textwidth,height=6cm]{diagrams/13-4_pschemaN}
+        \caption{Modifying the number of Wikidata Entities}
+    \end{subfigure}%
+    \vspace*{1em}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includestandalone[width=\textwidth,height=6cm]{diagrams/13-5_pschemaDEPTH}
+        \caption{Modifying the depth of the \texttt{ShEx} tree}
+    \end{subfigure}%
+    \vspace*{1em}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includestandalone[width=\textwidth,height=6cm]{diagrams/13-6_pschemaBREADTH}
+        \caption{Modifying the breadth of the \texttt{ShEx} tree}
+    \end{subfigure}
+    \caption{Time to create the \textit{subsets} of Wikidata with \texttt{pschema-rs}}
+\end{figure}
