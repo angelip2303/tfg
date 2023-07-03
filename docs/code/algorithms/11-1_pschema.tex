@@ -18,7 +18,7 @@
     \blockskip
 
     \texttt{initialMessage} = \texttt{None} \label{lst:line:initialMessage} \;
-    \texttt{v} = \texttt{Pregel(initialMessage,sendMsg,aggregateMsg,vProg)} \;
+    \texttt{v} = \texttt{Pregel(maxIterations,initialMessage,sendMsg,aggregateMsg,vProg)} \;
     \Return{v} \;
     \blockskip
 
@@ -27,9 +27,12 @@
             \begin{math}
                 \msgs.insert\left(
                 \begin{cases}
-                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \TripleConstraint \\
-                    \text{validate(\lbl, \g)} & \text{if}\ \lbl = \ShapeReference   \\
-                    \texttt{None}             & \text{otherwise}                    \\
+                    \text{validate(\lbl, \g)}          & \text{if}\ \lbl = \TripleConstraint \\
+                    \text{validate(\lbl, \g)}          & \text{if}\ \lbl = \ShapeReference   \\
+                    \text{validate(\lbl, \labels, \g)} & \text{if}\ \lbl = \ShapeAnd         \\
+                    \text{validate(\lbl, \labels, \g)} & \text{if}\ \lbl = \ShapeOr          \\
+                    \text{validate(\lbl, \labels, \g)} & \text{if}\ \lbl = \Cardinality      \\
+                    \texttt{None}                      & \text{otherwise}                    \\
                 \end{cases}
                 \right)
             \end{math}
@@ -51,16 +54,7 @@
     \blockskip
 
     \DefInline{vProg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet], \msgs:\ \MsgSet)}{
-        \msgs\ where \;
-        \ \ \ \msg\ =\
-        \begin{math}
-            \begin{cases}
-                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \ShapeAnd    \\
-                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \ShapeOr     \\
-                \text{validate(\lbl, \msgs, \g)} & \text{if}\ \lbl = \Cardinality \\
-                \texttt{None}                    & \text{otherwise}               \\
-            \end{cases}
-        \end{math}
+        \labels\.concatenate(\msgs)\;
     } \label{lst:line:vProg}
 \end{algorithm}
 \end{document}

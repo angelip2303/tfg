@@ -1,0 +1,1 @@
+col(Column::Predicate.as_ref()).cast(DataType::Categorical(None))

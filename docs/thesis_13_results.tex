@@ -4,6 +4,30 @@
 
 As we have seen in the previous chapter, the \texttt{wd2duckdb} tool is analyzed thoroughly for us to understand how it performs and what can be done to improve it. In this section, we will present the execution times of the tool provided several configurations. What we want to see is how the tool performs with different optimizations enabled and how it compares to the original version of the tool. As such, we will prove that the optimizations we have implemented are indeed useful and that they improve the performance of the tool. Recall that the optimizations that we have implemented were described in section \ref{section:optimizations}.
 
+As can be seen in Figure \ref{fig:wd2duckdb}, the optimizations that we have implemented improve the performance of the tool. This is something that was expected before running the tests; however, the results obtained prove to be a worthy improvement. Note that for us to test the performance of the tool, we have used the same Wikidata dump for all the tests. The idea is to create 8 different databases each three times larger than the previous one. This, we have increased the number of Wikidata entities by a factor of 3 each time, starting from 10 thousand items to 21.87 million elements. This is, values in the abscissa axis
+can be obtained through the following representation: $10,000 \cdot 3^n, n \in [0, 7]$. For us to fit such a big range of values in a single graph, we have used a logarithmic scale for the x-axis. This way, we can see the results of the tests in a single graph. Note that for the y-axis, we have used a linear scale, as the values are not that big, ranging from $0$ to $4,000$ and $40,000$ seconds, respectively, modeling the time it took to generate the database. This is said to be a \textit{semi-logarithmic} plot. To put it all together, we have used this type of representation to manage to test the tool with a wide range of values, and still, be able to see the results in a single graph.
+
+For us to understand the values better, let me show them in a table, and then, we will comment on them in detail. Table \ref{table:wd2duckdb} shows the time it took to create the database with the different optimizations enabled and disabled.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor[HTML]{EFEFEF}
+        \cellcolor[HTML]{C0C0C0}\textbf{N}               & \textit{0} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{5} & \textit{6} & \textit{7} \\ \hline
+        \cellcolor[HTML]{C0C0C0}\textbf{Optimizations}   & 4.56       & 11.05      & 26.36      & 54.87      & 112.30     & 250.86     & 1,349.10   & 3,730.33   \\ \hline
+        \cellcolor[HTML]{C0C0C0}\textbf{No Optimization} & 40.18      & 99.52      & 243.64     & 514.68     & 1,081.64   & 2,566.25   & 13,157.18  & 37,340.60  \\ \hline
+    \end{tabular}
+    \caption{Time to create the database with \texttt{wd2duckdb}}
+    \label{table:wd2duckdb}
+\end{table}
+
+As can be seen, the time it takes \texttt{wd2duckdb} to process the dumps grows at a linear rate. What's more, we can see that the speedup in the execution time is almost 10. Let me first calculate this value, and then, we will comment on the results. Having ${Time_{DEV}}_i$ the $i^{th}$ execution time of the tool in developer mode, that is, with no optimization enabled, and ${Time_{OPT}}_j$ the $j^{th}$ execution time of the tool in release mode, that is, with all the optimizations enabled. The speedup is calculated as follows:
+
+\begin{equation}
+    \text{Speedup} = \frac{\overline{Time_{DEV}}}{\overline{Time_{OPT}}} = \frac{\sum_{i=0}^{7}t_i}{\sum_{j=0}^{7}t_j} = \frac{40.18 + \cdots + 37,340.60}{4.56 + \cdots + 3,730.33} = \frac{55,043.70}{5,539.43} = 9.94
+\end{equation}
+
 \begin{figure}[p]
     \begin{subfigure}{0.49\textwidth}
         \centering
@@ -23,10 +47,26 @@ As we have seen in the previous chapter, the \texttt{wd2duckdb} tool is analyzed
         \caption{Comparison between the two options: with and without optimizations}
     \end{subfigure}
     \caption{Time to create the database with \texttt{wd2duckdb}}
+    \label{fig:wd2duckdb}
 \end{figure}
 
-
 \section{\texttt{pschema-rs}}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|
+            >{\columncolor[HTML]{C0C0C0}}c |c|c|c|}
+        \hline
+        \textbf{N}          & \cellcolor[HTML]{EFEFEF}\textit{0} & \cellcolor[HTML]{EFEFEF}\textit{1} & \cellcolor[HTML]{EFEFEF}\textit{2} \\ \hline
+        \textbf{pschema-rs} & 5,014.34                           & 4,995.30                           & 4,996.04                           \\ \hline
+        \textbf{wdsub}      & 5,090.01                           & 5,064.14                           & 5,071.09                           \\ \hline
+    \end{tabular}
+    \caption{Time to create the \textit{subsets} of Wikidata with \texttt{pschema-rs} and \texttt{wdsub}}
+\end{table}
+
+\begin{equation}
+    \text{Speedup} = \frac{\overline{Time_{wdsub}}}{\overline{Time_{pschema-rs}}} = \frac{\sum_{i=0}^{2}t_i}{\sum_{j=0}^{2}t_j} = \frac{5,090.01 + \cdots + 5,071.09}{5,014.34 + \cdots + 4,996.04} = \frac{15,225.28}{15,005.69} = 1.01
+\end{equation}
 
 \begin{figure}[p]
     \begin{subfigure}{\textwidth}
