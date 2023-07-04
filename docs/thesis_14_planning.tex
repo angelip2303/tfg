@@ -13,23 +13,43 @@ This project's planning was divided into four main phases: the first one was the
 
 \subsection{Research phase}
 
-The research phase was divided into two main parts: the first one was the \textbf{research of the state of the art}, where the main concepts were studied and understood; the second one was the \textbf{research of the technologies}, where the technologies that were going to be used in the project were analyzed. To be fair, part of this phase was done during the development phase, as we changed the technologies that were going to be used in the project. However, the main concepts were already understood, so the research on the technologies was not that hard. Hence, we can say that the research phase ended when the development phase started.
+The research phase was divided into two main parts: the first one was the \textbf{research of the state of the art}, where the main concepts were studied and understood; the second one was the \textbf{research of the technologies}, where the technologies that were going to be used in the project were analyzed. To be fair, part of this phase was done during the development phase, as we changed the technologies that were going to be used in the project. However, the main concepts were already understood, so the research on the technologies was not that hard. Hence, we can say that the research phase ended when the development phase started. Following the naming convention used, this phase includes the \textit{Literature review} and the \textit{Learning new technologies} stages.
 
 \subsection{Development phase}
 
-The development phase was divided into three main parts: the first one was the \textbf{development of DataFrame-based solution}, where we tried to develop a solution based on DataFrames. As have already discussed, the outcome of this part was not as expected, so we had to change the approach; the second one was the \textbf{development of the ETL pipeline}, where we developed the \texttt{wd2duckdb} tool; the third one was the \textbf{development of the Pregel algorithm}, where we developed the \texttt{pschema-rs} tool.
+The development phase was divided into three main parts: the first one was the \textbf{development of DataFrame-based solution}, where we tried to develop a solution based on DataFrames. As have already discussed, the outcome of this part was not as expected, so we had to change the approach; the second one was the \textbf{development of the ETL pipeline}, where we developed the \texttt{wd2duckdb} tool; the third one was the \textbf{development of the Pregel algorithm}, where we developed the \texttt{pschema-rs} tool. Following the naming convention used, this phase includes the \textit{Proposed Solution Development} stage.
 
 \subsection{Writing phase}
 
-The writing phase was divided into two main parts: the first one was the \textbf{literature review}, where the state of the art was studied and written; the second one was the \textbf{thesis}, where the thesis was written. The first part was done during the research phase; for the sake of simplicity, we will consider that the \textit{literature review} stage is part of the \textit{research phase}. Hence, the writing phase is only composed of the \textit{thesis} stage, where I wrote the part of the thesis that is created entirely by me.
+The writing phase was divided into two main parts: the first one was the \textbf{literature review}, where the state of the art was studied and written; the second one was the \textbf{thesis}, where the thesis was written. The first part was done during the research phase; for the sake of simplicity, we will consider that the \textit{literature review} stage is part of the \textit{research phase}. Hence, the writing phase is only composed of the \textit{thesis} stage, where I wrote the part of the thesis that is created entirely by me. Following the naming convention used, this phase includes the \textit{Dissertation Document} stage.
 
 \subsection{Defense of the work phase}
 
-The defense of the work phase was divided into two main parts: the first one was the \textbf{presentation of the thesis}, where the slides and the presentation were created; the second one was the \textbf{defense of the thesis}, where the thesis is going to be presented and defended. This part has not been done yet; however, it is already planned.
+The defense of the work phase was divided into two main parts: the first one was the \textbf{presentation of the thesis}, where the slides and the presentation were created; the second one was the \textbf{defense of the thesis}, where the thesis is going to be presented and defended. This part has not been done yet; however, it is already planned. Following the naming convention used, this phase includes the \textit{Defense of the project} stage.
 
-\section{Budget}
+\subsection{Other phase}
 
-Note that part of this project was done during an internship at \textit{WESO}. Hence, the budget for this project is going to be calculated based on the rate that the \textit{University of Oviedo} pays to its interns\footnote{\url{https://www.funiovi.org/estudiantes/practicas}}. Provided a 20 hours per week internship, the maximum wage is 400€ per month. Hence, given that a work month has 4.33 weeks, the hourly rate is 4.61€. This rate is going to be used to calculate the budget of this project.
+We have also included another phase, namely, the \textbf{meetings phase}, where the meetings with the tutor were held. Following the naming convention used, this phase includes the \textit{Meetings} stage.
+
+The time spent in each phase is shown in Figure \ref{fig:pie}. The project's timeline is shown in Figure \ref{fig:timeline} and Table \ref{tab:timeline}. Note that the project's timeline is not a Gantt chart, as it does not show the dependencies between the tasks. However, it is a good way to show the project's timeline. The project's budget is shown in Table \ref{table:costs}.
+
+\begin{figure}[ht]
+    \centering
+    \begin{adjustbox}{max width=0.66\textwidth}
+        \begin{tikzpicture}
+            \pie[hide number]{
+                1.41/Meetings (1.41\%),
+                7.93/Literature Review (7.93\%),
+                41.56/Dissertation Document (41.56\%),
+                37.78/Proposed Solution Development (37.78\%),
+                7.55/Learning new technologies (7.55\%),
+                3.77/Defense of the project (3.77\%)
+            }
+        \end{tikzpicture}
+    \end{adjustbox}
+    \caption{Part of the project's budget spent in each phase}
+    \label{fig:pie}
+\end{figure}
 
 \begin{figure}[p]
     \centering
@@ -45,19 +65,79 @@ Note that part of this project was done during an internship at \textit{WESO}. H
     \label{tab:timeline}
 \end{table}
 
+\section{Budget}
 
-\begin{figure}[p]
-    \centering
-    \begin{tikzpicture}
-        \pie[hide number]{
-            1.41/Meetings (1.41\%),
-            7.93/Literature Review (7.93\%),
-            41.56/Dissertation Document (41.56\%),
-            37.78/Proposed Solution Development (37.78\%),
-            7.55/Learning new technologies (7.55\%),
-            3.77/Defense of the project (3.77\%)
-        }
-    \end{tikzpicture}
-    \caption{Part of the project's budget spent in each phase}
-    \label{fig:pie}
+Note that part of this project was done during an internship at \textit{WESO}. Hence, the budget for this project is going to be calculated based on the rate that the \textit{University of Oviedo} pays to its interns\footnote{\url{https://www.funiovi.org/estudiantes/practicas}}. Provided a 20 hours per week internship, the maximum wage is 400€ per month. Hence, given that a work month has 4.33 weeks, the hourly rate is 4.61€. This rate is going to be used to calculate the budget of this project.
+
+For us to calculate the budget, we need to know two main aspects. First, we need to know the sum of the \textit{Indirect costs}, which are the costs that even though they are not directly related to the project, are necessary for the project to be done. Second, we need to know the sum of the \textit{Direct costs}, which are the costs that are directly related to the project. This is the sum of the costs of each of the phases of the project. Let me start by explaining the \textit{Indirect costs}.
+
+\subsection{Indirect costs}
+
+The \textit{Indirect costs} of this project is divided into two main parts: the \textbf{costs of the means of production} and the \textbf{rest of Indirect costs}. The first one is the cost associated with the means of production, such as the computer, the software, the licenses, etc. The second one is the cost associated with the rest of the \textit{Indirect costs}, such as electricity, Internet, etc. The \textit{Indirect costs} are shown in Table \ref{table:indirect-costs}. It is worth noting that the \textit{Indirect costs} are calculated based on some general approximations. For example, the cost of the computer is calculated based on the average price of a computer with similar characteristics. The cost of the \textit{rest of Indirect cost} is rounded as it is not possible to know the exact cost of each of the items. Recall, this project was performed at my home, so the \textit{rest of Indirect cost} is calculated based on the cost of the electricity and the Internet at my home, and the impact of the project on the electricity and the Internet bill.
+
+\begin{figure}[ht]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{tabular}{|cccccc|}
+            \hline
+            \rowcolor[HTML]{C0C0C0}
+            \multicolumn{6}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Costs of the means of production}}                                                                                                                                                                                                                                                                 \\ \hline
+            \rowcolor[HTML]{EFEFEF}
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textit{Component / License}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textit{Units}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textit{Cost}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textit{Total Costs}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textit{Type}} & \textit{Terms} \\ \hline
+            \multicolumn{1}{|c|}{Development Systems}                                  & \multicolumn{1}{c|}{1}                                      & \multicolumn{1}{c|}{1,500.00 €}                            & \multicolumn{1}{c|}{1,500.00 €}                                   & \multicolumn{1}{c|}{Amortization}                          & 1              \\ \hline
+            \multicolumn{1}{|c|}{Server\footnotemark}                                  & \multicolumn{1}{c|}{1}                                      & \multicolumn{1}{c|}{3,565.79 €}                            & \multicolumn{1}{c|}{3,565.79 €}                                   & \multicolumn{1}{c|}{Amortization}                          & 1              \\ \hline
+            \multicolumn{3}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Total}}               & \multicolumn{3}{c|}{5,065.79 €}                                                                                                                                                                                                                                            \\ \hline
+        \end{tabular}
+        \caption{Costs of the means of production}
+    \end{subfigure}%
+    \vspace*{1em}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{tabular}{|ccc|}
+            \hline
+            \rowcolor[HTML]{C0C0C0}
+            \multicolumn{3}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Indirect costs}}                                                                                      \\ \hline
+            \rowcolor[HTML]{EFEFEF}
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textit{Service}} & \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}\textit{Monthly Cost}} & \textit{Annual Cost} \\ \hline
+            \multicolumn{1}{|c|}{Natural Gaz}                              & \multicolumn{1}{c|}{10.00 €}                                       & 110.00 €             \\ \hline
+            \multicolumn{1}{|c|}{Electricity}                              & \multicolumn{1}{c|}{20.00 €}                                       & 220.00 €             \\ \hline
+            \multicolumn{1}{|c|}{Water}                                    & \multicolumn{1}{c|}{5.00 €}                                        & 55.00 €              \\ \hline
+            \multicolumn{1}{|c|}{Telecommunications}                       & \multicolumn{1}{c|}{30.00 €}                                       & 330.00 €             \\ \hline
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Total}}   & \multicolumn{2}{c|}{715.00 €}                                                             \\ \hline
+        \end{tabular}
+        \caption{Costs that are not direct to the project, but are required for us to work}
+    \end{subfigure}%
+    \caption{Indirect costs}
+    \label{table:indirect-costs}
 \end{figure}
+\footnotetext{\url{https://www.pccomponentes.com/hpe-proliant-ml350-gen10-intel-xeon-silver-4214r-32gb}}
+
+\subsection{Final Budget}
+
+The final budget of the project is the sum of the direct costs, calculated as the time it takes to complete every phase, as seen in the previous section, times the hourly rate, the indirect costs and the costs of the means of production. We have also considered a 21\% VAT on the total amount of the project. Note that as this is a research project, the profit margin is 0\%, as the project is not intended to be sold, and the benefit we take from it is the knowledge acquired and the resulting code and documentation.
+
+\begin{table}[p]
+    \renewcommand{\arraystretch}{1.5}
+    \setlength{\tabcolsep}{.25cm}
+    \centering
+    \begin{tabular}{|clcc|}
+        \hline
+        \rowcolor[HTML]{C0C0C0}
+        \multicolumn{2}{|c|}{\cellcolor[HTML]{C0C0C0}\textbf{Phase}}               & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{Hours}} & \textbf{Total cost} \\ \hline
+        \multicolumn{2}{|c|}{Research}                                             & \multicolumn{1}{c|}{61.5}                                   & 283.52 €            \\ \hline
+        \multicolumn{2}{|c|}{Development}                                          & \multicolumn{1}{c|}{150}                                    & 691.50 €            \\ \hline
+        \multicolumn{2}{|c|}{Writing}                                              & \multicolumn{1}{c|}{165}                                    & 760.65 €            \\ \hline
+        \multicolumn{2}{|c|}{Defense of the Work}                                  & \multicolumn{1}{c|}{15}                                     & 69.15 €             \\ \hline
+        \multicolumn{2}{|c|}{Other}                                                & \multicolumn{1}{c|}{5.5}                                    & 25.36 €             \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        \multicolumn{4}{|l|}{\cellcolor[HTML]{EFEFEF}}                                                                                                                 \\ \hline
+        \multicolumn{3}{|r|}{Project Costs}                                        & 1,830.18 €                                                                        \\ \hline
+        \multicolumn{3}{|r|}{Total Indirect Costs}                                 & 5,780.79 €                                                                        \\ \hline
+        \multicolumn{2}{|r|}{Taxes}                                                & \multicolumn{1}{c|}{21\%}                                   & 405.34 €            \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        \multicolumn{4}{|l|}{\cellcolor[HTML]{EFEFEF}}                                                                                                                 \\ \hline
+        \multicolumn{3}{|r|}{\cellcolor[HTML]{C0C0C0}\textbf{Project Total Costs}} & 8,016.31 €                                                                        \\ \hline
+    \end{tabular}
+    \caption{Aggregated costs of the whole project}
+    \label{table:costs}
+\end{table}

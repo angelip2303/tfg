@@ -56,9 +56,9 @@ Regarding the complexity of the algorithm, we can say that it is linear. This is
 
 \section{\texttt{pschema-rs}}
 
-In this section, we will analyze the results obtained from the execution of \texttt{pschema-rs}. Recall that the experiment conducted will be focused on three aspects: the time it takes to create the subsets of Wikidata, the resources used during the execution of the algorithm, and the possibility of creating subsets from other RDF datasets.
+In this section, we will analyze the results obtained from the execution of \texttt{pschema-rs}. Recall that the experiment conducted will be focused on three main aspects: the time it takes to create the subsets of Wikidata, the resources used during the execution of the algorithm, and the possibility of creating subsets from other RDF datasets.
 
-The first thing we will analyze is the time it takes to create the subsets of Wikidata. For us to do so, we will execute the algorithm three times, each of them with the same configuration and the same subset of Wikidata, the one of the $21^{st}$ August 2017. Then, we will calculate the average time it takes to create the subsets. Apart from that, we will also track the memory used during the execution of the algorithm. Hence, we will see if it is feasible to create subsets of Wikidata in a machine with acceptable resources. What I mean by this is that we will see if it is possible to create subsets of Wikidata in a machine that, even if it has some resources, is not a supercomputer. Finally, we will compare the results obtained with the ones obtained by \texttt{wdsub}, the tool that we have used as a baseline and that we have described in Section \ref{section:wd2sub}. It is worth noting that this tool is the recommendation of the Wikidata community to create subsets of Wikidata. Hence, we will see if the tool that we have developed is faster than the one recommended by the community.
+The first thing we will analyze is the time to create the Wikidata subsets. For us to do so, we will execute the algorithm three times, each of them with the same configuration and the same subset of Wikidata\footnote{\url{https://dumps.wikimedia.org/other/wikidata/}}, the one of the $21^{st}$ August 2017. Then, we will calculate the average time. Apart from that, we will also track the memory used during the execution of the algorithm. Hence, we will see if it is feasible to create subsets of Wikidata in a machine with acceptable resources. What I mean by this is that we will see if it is possible to create Wikidata subsets in a machine that, even if it has some resources, is not a supercomputer. Finally, we will compare the results obtained with the ones obtained with \texttt{wdsub}\footnote{\url{https://github.com/weso/wdsub}}, the tool that we have used as a baseline and that we have described in Section \ref{section:wd2sub}, and with \texttt{sparkwdsub}\footnote{\url{https://github.com/weso/sparkwdsub}}, the tool that we described in Chapter \ref{chapter:existing}. It is worth noting that the former is the recommendation of the Wikidata community to create subsets of such databases, while the latter is built on top of the same framework as our implementation: Pregel. Hence, we will see if the tool that we have developed is faster than the one recommended by the community, and how it compares to another that has some similarities with it.
 
 \begin{table}[ht]
     \centering
@@ -68,20 +68,23 @@ The first thing we will analyze is the time it takes to create the subsets of Wi
         \textbf{N}          & \cellcolor[HTML]{EFEFEF}\textit{0} & \cellcolor[HTML]{EFEFEF}\textit{1} & \cellcolor[HTML]{EFEFEF}\textit{2} & \cellcolor[HTML]{EFEFEF}\textbf{Memory (GB)} \\ \hline
         \textbf{pschema-rs} & 5,014.34                           & 4,995.30                           & 4,996.04                           & 20.3                                         \\ \hline
         \textbf{wdsub}      & 5,090.01                           & 5,064.14                           & 5,071.09                           & -                                            \\ \hline
+        \textbf{sparkwdsub} & -                                  & -                                  & -                                  & -                                            \\ \hline
     \end{tabular}
     \caption{Time to create the \textit{subsets} of Wikidata with \texttt{pschema-rs} and \texttt{wdsub}}
     \label{table:pschema-rs}
 \end{table}
 
-As can be seen in table \ref{table:pschema-rs}, both solutions take a similar time to create the subsets of Wikidata. However, we can see that \texttt{pschema-rs} is slightly faster than \texttt{wdsub}. Let me first calculate the speedup, and then, we will comment on the results.
+As can be seen in table \ref{table:pschema-rs}, \texttt{pschema-rs} and \texttt{wdsub} take a similar time to create the subsets of Wikidata. However, we can see that the former is slightly faster than \texttt{wdsub}. On the other hand, it can be seen that \texttt{sparkwdsub} has no time recorded. That's because we were unable to execute the tool as it requires the JSON dump to be uncompressed and to fit in the memory of the machine. As we have already mentioned, the JSON dump is 224.24 GB uncompressed; hence, it is impossible to fit it in the memory of a computer with 40 GB of RAM memory. Moreover, we would need even more memory to annotate the dump with information such as the currently valid set of \texttt{Shapes}. With that said, before we can compare the results obtained with \texttt{pschema-rs} and \texttt{wdsub}, let me compute the speedup of the former to the latter. To do so, I will use the following formula:
+
+\vspace*{-1em}
 
 \begin{equation}
     \text{Speedup} = \frac{\overline{Time_{wdsub}}}{\overline{Time_{pschema-rs}}} = \frac{\sum_{i=0}^{2}t_i}{\sum_{j=0}^{2}t_j} = \frac{5,090.01 + \cdots + 5,071.09}{5,014.34 + \cdots + 4,996.04} = \frac{15,225.28}{15,005.69} = 1.01
 \end{equation}
 
-As can be seen, the speedup is slightly higher than 1. This means that \texttt{pschema-rs} is slightly faster than \texttt{wdsub}. However, we can see that the difference is not significant. However, far from letting us down, this result is encouraging. Recall that \texttt{wdsub} is a mature tool, while we are still in the early stages of development. Hence, we can say that the results obtained are promising. Moreover, we can see that the memory used by \texttt{pschema-rs} is around 20 GB. This means that it is possible to create subsets of Wikidata in a machine with acceptable resources. Hence, we can say that the algorithm is efficient in terms of time and memory. Having said that, we will now analyze the results obtained from the execution of the algorithm with other RDF datasets.
+As can be seen, the speedup is slightly higher than 1. This means that \texttt{pschema-rs} is slightly faster than \texttt{wdsub}. However, we can see that the difference is not significant. However, far from letting us down, this result is encouraging. Recall that \texttt{wdsub} is a mature tool, while we are still in the early stages of development. Hence, we can say that the results obtained are promising. Moreover, we can see that the memory used by \texttt{pschema-rs} is around 20 GB. This means that it is possible to create subsets of Wikidata in a machine with acceptable resources. Hence, we can say that the algorithm is efficient in terms of time and memory. In the last part of this section, we will see how the algorithm behaves when we tweak some of its parameters. Having said that, we will now analyze the results obtained from the execution of the algorithm with other RDF datasets.
 
-Before getting into more details, let me define what I mean by \texttt{DEV} and \texttt{OPT}. Recall that in section \ref{section:pschema-rs:optimizations} we showed two main optimizations that we would take advantage from.
+Before getting into more details, let me define what I mean by \texttt{DEV} and \texttt{OPT}. Recall that in section \ref{section:pschema-rs:optimizations} we described two optimizations that we would take into account when implementing the algorithm. The first one is \textit{parallelization}, while the second is \textit{caching}. Hence, \texttt{DEV} refers to the execution of the algorithm without any of these optimizations, while \texttt{OPT} refers to the execution of the algorithm with both optimizations enabled. Another thing to note is that the experiment was conducted using two different \texttt{Shapes}: \texttt{protein} and \texttt{subcellular\_location}. The former is a \texttt{Shape} that describes the structure of a \textit{glycoprotein}\footnote{\url{https://en.wikipedia.org/wiki/Glycoprotein}}, while the latter describes the amino-acid position of a specific protein. The reason why we chose these two \texttt{Shapes} is that they were the ones that we created during the \textit{DBCLS BioHackathon 2023}, with the help of experts in the field of \textit{bioinformatics}, a rising field that needs tools that can help them to analyze their data. In this sense, the experiment was reproduced in a somewhat realistic scenario. Having said that, the experiment was run three times for each \texttt{Shape}, having the same \texttt{Uniprot} dataset as input. The results obtained are shown in table \ref{table:pschema-rs:uniprot}.
 
 \begin{table}[ht]
     \centering
@@ -95,8 +98,58 @@ Before getting into more details, let me define what I mean by \texttt{DEV} and 
         \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{C0C0C0}\textbf{OPT}}} & \texttt{subcellular\_location}                    & 7,346,129                                        & 1,084,151                                          & 37.76                                     & 3.75                                         \\ \hline
     \end{tabular}
     \caption{Time and memory consumption to create the \textit{subsets} of \texttt{Uniprot} with \texttt{pschema-rs}}
-    \label{tab:my-table}
+    \label{table:pschema-rs:uniprot}
 \end{table}
+
+As can be seen, the results obtained are similar in terms of the size of the subset we have created. This is, the optimizations have no impact on the \textit{validity} of the tool to create subsets that are correct for the \texttt{Shape} that we have defined. This result is fantastic, as that means that we can use the optimizations without worrying about the correctness of the results. However, we can see that the optimizations have a significant impact on the time and memory consumption. In particular, we can see that the time consumption is reduced by 38\% and 35\% for the \texttt{protein} and \texttt{subcellular\_location} \texttt{Shapes}, respectively. Moreover, we can see that the memory consumption is reduced by 43\% and 38\% for the \texttt{protein} and \texttt{subcellular\_location} \texttt{Shapes}, respectively. Hence, we can say that the optimizations are effective in terms of time and memory consumption. In the next section, we will see how the algorithm behaves when we tweak some of its parameters.
+
+The last experiment that we conducted was to see how the algorithm behaves when we modify some of its parameters. In particular, we modified the number of \texttt{Wikidata} entities, the depth of the \texttt{ShEx} tree, and the breadth of the \texttt{ShEx} tree. The results obtained are shown in Figures \ref{table:pschema-rs:parameters} and \ref{figure:pschema-rs:parameters}. As can be seen, the time consumption is linear in all cases. This is, the more \texttt{Wikidata} entities we have, the same rate of increase in time is observed.  Moreover, the deeper and wider the \texttt{ShEx} tree is, the same behavior is seen.
+
+\begin{figure}[ht]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{adjustbox}{max width=\textwidth}
+            \begin{tabular}{|
+                    >{\columncolor[HTML]{C0C0C0}}c |c|c|c|c|c|c|c|c|c|}
+                \hline
+                \textbf{N}        & 250,000 & 500,000 & 750,000 & 1,000,000 & 1,250,000 & 1,500,000 & 1,750,000 & 2,000,000 & 2,250,000 \\ \hline
+                \textbf{Time (s)} & 6.96    & 18.03   & 30.70   & 40.91     & 51.97     & 64.73     & 83.29     & 102.92    & 123.45    \\ \hline
+            \end{tabular}
+        \end{adjustbox}
+        \caption{Modifying the number of Wikidata Entities}
+    \end{subfigure}%
+    \vspace*{0.5em}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{tabular}{|
+                >{\columncolor[HTML]{C0C0C0}}c |c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            {\color[HTML]{000000} \textbf{Height}}   & 1    & 2     & 3     & 4     & 5     & 6     & 7     & 8     & 9     & 10    \\ \hline
+            {\color[HTML]{000000} \textbf{Time (s)}} & 6.96 & 14.34 & 21.26 & 28.41 & 35.38 & 42.26 & 49.33 & 56.28 & 63.34 & 70.31 \\ \hline
+        \end{tabular}
+        \caption{Depth of the tree (number of levels)}
+    \end{subfigure}%
+    \vspace*{0.5em}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{tabular}{|
+                >{\columncolor[HTML]{C0C0C0}}c |c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            {\color[HTML]{000000} \textbf{Width}}    & 1    & 2    & 3    & 4    & 5    & 6    & 7    & 8    & 9    & 10   \\ \hline
+            {\color[HTML]{000000} \textbf{Time (s)}} & 7.36 & 7.59 & 7.87 & 8.16 & 8.32 & 8.52 & 8.77 & 9.02 & 9.18 & 9.38 \\ \hline
+        \end{tabular}
+        \caption{Height of the tree (number of levels)}
+    \end{subfigure}
+    \caption{Time to create the \textit{subsets} of Wikidata with \texttt{pschema-rs}}
+    \label{table:pschema-rs:parameters}
+\end{figure}
+
+\vspace*{-1em}
+
+As can be seen in the table above, the time increases at a rate of over 12 seconds per 250,000 entities. This is, at a linear rate. Even though it is hard to explain, as complex aggregations over columns are involved, it is nice to see that increasing the number of entities won't have a steep impact on the time consumption. This is, we can create subsets of Wikidata with millions of entities in a reasonable amount of time. What's more, we can see that \texttt{pola-rs} behaves seamlessly when working with small datasets, in order of millions of entities. Note that \textit{small} is a relative term. In this case, we consider small datasets those with less than 10 million entities. To continue, it can also be seen that the time consumption is linear when modifying the depth of the tree,
+and we can appreciate a trend in it. Note that the time it takes to create a subset of Wikidata increases at a rate of $7 x$ where $x$ is the height of the tree. This makes sense as the number of iterations that the algorithm has to do is proportional -- the same -- to the height of the tree. Finally, we can see that the time consumption is also linear when modifying the breadth. However, the impact is fairly small.
+
+We can see how the algorithm behaves when we modify some of its parameters. That is, the two factors that affect the most are the number of entities and the depth of the tree. This makes total sense, as the number of iterations that the algorithm has to do is proportional to the height of the tree, and the number of entities to be processed makes the operations even more expensive. Trying to tell the complexity of Pregel-based algorithms is not an easy task. However, we can see that the execution time of the algorithm is predictable, and behaves as expected. The following is going to be a rough reasoning of the algorithm's complexity. Note that this is not a formal proof, but a rough estimation. As we have seen, the two main factors affecting the time consumption of the algorithm are the number of entities and the height of the tree, which could be understood as the two categories of costs: the cost of the local computation, and the number of iterations of the algorithm. As the local computation takes place at each iteration, and both costs follow linear tendency, we could sum this up as: \textit{for every m, where m is the number of iterations, we perform n internal computations}. That is, the algorithm follows a \textit{subquadratic} complexity: $O(m \cdot n)$.
 
 \begin{figure}[p]
     \begin{subfigure}{\textwidth}
@@ -108,7 +161,7 @@ Before getting into more details, let me define what I mean by \texttt{DEV} and 
     \begin{subfigure}{\textwidth}
         \centering
         \includestandalone[width=\textwidth,height=6cm]{diagrams/13-5_pschemaDEPTH}
-        \caption{Modifying the depth of the \texttt{ShEx} tree}
+        \caption{Modifying the height of the \texttt{ShEx} tree}
     \end{subfigure}%
     \vspace*{1em}
     \begin{subfigure}{\textwidth}
@@ -117,4 +170,5 @@ Before getting into more details, let me define what I mean by \texttt{DEV} and 
         \caption{Modifying the breadth of the \texttt{ShEx} tree}
     \end{subfigure}
     \caption{Time to create the \textit{subsets} of Wikidata with \texttt{pschema-rs}}
+    \label{figure:pschema-rs:parameters}
 \end{figure}
