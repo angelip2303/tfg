@@ -1,5 +1,9 @@
 ---
 theme: apple-basic
+themeConfig:
+  paginationX: r
+  paginationY: t
+  paginationPagesDisabled: [1]
 layout: intro-image
 image: ./assets/img/cover.png
 ---
@@ -14,6 +18,8 @@ image: ./assets/img/cover.png
       Analysis and implementation of an algorithm to validate Knowledge Graphs using Big data techniques
     </p>
 </div>
+
+<Pagination classNames="text-gray-300" />
 
 ---
 
@@ -33,6 +39,41 @@ timeline
     Writing : Youtube
     Project defense : Twitter
 ```
+
+---
+layout: three-cols-content
+---
+
+
+
+# 🌉 Motivation
+
+::content::
+
+<p>
+The city of Königsberg in Prussia (now Kaliningrad, Russia) was built on both banks of the Pregel
+River and featured two sizable islands, Kneiphof and Lomse, which were linked to the two mainland
+sections of the city by seven bridges. The challenge was creating a route through the city that would
+cross each of those bridges just once. What Euler proved was that this problem has no solution.
+</p>
+
+::left::
+<figure>
+    <img src="assets/img/konigsberg_bridges.png" alt="Königsberg bridges"/>
+    <figcaption> <span> Figure 1: </span> Positioning of the Königsberg bridges and the Pregel river in blue </figcaption>
+</figure>
+
+::center::
+<figure>
+    <img src="assets/img/konigsberg_abstract.png" alt="Abstract bridges representation"/>
+    <figcaption> <span> Figure 2: </span> Abstract representation of the problem  </figcaption>
+</figure>
+
+::right::
+<figure>
+    <img src="assets/img/konigsberg_graph.png" alt="Graph representation"/>
+    <figcaption> <span> Figure 3: </span> Abstract graph corresponding to the bridges of Königsberg  </figcaption>
+</figure>
 
 ---
 
@@ -76,28 +117,37 @@ That's were RDF comes in
 <http://example.org/thg> <http://example.org/isOfGenre> <http://example.org/dystopianNovel> .
 ```
 ---
+layout: two-cols-content
+---
 
 # 🕶️ Opaque URIs
 
-- A URI is a sequence of characters that identifies a resource.
-- They are used to identify resources in RDF, namely, subjects, predicates and objects.
-- Designing good URIs is the first step in linked data development.
-- There are two main types of URIs: descriptive and opaque.
+::content::
 
-<div class="grid grid-cols-2">
-    <div>
-        <h3> Descriptive URIs </h3>
-        <p> http://example.org/AlanTuring </p>
-        <p> http://example.org/AlanTuring#person </p>
-        <p> http://example.org/AlanTuring#human </p>
-    </div>
-    <div>
-        <h3> Opaque URIs </h3>
-        <p> http://example.org/1 </p>
-        <p> http://example.org/2 </p>
-        <p> http://example.org/3 </p>
-    </div>
-</div>
+- A URI is a unique sequence of characters that **identifies** a resource.
+- They are used to identify resources in RDF, namely, **subjects**, **predicates** and **objects**.
+- Designing good URIs is the **first step** in linked data development.
+- There are two main types of URIs: _descriptive_ and _opaque_.
+
+::left::
+
+#### Descriptive URIs
+
+```turtle
+http://example.org/AlanTuring
+http://example.org/España
+http://example.org/足球 # Football in Chinese
+```
+
+::right::
+
+#### Opaque URIs
+
+```turtle
+http://example.org/1
+http://example.org/2
+http://example.org/3
+```
 
 ---
 layout: center
@@ -202,14 +252,15 @@ layout: diagram-header
 
 ::right::
 
-<img
+<figure>
+    <img
     class="m-auto"
     src="assets/img/traversal.svg" 
     alt="Tree traversal as implemented in PSchema"
     width="400"
 />
-
-<p> <span> Order: </span> h, i, j, k, d, e, f, g, b, c, a </p>
+    <figcaption> <span> Order: </span> h, i, j, k, d, e, f, g, b, c, a  </figcaption>
+</figure>
 
 ---
 

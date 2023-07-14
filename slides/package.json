@@ -12,5 +12,15 @@
   },
   "devDependencies": {
     "@iconify-json/ri": "^1.1.10"
+  },
+  "slidev": {
+    "colorSchema": "both",
+    "highlighter": "all",
+    "defaults": {
+      "themeConfig": {
+        "paginationX": "r",
+        "paginationY": "t"
+      }
+    }
   }
 }
