@@ -14,12 +14,12 @@
             \g:\ Graph[\VertSet, \EdgeSet] \;
             \lbl:\ \LabelSet \;
         }}
-    \KwOut{\Block{\vertex: \VertSet}}
+    \KwOut{\Block{sub:\ Graph[\VertSet, \EdgeSet]}}
     \blockskip
 
     \texttt{initialMessage} = \texttt{None} \label{lst:line:initialMessage} \;
-    \texttt{v} = \texttt{Pregel(maxIterations,initialMessage,sendMsg,aggregateMsg,vProg)} \;
-    \Return{v} \;
+    \texttt{sub} = \texttt{Pregel(\g,maxIterations,initialMessage,sendMsg,aggregateMsg,vProg)} \;
+    \Return{sub} \;
     \blockskip
 
     \DefInline{sendMsg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet])}{
@@ -54,7 +54,7 @@
     \blockskip
 
     \DefInline{vProg(\lbl:\ \LabelSet, \g:\ Graph[\VertSet, \EdgeSet], \msgs:\ \MsgSet)}{
-        \labels\.concatenate(\msgs)\;
+        \labels.concatenate(\msgs)\;
     } \label{lst:line:vProg}
 \end{algorithm}
 \end{document}
