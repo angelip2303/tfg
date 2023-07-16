@@ -744,7 +744,7 @@ layout: iframe-right
 url: https://biohackrxiv.org/md73k
 ---
 
-# 🧬 BioHackathon 2023
+# 🧬 BioHackathon
 
 - **The Japan BioHackathon** is a series of hackathons organized by the [DBCLS](https://dbcls.rois.ac.jp/en/) since 2008.
 - The **goal** is to promote **collaboration** and **development** of **open-source** software, **standards** and **databases** in the life sciences.
