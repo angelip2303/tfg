@@ -53,6 +53,7 @@ ul {
     padding: 0;
     margin: 0;
 }
+
 li {
     font-size: 0.7rem;
 }
