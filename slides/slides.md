@@ -5,7 +5,7 @@ themeConfig:
   paginationY: t
   paginationPagesDisabled: [1,36]
 layout: intro-image
-image: /public/img/cover.png
+image: /img/cover.png
 download: true
 ---
 
@@ -92,7 +92,7 @@ layout: section
 
 ---
 layout: intro-image
-image: assets/img/kg.png
+image: /img/kg.png
 ---
 
 ---
