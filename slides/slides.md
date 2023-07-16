@@ -569,8 +569,8 @@ layout: two-cols-bottom
 
 <h2> 📦 Row-oriented </h2>
 
-- Each **row** contains _heterogeneous_ data (i.e JSON).
-- **Row storage** is good for _transactional_ workloads.
+- Each **row** contains _heterogeneous_ data (i.e JSON)
+- **Row stores** are good for _transactional_ workloads
 - JSON (i.e. Wikidata) introduces **boilerplate**.
 
 <img
@@ -583,9 +583,9 @@ layout: two-cols-bottom
 
 <h2> 📦 Column-oriented<sup>1</sup> </h2>
 
-- Each **column** contains _homogeneous_ data.
-- **Columnar storage** is good for _analytical_ workloads.
-- DuckDB is a column-oriented database.
+- Each **column** contains _homogeneous_ data
+- **Columnar stores** are good for _analytical_ workloads
+- DuckDB is a column-oriented database
 
 <img
     class="mx-auto"
@@ -615,11 +615,11 @@ layout: two-cols-bottom
 
 The **Move-to-Front Coding** is a **lossless** _transformation algorithm_ which processes a sequence of symbols and produces a sequence of integers.
 
-The **idea** is that the most recently used symbols are more likely to be used again in the near future. Hence, we can maintain a list of the symbols and when one is used, it is moved to the front of the list.
+The **idea** is that the most recently used symbols are more likely to be used again in the near future. Hence, we can maintain a list of those and when one is used, it is moved to the front of the list.
 
-1. This allows us to **exploit the locality** of the data.
-2. The **most frequent** items will require **fewer bits**.
-3. **Cache** misses are **less likely** to happen.
+1. This allows us to **exploit the locality** of data
+2. **;ost frequent** items will require **fewer bits**
+3. **Cache** misses are **less likely** to happen
 
 ⚠ `Integers` _usually_ require **less bytes** to be stored than `Strings`, so more data can be cached.
 
