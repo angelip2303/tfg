@@ -11,7 +11,8 @@
     "@slidev/theme-apple-basic": "^0.20.0"
   },
   "devDependencies": {
-    "@iconify-json/ri": "^1.1.10"
+    "@iconify-json/ri": "^1.1.10",
+    "playwright-chromium": "^1.36.1"
   },
   "slidev": {
     "colorSchema": "both",
