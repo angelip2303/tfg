@@ -101,10 +101,10 @@ layout: center
 
 # 🌉 To put it in context...
 
-- ✔ Knowledge Graphs are a **powerful tool** to represent knowledge.
-- ✔ They are **flexible** and **extensible**.
-- ✔ They are **easy to understand** by humans.
-- ✔ They are used in **many fields**.
+- ✅ Knowledge Graphs are a **powerful tool** to represent knowledge.
+- ✅ They are **flexible** and **extensible**.
+- ✅ They are **easy to understand** by humans.
+- ✅ They are used in **many fields**.
 - ❌ They are **hard to be validated** by machines.
 - ❌ They tend to be **huge**.
 
@@ -114,9 +114,9 @@ layout: center
 
 # 🌐 Wikidata
 
-- ✔ Is a **free** and **open** Knowledge Graph.
-- ✔ Supports **multiple languages**, thanks to _opaque URIs_.
-- ✔ Supports **Shape Expressions** since 2019.
+- ✅ Is a **free** and **open** Knowledge Graph.
+- ✅ Supports **multiple languages**, thanks to _opaque URIs_.
+- ✅ Supports **Shape Expressions** since 2019.
 - ❌ Is **huge**<sup>1</sup>.
 - ❌ Is **hard to validate**, due to its size.
 - ❌ Data comes from **multiple sources**.
@@ -621,7 +621,7 @@ The **idea** is that the most recently used symbols are more likely to be used a
 2. **;ost frequent** items will require **fewer bits**
 3. **Cache** misses are **less likely** to happen
 
-⚠ `Integers` _usually_ require **less bytes** to be stored than `Strings`, so more data can be cached.
+👀 `Integers` _usually_ require **less bytes** to be stored than `Strings`, so more data can be cached.
 
 <style>
 .slidev-layout ol {
@@ -862,14 +862,14 @@ layout: center
 
 | **Feature**                      | **Supported** | **PSchema Representation** |
 |----------------------------------|:-------------:|--------|
-| Triple constraints               | ✔ | TripleConstraint, ShapeAnd, ShapeOr |
-| Cardinality                      | ✔ |    Cardinality      |
+| Triple constraints               | ✅ | TripleConstraint, ShapeAnd, ShapeOr |
+| Cardinality                      | ✅ |    Cardinality      |
 | Labels, descriptions and aliases | ❌ | ---  |
-| Value sets                       | ✔ |     ShapeOr      |
-| Built-in DataTypes               | ✔ | ShapeLiteral |
+| Value sets                       | ✅ |     ShapeOr      |
+| Built-in DataTypes               | ✅ | ShapeLiteral |
 | Facets                           | ❌ | --- |
 | Qualifiers                       | ❌ | --- |
-| References                       | ✔ | ShapeReference |
+| References                       | ✅ | ShapeReference |
 | Ranks                            | ❌ | --- |
 | SiteLinks                        | ❌ | --- |
 
@@ -881,12 +881,12 @@ layout: center
 
 | **Feature** | **Supported** | **Comments** |
 |-------|:-----------:|--------|
-|    DuckDB Import | ✔ |     ---     |
+|    DuckDB Import | ✅ |     ---     |
 |    DuckDB Export  | 🕒 | Even if it's planned, we are waiting for the `pola-rs` release |
 |    Parquet Import  | ❌ |     ---     |
-|    Parquet Export  | ✔ |     ---     |
-|    NTriples Import  | ✔  |    ---      |
-|    NTriples Export  | ✔ |     ---     |
+|    Parquet Export  | ✅ |     ---     |
+|    NTriples Import  | ✅  |    ---      |
+|    NTriples Export  | ✅ |     ---     |
 
 ---
 layout: center
