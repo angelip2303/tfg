@@ -63,7 +63,7 @@ layout: center
 - ❌ They tend to be **huge**.
 
 ---
-layout: two-cols-bottom
+layout: two-cols-content-bottom
 ---
 
 # 👨‍🏫 How do we represent Knowledge?
@@ -235,6 +235,8 @@ layout: diagram-header
 :Date {}
 ```
 
+## 🌳 Shape Expression tree
+
 ::right::
 
 <figure>
@@ -256,6 +258,8 @@ layout: diagram-header
 
 - **Level order traversal** visits the nodes of a tree level by level.
 - **Reverse** level order traversal visits the nodes of a tree level by level, but in reverse order.
+
+## Iterator
 
 <Footnotes separator>
     <Footnote :number=1>
@@ -282,8 +286,6 @@ layout: full
 <img src="assets/img/pschema.png" alt="PSchema logo" class="h-full m-auto"/>
 
 ---
-layout: big-diagram
----
 
 # 0️⃣ The algorithm in action
 
@@ -306,7 +308,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-1.svg" 
+    src="assets/img/pschema-1_1.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -322,9 +324,53 @@ layout: big-diagram
 
 <Footnotes separator>
     <Footnote :number=1>
-        For simplicity, only the nodes that are valid are highlighted. However, the algorithm will send messages to all nodes.
+        For simplicity, only the nodes that are valid are highlighted. However, all the nodes will send messages to their neighbors in the <it> destination </it> to <it> source </it> direction.
     </Footnote>
 </Footnotes>
+
+---
+layout: big-diagram
+---
+
+# 1️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-1_2.svg" 
+    alt="PSchema algorithm trace"
+/>
+
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-1.svg" 
+    alt="Shape Expression tree"
+/>
+
+---
+layout: big-diagram
+---
+
+# 1️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-1_3.svg" 
+    alt="PSchema algorithm trace"
+/>
+
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-1.svg" 
+    alt="Shape Expression tree"
+/>
 
 ---
 layout: big-diagram
@@ -336,7 +382,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-2.svg" 
+    src="assets/img/pschema-2_1.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -352,16 +398,113 @@ layout: big-diagram
 layout: big-diagram
 ---
 
+# 2️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-2_2.svg" 
+    alt="PSchema algorithm trace"
+/>
+
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-2.svg" 
+    alt="Shape Expression tree"
+/>
+
+
+---
+layout: big-diagram
+---
+
+# 2️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-2_3.svg" 
+    alt="PSchema algorithm trace"
+/>
+
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-2.svg" 
+    alt="Shape Expression tree"
+/>
+
+
+---
+layout: big-diagram
+---
+
 # 3️⃣ The algorithm in action
 
 ::big::
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-3.svg" 
+    src="assets/img/pschema-3_1.svg" 
     alt="PSchema algorithm trace"
 />
 
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-3.svg"
+    alt="Shape Expression tree"
+/>
+
+::bottom::
+
+<Footnotes separator>
+    <Footnote :number=1>
+        In the actual implementation, the message is sent by the <it> first </it> node in the DataFrame.
+    </Footnote>
+</Footnotes>
+
+---
+layout: big-diagram
+---
+
+# 3️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-3_2.svg" 
+    alt="PSchema algorithm trace"
+/>
+
+::small::
+
+<img
+    class="mx-auto"
+    src="assets/img/tree-3.svg"
+    alt="Shape Expression tree"
+/>
+
+---
+layout: big-diagram
+---
+
+# 3️⃣ The algorithm in action
+
+::big::
+
+<img
+    class="mx-auto"
+    src="assets/img/pschema-3_3.svg" 
+    alt="PSchema algorithm trace"
+/>
 
 ::small::
 
@@ -383,7 +526,7 @@ layout: big-diagram
 
 
 ---
-layout: two-cols-header
+layout: two-cols-bottom
 ---
 
 # 🗃️ How is the dataset stored?
@@ -395,6 +538,10 @@ layout: two-cols-header
 ::right::
 
 <h2> 📦 Column-oriented<sup>1</sup> </h2>
+
+This allows us to implement some **optimizations**...
+
+::bottom::
 
 <Footnotes separator>
     <Footnote :number=1>
@@ -409,10 +556,81 @@ layout: section
 # 🚀 Optimizations
 
 ---
+layout: two-cols-bottom
+---
 
 # 🔁 Move-to-Front Coding
 
-(Witten, I. H., A. Moff at, and T. C. Bell (1999). Managing Gigabytes : Compressing and Indexing Documents and Images. Morgan Kaufmann.)
+::left::
+
+The **Move-to-Front Coding** is a **lossless** _transformation algorithm_ which processes a sequence of symbols and produces a sequence of integers.
+
+The **idea** is that the most recently used symbols are more likely to be used again in the near future. Hence, we can maintain a list of the symbols and when one is used, it is moved to the front of the list.
+
+1. This allows us to **exploit the locality** of the data.
+2. The **most frequent** items will require **fewer bits**.
+3. **Cache** misses are **less likely** to happen.
+
+<style>
+ol {
+  list-style: none; /* Remove list bullets */
+  padding: 0;
+  margin: 0;
+}
+
+ol li {
+  padding-left: 1rem;
+  text-indent: -0.75rem;
+}
+
+ol li::before {
+  content: "😲 ";
+}
+
+ol li:nth-child(2)::before {
+  content: '🤏 ';
+}
+
+ol li:nth-child(3)::before {
+  content: '😎 ';
+}
+</style>
+
+::right::
+
+#### i.e Encoding<sup>1</sup> the string _panama_
+
+| **input** |  **output**  | **list**                   |
+|-----------|--------------|----------------------------|
+| p         | 15           | abcdefghijklmnopqrstuvwxyz |
+| a         | 15 1         | pabcdefghijklmnoqrstuvwxyz |
+| n         | 15 1 14      | apbcdefghijklmnoqrstuvwxyz |
+| a         | 15 1 14 1    | napbcdefghijklmoqrstuvwxyz |
+| m         | 15 1 14 1 14 | anpbcdefghijklmoqrstuvwxyz |
+| a         | 15 1 14 1 14 | manpbcdefghijkloqrstuvwxyz |
+
+<style>
+h4 {
+    margin-left: 1em;
+}
+table {
+    margin-left: 1em;
+}
+</style>
+
+::bottom::
+
+<Footnotes separator>
+    <Footnote :number=1>
+        <a href="https://www.geeksforgeeks.org/move-front-data-transform-algorithm/"> https://www.geeksforgeeks.org/move-front-data-transform-algorithm/ </a>
+    </Footnote>
+</Footnotes>
+
+<style>
+li::before {
+  content: "";
+}
+</style>
 
 ---
 
