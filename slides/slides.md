@@ -42,6 +42,7 @@ timeline
         : pschema-rs
     Writing
         : Thesis
+        : Paper
         : Running tests
     Project defense
         : Slides preparation
@@ -58,7 +59,7 @@ layout: center
 - ✔ They are **flexible** and **extensible**.
 - ✔ They are **easy to understand** by humans.
 - ✔ They are used in **many fields**.
-- ❌ They are **hard to validate** by machines.
+- ❌ They are **hard to be validated** by machines.
 - ❌ They tend to be **huge**.
 
 ---
@@ -87,7 +88,7 @@ layout: two-cols-bottom
 ## 🕶️ Opaque URIs
 
 - A URI is a unique sequence of characters that **identifies** a resource, namely, _subjects_, _predicates_ and _objects_.
-- Designing good URIs is the **first step** in linked data development. As such, there are two main types of URIs: _descriptive_ and _opaque_.
+- Designing good URIs is the **first step** in linked data development.
 
 ::bottom::
 
@@ -102,33 +103,46 @@ layout: two-cols-bottom
 
 # 🧠 Knowledge Graphs
 
-<center>
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human)
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow)
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe) -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer)
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town)
-```
-</center>
+<figure>
+    <img
+        class="m-auto"
+        src="assets/img/kg.svg" 
+        alt="Knowledge Graph"
+    />
+    <figcaption> <span> Figure 1: </span> Knowledge Graph modelling some information about Alan Turing </figcaption>
+</figure>
 
 ---
 
 # 🤓 How do we address that issue?
 
-<img
-    class="m-auto"
-    src="assets/img/subset_generator.svg" 
-    alt="Subset generator"
-/>
+<figure>
+    <img
+        class="mx-auto"
+        src="assets/img/subset_generator.svg" 
+        alt="Subset generator"
+    />
+    <figcaption> <span> Figure 2: </span> ShEx-based <it> subset </it> generation process for Alan Turing's example </figcaption>
+</figure>
+
+---
+layout: center
+---
+
+# 🌐 Wikidata
+
+- ✔ Is a **free** and **open** Knowledge Graph.
+- ✔ Supports **multiple languages**, thanks to _opaque URIs_.
+- ✔ Supports **Shape Expressions** since 2019.
+- ❌ Is **huge**<sup>1</sup>.
+- ❌ Is **hard to validate**, due to its size.
+- ❌ Data comes from **multiple sources**.
+
+<Footnotes separator>
+    <Footnote :number=1>
+    Wikidata contains more than <a href="https://www.wikidata.org/wiki/Wikidata:Statistics"> 100 million items</a>. The dump file is 100 GB compressed, and 1.5 TB uncompressed.
+    </Footnote>
+</Footnotes>
 
 ---
 layout: center
@@ -139,12 +153,6 @@ layout: center
 - 📈 Volume
 - 🚄 Velocity
 - 🌪️ Variety
-
----
-
-# 🌐 Wikidata
-
-
 
 ---
 layout: diagram
@@ -159,16 +167,15 @@ layout: diagram
 - Distributed.
 - _Thinking like a vertex_.
 
-<div class="flex flex-row gap-4 mt-2">
-<figure>
-    <img width="150" src="assets/img/konigsberg_abstract.png" alt="Abstract bridges representation" class="mx-auto" />
-    <figcaption> <span> Figure 1: </span> Abstract representation of the Königsberg bridges problem </figcaption>
-</figure>
-
-<figure>
-    <img width="150" src="assets/img/konigsberg_graph.png" alt="Graph representation" class="mx-auto" />
-    <figcaption> <span> Figure 2: </span> Graph representation of the problem  </figcaption>
-</figure>
+<div class="flex flex-row gap-4">
+    <figure>
+        <img width="150" src="assets/img/konigsberg_abstract.png" alt="Abstract bridges representation" class="mx-auto" />
+        <figcaption> <span> Figure 1: </span> Abstract representation of the Königsberg bridges problem </figcaption>
+    </figure>
+    <figure>
+        <img width="150" src="assets/img/konigsberg_graph.png" alt="Graph representation" class="mx-auto" />
+        <figcaption> <span> Figure 2: </span> Graph representation of the problem  </figcaption>
+    </figure>
 </div>
 
 <Footnotes separator>
@@ -179,22 +186,14 @@ layout: diagram
 
 ::right::
 
-```mermaid
-stateDiagram-v2
-    state iterations <<choice>>
-    state "Initial Messages" as initial
-    state "Send messages" as send
-    state "Aggregate messages" as aggregate
-    state "Vertex computation" as compute
-
-    [*] --> initial
-	initial --> iterations
-    iterations --> send: if iteration <= max_iterations
-	iterations --> [*]: else
-	send --> aggregate
-    aggregate --> compute
-    compute --> iterations
-```
+<figure>
+    <img
+        class="mx-auto"
+        src="assets/img/pregel.svg" 
+        alt="Pregel model"
+    />
+    <figcaption> <span> Figure 3: </span> Pregel model </figcaption>
+</figure>
 
 ---
 layout: quote
@@ -207,15 +206,20 @@ layout: quote
 
 # 🧮 PSchema
 
-- **P**regel-based **Schema** validation algorithm
-- Validates Knowledge Graphs
-- Uses Pregel to distribute the validation process
+- **P**regel-based **Schema** validation algorithm.
+- Validates Knowledge Graphs.
+- Uses Pregel to distribute the validation process.
+- Uses Shape Expressions to define the schema.
+- Can use different Knowledge Graphs as input.
+- Based on a multithreaded implementation of Pregel.
 
 ---
-layout: diagram
+layout: diagram-header
 ---
 
-# 🌳 Shape Expression tree
+# 🌳 How are Shape Expressions represented?
+
+::left::
 
 ```turtle
 :Person {
@@ -233,13 +237,15 @@ layout: diagram
 
 ::right::
 
-```mermaid
-graph TD
-    Person -->|placeOfBirth| Place
-    Person -->|placeOfBirth| Date
-    Person -->|employer| Organization
-    Place -->|country| Country
-```
+<figure>
+    <img
+        class="mx-auto"
+        src="assets/img/tree.svg" 
+        alt="Shape Expression tree"
+    />
+    <figcaption> <span> Figure 4: </span> Shape Expression tree </figcaption>
+</figure>
+
 ---
 layout: diagram-header
 ---
@@ -250,7 +256,6 @@ layout: diagram-header
 
 - **Level order traversal** visits the nodes of a tree level by level.
 - **Reverse** level order traversal visits the nodes of a tree level by level, but in reverse order.
-
 
 <Footnotes separator>
     <Footnote :number=1>
@@ -282,38 +287,14 @@ layout: big-diagram
 
 # 0️⃣ The algorithm in action
 
-::big::
-
-## Knowledge Graph
-
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human)
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow)
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe) -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer)
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town)
-```
-
-::small::
-
-## Shape Expression tree
-
-```mermaid
-flowchart TD
-    Person -->|placeOfBirth| Place
-    Person -->|dateOfBirth| Date
-    Person -->|employer| Organization
-    Place -->|country| Country:::validation
-```
-
+<figure>
+    <img
+        class="mx-auto"
+        src="assets/img/pschema-0.svg" 
+        alt="PSchema algorithm trace"
+    />
+    <figcaption> <span> Figure 6: </span> The Initial Messages are sent to all the nodes in the graph </figcaption>
+</figure>
 
 ---
 layout: big-diagram
@@ -323,37 +304,27 @@ layout: big-diagram
 
 ::big::
 
-## Knowledge Graph
-
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human)
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow)
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe) -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer)
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town)
-```
+<img
+    class="mx-auto"
+    src="assets/img/pschema-1.svg" 
+    alt="PSchema algorithm trace"
+/>
 
 ::small::
 
-## Shape Expression tree
+<img
+    class="mx-auto"
+    src="assets/img/tree-1.svg" 
+    alt="Shape Expression tree"
+/>
 
-```mermaid
-flowchart TD
-    Person -->|placeOfBirth| Place
-    Person -->|dateOfBirth| Date
-    Person -->|employer| Organization
-    Place -->|country| Country:::validation
+::bottom::
 
-    classDef validation fill:green,stroke:darkgreen,stroke-width:2px,color:white;
-```
+<Footnotes separator>
+    <Footnote :number=1>
+        For simplicity, only the nodes that are valid are highlighted. However, the algorithm will send messages to all nodes.
+    </Footnote>
+</Footnotes>
 
 ---
 layout: big-diagram
@@ -363,39 +334,19 @@ layout: big-diagram
 
 ::big::
 
-## Knowledge Graph
-
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human)
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow)
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe) -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer)
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town)
-```
+<img
+    class="mx-auto"
+    src="assets/img/pschema-2.svg" 
+    alt="PSchema algorithm trace"
+/>
 
 ::small::
 
-## Shape Expression tree
-
-```mermaid
-flowchart TD
-    Person -->|placeOfBirth| Place:::validation
-    Person -->|dateOfBirth| Date:::validation
-    Person -->|employer| Organization:::validation
-    Place -->|country| Country:::validated
-
-    linkStyle 3 opacity:0.1,color:lightgray;
-    classDef validation fill:green,stroke:darkgreen,stroke-width:2px,color:white;
-    classDef validated opacity:0.5;
-```
+<img
+    class="mx-auto"
+    src="assets/img/tree-2.svg" 
+    alt="Shape Expression tree"
+/>
 
 ---
 layout: big-diagram
@@ -405,64 +356,30 @@ layout: big-diagram
 
 ::big::
 
-## Knowledge Graph
+<img
+    class="mx-auto"
+    src="assets/img/pschema-3.svg" 
+    alt="PSchema algorithm trace"
+/>
 
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human)
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow)
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe) -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer)
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town)
-```
 
 ::small::
 
-## Shape Expression tree
-
-```mermaid
-flowchart TD
-    Person:::validation -->|placeOfBirth| Place:::validated
-    Person -->|dateOfBirth| Date:::validated
-    Person -->|employer| Organization:::validated
-    Place -->|country| Country:::validated
-
-    linkStyle 0,1,2,3 opacity:0.1,color:lightgray;
-    classDef validation fill:green,stroke:darkgreen,stroke-width:2px,color:white;
-    classDef validated opacity:0.5;
-```
+<img
+    class="mx-auto"
+    src="assets/img/tree-3.svg"
+    alt="Shape Expression tree"
+/>
 
 ---
 
 # 🏁 Resulting _subgraph_
 
-<center>
-```mermaid
-flowchart LR
-    alan(Alan Turing)
-    alan -->|instanceOf| human(Human):::invalid
-    alan -->|placeOfBirth| warrington(Warrington Lodge)
-    alan -->|placeOfDeath| wilmslow(Wilmslow):::invalid
-    alan -->|dateOfBirth| 1912-06-23
-    alan -->|employer| gchq(GCHQ)
-    bombe(Bombe):::invalid -->|discoverer| alan
-    bombe -->|instanceOf| computer(Computer):::invalid
-    bombe -->|manufacturer| gchq(GCHQ)
-    warrington -->|country| UK(UK)
-    wilmslow -->|country| UK
-    wilmslow -->|instanceOf| town(Town):::invalid
-
-    linkStyle 0,2,5,6,7,9,10 opacity:0.1,color:lightgray
-    classDef invalid opacity:0.5
-```
-</center>
+<img
+    class="mx-auto"
+    src="assets/img/pschema-4.svg" 
+    alt="PSchema algorithm trace"
+/>
 
 
 ---
@@ -521,3 +438,33 @@ url: https://biohackrxiv.org/md73k
 ---
 
 # 🧬 BioHackathon 2023
+
+
+---
+
+# 📚 References
+
+---
+layout: end
+---
+
+---
+layout: cover
+---
+
+<figure>
+    <img
+        class="mx-auto"
+        src="assets/img/pie.PNG" 
+        alt="Time spent in each phase of the project"
+    />
+    <figcaption> <span> Figure 1: </span> Time spent in each phase of the project </figcaption>
+</figure>
+
+---
+
+# Other examples of Knowledge Graphs
+
+---
+
+# Supported Shape Expression features

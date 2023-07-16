@@ -18,10 +18,12 @@ const props = defineProps({
       <div class="col-left" :class="props.class">
         <slot name="big" />
       </div>
-
       <div class="col-right my-auto mx-auto text-center" :class="props.class">
         <slot name="small" />
       </div>
+    </div>
+    <div class="col-footer">
+      <slot name="bottom" />
     </div>
   </div>
 </template>

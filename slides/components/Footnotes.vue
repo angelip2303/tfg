@@ -7,7 +7,7 @@
   >
     <hr v-if="separator" />
     <ul
-      class="flex flex-wrap !list-none p-2"
+      class="flex flex-wrap !list-none p-0 pb-2 pr-2 m-0"
       v-bind:class="{
         'justify-start': x === 'l',
         'justify-end': x === 'r',
