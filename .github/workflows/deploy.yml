@@ -45,6 +45,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v1
         with:
           path: dist
+          working-directory: ./slides
 
       - name: Deploy
         id: deployment
