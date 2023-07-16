@@ -621,7 +621,7 @@ The **idea** is that the most recently used symbols are more likely to be used a
 2. **;ost frequent** items will require **fewer bits**
 3. **Cache** misses are **less likely** to happen
 
-👀 `Integers` _usually_ require **less bytes** to be stored than `Strings`, so more data can be cached.
+👀 `Integers` _usually_ require **less bytes** to be stored than `Strings`: _cache efficiency_.
 
 <style>
 .slidev-layout ol {
