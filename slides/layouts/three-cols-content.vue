@@ -34,7 +34,7 @@ const props = defineProps({
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 0.2fr 1fr 2fr;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .col-header { grid-area: 1 / 1 / 1 / 4; }
