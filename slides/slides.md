@@ -182,7 +182,7 @@ layout: diagram
         src="assets/img/pregel.svg" 
         alt="Pregel model"
     />
-    <figcaption> <span> Figure 3: </span> Pregel model </figcaption>
+    <figcaption> <span> Figure 3: </span> Pregel model as implemented in pregel-rs </figcaption>
 </figure>
 
 ---
