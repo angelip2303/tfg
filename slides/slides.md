@@ -777,7 +777,7 @@ layout: cover
 <figure>
     <img
         class="mx-auto"
-        src="/public/img/pie.PNG" 
+        src="/public/img/pie.png" 
         alt="Time spent in each phase of the project"
     />
     <figcaption> <span> Figure 1: </span> Time spent in each phase of the project </figcaption>
