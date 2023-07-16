@@ -5,7 +5,8 @@ themeConfig:
   paginationY: t
   paginationPagesDisabled: [1,36]
 layout: intro-image
-image: ./assets/img/cover.png
+image: /public/img/cover.png
+download: true
 ---
 
 <div>
@@ -65,7 +66,7 @@ li {
 
 <img
     class="mx-auto"
-    src="assets/img/timeline.svg" 
+    src="/public/img/timeline.svg" 
     alt="Timeline"
 />
 
@@ -82,7 +83,7 @@ layout: section
 <figure>
     <img
         class="m-auto"
-        src="assets/img/kg.svg" 
+        src="/public/img/kg.svg" 
         alt="Knowledge Graph"
     />
     <figcaption> <span> Figure 1: </span> Knowledge Graph modelling some information about Alan Turing </figcaption>
@@ -132,7 +133,7 @@ layout: center
 <figure>
     <img
         class="mx-auto"
-        src="assets/img/subset_generator.svg" 
+        src="/public/img/subset_generator.svg" 
         alt="Subset generator"
     />
     <figcaption> <span> Figure 2: </span> ShEx-based <it> subset </it> generation process for Alan Turing's example </figcaption>
@@ -159,11 +160,11 @@ layout: diagram
 
 <div class="flex flex-row gap-4">
     <figure>
-        <img width="150" src="assets/img/konigsberg_abstract.png" alt="Abstract bridges representation" class="mx-auto" />
+        <img width="150" src="/public/img/konigsberg_abstract.png" alt="Abstract bridges representation" class="mx-auto" />
         <figcaption> <span> Figure 1: </span> Abstract representation of the Königsberg bridges problem </figcaption>
     </figure>
     <figure>
-        <img width="150" src="assets/img/konigsberg_graph.png" alt="Graph representation" class="mx-auto" />
+        <img width="150" src="/public/img/konigsberg_graph.png" alt="Graph representation" class="mx-auto" />
         <figcaption> <span> Figure 2: </span> Graph representation of the problem  </figcaption>
     </figure>
 </div>
@@ -179,7 +180,7 @@ layout: diagram
 <figure>
     <img
         class="mx-auto"
-        src="assets/img/pregel.svg" 
+        src="/public/img/pregel.svg" 
         alt="Pregel model"
     />
     <figcaption> <span> Figure 3: </span> Pregel model as implemented in pregel-rs </figcaption>
@@ -212,7 +213,7 @@ layout: two-cols-unbalanced
 
 ::right::
 
-<img src="assets/img/pschema.png" alt="PSchema" class="h-full m-auto"/>
+<img src="/public/img/pschema.png" alt="PSchema" class="h-full m-auto"/>
 
 ---
 layout: diagram-header
@@ -248,7 +249,7 @@ The following is an example of a Shape Expression:
 <figure>
     <img
         class="mx-auto"
-        src="assets/img/tree.svg" 
+        src="/public/img/tree.svg" 
         alt="Shape Expression tree"
     />
     <figcaption> <span> Figure 4: </span> Shape Expression tree </figcaption>
@@ -278,7 +279,7 @@ layout: diagram-header
 <figure>
     <img
     class="m-auto"
-    src="assets/img/traversal.svg" 
+    src="/public/img/traversal.svg" 
     alt="Tree traversal as implemented in PSchema"
     width="400"
 />
@@ -298,7 +299,7 @@ li {
 <figure>
     <img
         class="mx-auto"
-        src="assets/img/pschema-0.svg" 
+        src="/public/img/pschema-0.svg" 
         alt="PSchema algorithm trace"
     />
     <figcaption> <span> Figure 5: </span> The Initial Messages are sent to all the nodes in the graph </figcaption>
@@ -314,7 +315,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-1_1.svg" 
+    src="/public/img/pschema-1_1.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -322,7 +323,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-1.svg" 
+    src="/public/img/tree-1.svg" 
     alt="Shape Expression tree"
 />
 
@@ -344,7 +345,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-1_2.svg" 
+    src="/public/img/pschema-1_2.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -352,7 +353,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-1.svg" 
+    src="/public/img/tree-1.svg" 
     alt="Shape Expression tree"
 />
 
@@ -366,7 +367,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-1_3.svg" 
+    src="/public/img/pschema-1_3.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -374,7 +375,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-1.svg" 
+    src="/public/img/tree-1.svg" 
     alt="Shape Expression tree"
 />
 
@@ -388,7 +389,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-2_1.svg" 
+    src="/public/img/pschema-2_1.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -396,7 +397,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-2.svg" 
+    src="/public/img/tree-2.svg" 
     alt="Shape Expression tree"
 />
 
@@ -410,7 +411,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-2_2.svg" 
+    src="/public/img/pschema-2_2.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -418,7 +419,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-2.svg" 
+    src="/public/img/tree-2.svg" 
     alt="Shape Expression tree"
 />
 
@@ -433,7 +434,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-2_3.svg" 
+    src="/public/img/pschema-2_3.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -441,7 +442,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-2.svg" 
+    src="/public/img/tree-2.svg" 
     alt="Shape Expression tree"
 />
 
@@ -456,7 +457,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-3_1.svg" 
+    src="/public/img/pschema-3_1.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -464,7 +465,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-3.svg"
+    src="/public/img/tree-3.svg"
     alt="Shape Expression tree"
 />
 
@@ -486,7 +487,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-3_2.svg" 
+    src="/public/img/pschema-3_2.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -494,7 +495,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-3.svg"
+    src="/public/img/tree-3.svg"
     alt="Shape Expression tree"
 />
 
@@ -508,7 +509,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-3_3.svg" 
+    src="/public/img/pschema-3_3.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -516,7 +517,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/tree-3.svg"
+    src="/public/img/tree-3.svg"
     alt="Shape Expression tree"
 />
 
@@ -526,7 +527,7 @@ layout: big-diagram
 
 <img
     class="mx-auto"
-    src="assets/img/pschema-4.svg" 
+    src="/public/img/pschema-4.svg" 
     alt="PSchema algorithm trace"
 />
 
@@ -573,7 +574,7 @@ layout: two-cols-bottom
 
 <img
     class="mx-auto"
-    src="assets/img/row.svg" 
+    src="/public/img/row.svg" 
     alt="Row-oriented storage"
 />
 
@@ -587,7 +588,7 @@ layout: two-cols-bottom
 
 <img
     class="mx-auto"
-    src="assets/img/col.svg" 
+    src="/public/img/col.svg" 
     alt="Columnar-oriented storage"
     height="300px"
 />
@@ -717,7 +718,7 @@ layout: three-images
 
 <img
     class="mx-auto h-auto w-full"
-    src="assets/img/n.svg" 
+    src="/public/img/n.svg" 
     alt="Row-oriented storage"
 />
 
@@ -725,7 +726,7 @@ layout: three-images
 
 <img
     class="mx-auto h-auto w-full"
-    src="assets/img/depth.svg" 
+    src="/public/img/depth.svg" 
     alt="Row-oriented storage"
 />
 
@@ -733,7 +734,7 @@ layout: three-images
 
 <img
     class="mx-auto h-full w-full"
-    src="assets/img/breadth.svg" 
+    src="/public/img/breadth.svg" 
     alt="Row-oriented storage"
 />
 
@@ -775,7 +776,7 @@ layout: cover
 <figure>
     <img
         class="mx-auto"
-        src="assets/img/pie.PNG" 
+        src="/public/img/pie.PNG" 
         alt="Time spent in each phase of the project"
     />
     <figcaption> <span> Figure 1: </span> Time spent in each phase of the project </figcaption>
